@@ -21,7 +21,9 @@ function UserCourseConf ()
                         </button>
                         </div>
 
-                        <button type="button" className="btn btn-primary me-5" style={{width:'50px',height:'38px'}}></button>
+                        <button type="button" className="btn btn-primary me-5" style={{width:'50px',height:'38px'}}>
+                            <i className="fa-solid fa-rotate-right"></i>
+                        </button>
                  
                  </div>
             </div>

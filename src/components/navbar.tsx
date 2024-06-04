@@ -4,8 +4,8 @@ function NavBar()
     let navigate=useNavigate();
 
     return(
-        <div>
-            <div className=" d-flex flex-column  col-xs-2 " style={{ background: "#074E85",height:'100vh',width:'319px'}}>
+        <div className='d-flex flex-column' style={{height:'100vh',width:'319px'}}>
+            <div className=" d-flex flex-column  col-xs-2 " style={{ background: "#074E85",height:'90vh',width:'319px'}}>
                   <div className="my-2  ">
                         <p className="text-center mt-2">
                           <img src="https://s3-alpha-sig.figma.com/img/1c8b/a115/5555c3e534dec5f2c27633aee63a0fe8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mQHPokX3UO-IhGNKk85-IXTYY~gagNwnBoPKrp5Ge8HWaPfkZmIsR8Uvnq9LKEv2ZBCXxL6P1MbJoE76~Al~CdYAMcp7bNn-eiz1G~eG5QxG9WfWmMQ97eGKv2zzYu8p3rkgUgtKlGukgyWg2Ke4Dk2FAK3xAJP9JuKy7~pxoYO~RdzXmuVXAQNdegFYskI3RQGBQedVu5~WqJHNipQcjB75u1qeqpA0FJbyuA2y6Sbo~mOVHBkXTCsGEGCM9Eio9e7a7FsRmF7ZJz6f6MW5BVtkEjwRVU9XtjpBC5imZ5do-bEckjO6iO7t6JB0-HkhlyGMYlj4Fz1Vlu~EzHFJyA__"
@@ -67,8 +67,8 @@ function NavBar()
                         
                   </div>
               </div>
-                <div className="d-flex flex-colum" style={{backgroundColor:'#070241'}}>
-                    <p style={{color:'white'}}>Logout</p>
+                <div className="d-flex flex-colum" style={{backgroundColor:'#070241',height:'10vh'}}>
+                    <i className="fa-solid fa-right-from-bracket fa-2x" style={{color:'white'}}></i>
                 </div>
             
           

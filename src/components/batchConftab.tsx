@@ -2,6 +2,7 @@ import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState } from 'react';
+import Custom_button from './actions';
 
 function BatchConfTab()
 {
@@ -12,9 +13,9 @@ function BatchConfTab()
         ]);
         
         const [colDefs, setColDefs] = useState([
-        { field: "Batch"},
-        { field: "Active"},
-        { field: "Actions"}
+        { field: "Batch",flex:1},
+        { field: "Active",flex:1},
+        { field: "Actions",flex:1, cellRenderer:Custom_button}
         ]);
         
       return(

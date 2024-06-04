@@ -14,11 +14,13 @@ function BatchConf ()
                                 <label className="form-label" for="form1"></label>
                             </div>
                         <button type="button" className="btn btn-primary" data-mdb-ripple-init style={{width:'50px',height:'38px'}}>
-                            <i className="fas fa-search"></i>
+                            <i className="fas fa-search"></i>                           
                         </button>
                         </div>
 
-                        <button type="button" className="btn btn-primary me-5" style={{width:'50px',height:'38px'}}></button>
+                        <button type="button" className="btn btn-primary me-5" style={{width:'50px',height:'38px'}}>
+                            <i className="fa-solid fa-rotate-right"></i>
+                        </button>
                  
                  </div>
 

@@ -2,6 +2,7 @@ import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState } from 'react';
+import Custom_button from './actions';
 
 function UserCourseConfTab()
 {
@@ -12,12 +13,12 @@ function UserCourseConfTab()
         ]);
         
         const [colDefs, setColDefs] = useState([
-        { field: "Employee_No"},
-        { field: "Name"},
-        { field: "Email"},
-        { field: "Role"},
-        { field: "Active"},
-        { field: "Actions"}
+        { field: "Employee_No",flex:1},
+        { field: "Name",flex:1},
+        { field: "Email",flex:1},
+        { field: "Role",flex:1},
+        { field: "Active",flex:1},
+        { field: "Actions",flex:1,cellRenderer:Custom_button}
         ]);
         
       return(
