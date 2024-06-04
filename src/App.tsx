@@ -11,6 +11,7 @@ import Course from "./components/course";
 function App() {
   return (
     <Routes>
+      <Route path="/login" element={<Login/>} />
       <Route path="/" element={<User/>} />
       <Route path="/schedule" element={<Schedule/>} />
       <Route path="/batch" element={<Batch/>} />

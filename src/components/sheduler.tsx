@@ -27,7 +27,13 @@ function Scheduler()
             <hr style={{width:'95%', margin:'auto'}}/>
             <div className='d-flex justify-content-between mt-3'>
                  <p className="p-0 ms-5 mb-0 mt-2 ">Scheduler Configuration</p>
-                 <button type="button" className="btn btn-danger me-5" style={{width:'105px', height:'44px'}}>Action</button>
+                 <div className="dropdown-center me-5">
+                    <button className="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Action</button>
+                    <ul className="dropdown-menu">
+                        <li><a className="dropdown-item" style={{color:'red'}} href="#">Generate Attendance Sheet</a></li>
+                        <li><a className="dropdown-item" style={{color:'red'}} href="#">Generate Hall Ticket</a></li>
+                    </ul>
+                </div>
             </div>
             
             <div className="ag-theme-quartz mt-4 ms-5 shadow"style={{ height: 400 , width:'93%'}}>

@@ -6,8 +6,8 @@ function Term()
 {
     return(
         <div className="d-flex flex-row">
-            <NavBar/>
-            <div className="d-flex flex-column w-100">
+            <NavBar/> 
+            <div className="d-flex flex-column w-100 justify-content-between">
                 <AddTerm/>
                 <TermConf/>
             </div>

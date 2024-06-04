@@ -15,6 +15,7 @@ function NavBar()
                   </div>
                   
                   <hr className="border border-light w-100 m-1" style={{}}/>
+                  
                   <div className="d=flex flex-column justify-content-between">
                       <div>
                           <ul className=" text-start d-flex flex-column  h-75 my-4 gap-4 mx-4 navbar-nav" style={{fontSize: "16px",color:'white'}}>
@@ -64,12 +65,13 @@ function NavBar()
                           </ul>
                         </div>
                         
-                        {/* <div className="" style={{backgroundColor:'#070241'}}>
-                          <hr className="border border-light w-100 m-1" style={{}}/>
-                          <p>logout</p>
-                        </div> */}
                   </div>
               </div>
+                <div className="d-flex flex-colum" style={{backgroundColor:'#070241'}}>
+                    <p style={{color:'white'}}>Logout</p>
+                </div>
+            
+          
           </div>
     );
 }

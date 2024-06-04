@@ -7,7 +7,7 @@ function Batch()
     return(
         <div className="d-flex flex-row">
             <NavBar/>
-            <div className="d-flex flex-column w-100">
+            <div className="d-flex flex-column w-100 justify-content-between">
                 <AddBatch/>
                 <BatchConf/>
             </div>
