@@ -21,25 +21,25 @@ function NavBar()
                           <ul className=" text-start d-flex flex-column  h-75 my-4 gap-4 mx-4 navbar-nav" style={{fontSize: "16px",color:'white'}}>
                               
                               <li className="" >
-                                  Administration
+                                  <p style={{margin:'0px'}}><i className="fa-sharp fa-solid fa-graduation-cap"></i>  Administration</p>
                                   <ul>
                                     <li> 
-                                        <p className="btn my-auto" onClick={() => navigate("/")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}>User</p>
+                                        <p className="btn my-auto" onClick={() => navigate("/")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-user"></i>  User</p>
                                     </li>
                                     <li>
-                                        <p className="btn my-auto" onClick={() => navigate("/batch")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}>Batch</p>
+                                        <p className="btn my-auto" onClick={() => navigate("/batch")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Batch</p>
                                     </li>
                                     <li>
-                                        <p className="btn my-auto" onClick={() => navigate("/room")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}>Room</p>
+                                        <p className="btn my-auto" onClick={() => navigate("/room")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Room</p>
                                     </li>
                                     <li>
-                                        <p className="btn my-auto" onClick={() => navigate("/term")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}>Term</p>
+                                        <p className="btn my-auto" onClick={() => navigate("/term")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Term</p>
                                     </li>
                                     <li>
-                                        <p className="btn my-auto" onClick={() => navigate("/course")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}>Course</p>
+                                        <p className="btn my-auto" onClick={() => navigate("/course")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Course</p>
                                     </li>
                                     <li> 
-                                        <p className="btn my-auto" onClick={() => navigate("/schedule")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}> Exam Scheduling</p>
+                                        <p className="btn my-auto" onClick={() => navigate("/schedule")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Exam Scheduling</p>
                                     </li>
                                   </ul>
                               </li>

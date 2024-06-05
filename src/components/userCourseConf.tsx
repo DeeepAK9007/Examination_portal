@@ -10,6 +10,8 @@ function UserCourseConf ()
                  <div className="d-flex flex-row">
                         
                         <button type="button" className="btn btn-primary me-5" style={{width:'155px',height:'38px', fontSize:'12px'}}>Bulk upload</button>
+
+                        <button type="button" className="btn btn-primary me-2" style={{width:'155px',height:'38px', fontSize:'12px'}}>Mapp</button>
                         
                         <div className="input-group">
                             <div id="search-autocomplete" className="form-outline" data-mdb-input-init>
