@@ -18,11 +18,11 @@ function NavBar()
                   
                   <div className="d=flex flex-column justify-content-between">
                       <div>
-                          <ul className=" text-start d-flex flex-column  h-75 my-4 gap-4 mx-4 navbar-nav" style={{fontSize: "16px",color:'white'}}>
+                          <ul className=" text-start d-flex flex-column  h-75 gap-0 mx-4 navbar-nav" style={{fontSize: "16px",color:'white'}}>
                               
                               <li className="" >
                                   <p style={{margin:'0px'}}><i className="fa-sharp fa-solid fa-graduation-cap"></i>  Administration</p>
-                                  <ul>
+                                  <ul style={{listStyleType:"none"}}>
                                     <li> 
                                         <p className="btn my-auto" onClick={() => navigate("/")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-user"></i>  User</p>
                                     </li>
@@ -38,29 +38,46 @@ function NavBar()
                                     <li>
                                         <p className="btn my-auto" onClick={() => navigate("/course")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Course</p>
                                     </li>
-                                    <li> 
-                                        <p className="btn my-auto" onClick={() => navigate("/schedule")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Exam Scheduling</p>
+                                  </ul>
+                              </li>
+
+                                
+                              <li className="" >
+                                  Exam office
+                                  <ul>
+                                    <li onClick={()=>navigate("/schedule")}><p className="btn my-auto" style={{color:'white'}}><i className="fa-regular fa-calendar"></i>  Exam Scheduling</p></li>
+                                  </ul>
+                              </li>
+
+                              <li className="" onClick={()=>navigate("/progCord")}>
+                                  <p className="btn m-auto" style={{color:'white'}}><i className="fa-solid fa-sheet-plastic"></i> Programme Co-ordinator</p>
+                              </li>
+
+                              <li className="">
+                                  <p className="btn m-0" style={{color:'white'}}><i className="fa-solid fa-chalkboard-user"></i>  Course Instructor</p>
+                                  <ul style={{listStyleType:"none"}}>
+                                    <li>
+                                        <p className="btn m-0" style={{color:'white'}}><i className="fa-solid fa-chalkboard-user"></i>  Upload Grades</p>
+                                    </li>
+                                    <li>
+                                        <p className="btn m-0" style={{color:'white'}}><i className="fa-solid fa-chalkboard-user"></i>  Issue Reporting</p>
+                                    </li>
+                                    <li>
+                                        <p className="btn m-0" style={{color:'white'}}><i className="fa-solid fa-chalkboard-user"></i>  Exam Mode Update</p>
                                     </li>
                                   </ul>
                               </li>
 
-                              <li className="" >
-                                  Exam office
-                                  <ul>
-                                    <li>Exam Scheduling</li>
+                              <li className="">
+                                  <p className="btn m-0" style={{color:'white'}}><i className="fa-solid fa-person"></i> Invigilator</p>
+                                  <ul style={{listStyleType:"none"}}>
+                                    <li>
+                                        <p className="btn m-0" style={{color:'white'}} onClick={()=>navigate("/attend")}><i className="fa-solid fa-chalkboard-user"></i>  Attendance</p>
+                                    </li>
+                                    <li>
+                                        <p className="btn m-0" style={{color:'white'}} onClick={()=>navigate("/incident")}><i className="fa-solid fa-chalkboard-user"></i>  Incident Reporting</p>
+                                    </li>
                                   </ul>
-                              </li>
-
-                              <li className="" >
-                                  Program Co-ordinator
-                              </li>
-
-                              <li className="" >
-                                  Course Instructor
-                              </li>
-
-                              <li className="" >
-                                  Invigilator
                               </li>
                           </ul>
                         </div>

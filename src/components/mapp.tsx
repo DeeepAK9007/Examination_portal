@@ -1,4 +1,4 @@
-function Custom_button()
+function Map_stud()
 {
     return(
         <div className="d-flex gap-4 justify-content-around mt-2 ">
@@ -14,4 +14,4 @@ function Custom_button()
     );
 }
 
-export default Custom_button;
+export default Map_stud;

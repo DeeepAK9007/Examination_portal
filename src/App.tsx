@@ -6,6 +6,9 @@ import Batch from "./components/batch";
 import Room from "./components/room";
 import Term from "./components/term";
 import Course from "./components/course";
+import ProgCord from "./components/progCordi";
+import Attendance from "./components/attendance";
+import Incident from "./components/incident";
 
 
 function App() {
@@ -18,6 +21,9 @@ function App() {
       <Route path="/room" element={<Room/>} />
       <Route path="/term" element={<Term/>} />
       <Route path="/course" element={<Course/>} />
+      <Route path="/progCord" element={<ProgCord/>} />
+      <Route path="/attend" element={<Attendance/>} />
+      <Route path="/incident" element={<Incident/>} />
     </Routes>
   )
 }
