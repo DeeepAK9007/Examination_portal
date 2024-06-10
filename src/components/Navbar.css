@@ -1,0 +1,47 @@
+.nav-item {
+  position: relative;
+}
+
+.dropdown-heading {
+  cursor: pointer;
+  padding-left: 10px;
+  position: relative;
+}
+
+.dropdown-heading::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  background: white;
+}
+
+.dropdown-list {
+  list-style-type: none;
+  padding-left: 0px;
+  position: relative;
+}
+
+.dropdown-list::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: white;
+}
+
+.dropdown-list li {
+  position: relative;
+}
+
+.dropdown-list li::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 20px;
+  height: 1px;
+  background: white;
+}

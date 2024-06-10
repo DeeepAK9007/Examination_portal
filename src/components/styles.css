@@ -1,0 +1,41 @@
+.centered {
+  float: none;
+  margin: 100px auto;
+}
+
+.form-group {
+  position: relative;
+}
+
+.palceholder {
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  color: #b1b1b1;
+}
+
+.form-group {
+  position: relative;
+  .palceholder {
+    position: absolute;
+    top: 7px;
+    left: 8px;
+    color: #b1b1b1;
+  }
+  label {
+    font-weight: normal;
+    color: #b1b1b1;
+  }
+  .star {
+    color: red;
+  }
+}
+
+label {
+  font-weight: normal;
+  color: #b1b1b1;
+}
+
+.star {
+  color: red;
+}

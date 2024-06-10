@@ -1,0 +1,60 @@
+/* YesNoToggle.css */
+.yes-no-switch {
+  display: flex;
+  align-items: center;
+}
+
+.yes-no-switch .form-check-input {
+  width: 60px;
+  height: 30px;
+  background-color: #0d6efd;
+  border-radius: 15px;
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.yes-no-switch .form-check-input::before {
+  content: attr(data-yes);
+  position: absolute;
+  left: 10px;
+  color: white;
+  font-weight: bold;
+  line-height: 30px;
+}
+
+.yes-no-switch .form-check-input::after {
+  content: attr(data-no);
+  position: absolute;
+  right: 10px;
+  color: white;
+  font-weight: bold;
+  line-height: 30px;
+}
+
+.yes-no-switch .form-check-input:checked::before {
+  content: "Yes";
+  left: 10px;
+}
+
+.yes-no-switch .form-check-input:checked::after {
+  content: "";
+}
+
+.yes-no-switch .form-check-input:not(:checked)::before {
+  content: "";
+}
+
+.yes-no-switch .form-check-input:not(:checked)::after {
+  content: "No";
+  right: 10px;
+}
+
+.yes-no-switch .form-check-input:checked {
+  background-color: #0d6efd;
+}
+
+.yes-no-switch .form-check-input:not(:checked) {
+  background-color: #e0e0e0;
+}

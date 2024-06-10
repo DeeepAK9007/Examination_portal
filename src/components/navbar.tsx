@@ -1,79 +1,241 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-function NavBar()
-{   
-    let navigate=useNavigate();
+import "./Navbar.css"; // Import the CSS file
 
-    return(
-        <div className='d-flex flex-column' style={{height:'100vh',width:'319px'}}>
-            <div className=" d-flex flex-column  col-xs-2 " style={{ background: "#074E85",height:'90vh',width:'319px'}}>
-                  <div className="my-2  ">
-                        <p className="text-center mt-2">
-                          <img src="https://s3-alpha-sig.figma.com/img/1c8b/a115/5555c3e534dec5f2c27633aee63a0fe8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mQHPokX3UO-IhGNKk85-IXTYY~gagNwnBoPKrp5Ge8HWaPfkZmIsR8Uvnq9LKEv2ZBCXxL6P1MbJoE76~Al~CdYAMcp7bNn-eiz1G~eG5QxG9WfWmMQ97eGKv2zzYu8p3rkgUgtKlGukgyWg2Ke4Dk2FAK3xAJP9JuKy7~pxoYO~RdzXmuVXAQNdegFYskI3RQGBQedVu5~WqJHNipQcjB75u1qeqpA0FJbyuA2y6Sbo~mOVHBkXTCsGEGCM9Eio9e7a7FsRmF7ZJz6f6MW5BVtkEjwRVU9XtjpBC5imZ5do-bEckjO6iO7t6JB0-HkhlyGMYlj4Fz1Vlu~EzHFJyA__"
-                          className="border rounded-circle p-2 w-25 h-25 " alt=""/>
-                        </p>
-                        <p style={{textAlign:'center',color:'white'}}>International Institute of <br/> Information Technology<br/>Bangalore</p>
-                  </div>
-                  
-                  <hr className="border border-light w-100 m-1" style={{}}/>
-                  
-                  <div className="d=flex flex-column justify-content-between">
-                      <div>
-                          <ul className=" text-start d-flex flex-column  h-75 my-4 gap-4 mx-4 navbar-nav" style={{fontSize: "16px",color:'white'}}>
-                              
-                              <li className="" >
-                                  <p style={{margin:'0px'}}><i className="fa-sharp fa-solid fa-graduation-cap"></i>  Administration</p>
-                                  <ul>
-                                    <li> 
-                                        <p className="btn my-auto" onClick={() => navigate("/")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-user"></i>  User</p>
-                                    </li>
-                                    <li>
-                                        <p className="btn my-auto" onClick={() => navigate("/batch")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Batch</p>
-                                    </li>
-                                    <li>
-                                        <p className="btn my-auto" onClick={() => navigate("/room")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Room</p>
-                                    </li>
-                                    <li>
-                                        <p className="btn my-auto" onClick={() => navigate("/term")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Term</p>
-                                    </li>
-                                    <li>
-                                        <p className="btn my-auto" onClick={() => navigate("/course")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Course</p>
-                                    </li>
-                                    <li> 
-                                        <p className="btn my-auto" onClick={() => navigate("/schedule")} style={{color: `${onmouseover? "#006CBE" : 'white'}`}}><i className="fa-regular fa-calendar"></i>  Exam Scheduling</p>
-                                    </li>
-                                  </ul>
-                              </li>
+function NavBar() {
+  let navigate = useNavigate();
 
-                              <li className="" >
-                                  Exam office
-                                  <ul>
-                                    <li>Exam Scheduling</li>
-                                  </ul>
-                              </li>
+  type DropdownState = {
+    admin: boolean;
+    examOffice: boolean;
+    courseInstructor: boolean;
+    invigilator: boolean;
+  };
 
-                              <li className="" >
-                                  Program Co-ordinator
-                              </li>
+  const [dropdownOpen, setDropdownOpen] = useState<DropdownState>({
+    admin: false,
+    examOffice: false,
+    courseInstructor: false,
+    invigilator: false,
+  });
 
-                              <li className="" >
-                                  Course Instructor
-                              </li>
+  const toggleDropdown = (section: keyof DropdownState) => {
+    setDropdownOpen((prevState) => ({
+      ...prevState,
+      [section]: !prevState[section],
+    }));
+  };
 
-                              <li className="" >
-                                  Invigilator
-                              </li>
-                          </ul>
-                        </div>
-                        
-                  </div>
-              </div>
-                <div className="d-flex flex-colum" style={{backgroundColor:'#070241',height:'10vh'}}>
-                    <i className="fa-solid fa-right-from-bracket fa-2x" style={{color:'white'}}></i>
-                </div>
-            
-          
+  return (
+    <div
+      className="d-flex flex-column"
+      style={{ height: "100vh", width: "319px" }}
+    >
+      <div
+        className="d-flex flex-column col-xs-2"
+        style={{ background: "#074E85", height: "90vh", width: "319px" }}
+      >
+        <div className="my-2">
+          <p className="text-center mt-2">
+            <img
+              src="https://s3-alpha-sig.figma.com/img/1c8b/a115/5555c3e534dec5f2c27633aee63a0fe8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mQHPokX3UO-IhGNKk85-IXTYY~gagNwnBoPKrp5Ge8HWaPfkZmIsR8Uvnq9LKEv2ZBCXxL6P1MbJoE76~Al~CdYAMcp7bNn-eiz1G~eG5QxG9WfWmMQ97eGKv2zzYu8p3rkgUgtKlGukgyWg2Ke4Dk2FAK3xAJP9JuKy7~pxoYO~RdzXmuVXAQNdegFYskI3RQGBQedVu5~WqJHNipQcjB75u1qeqpA0FJbyuA2y6Sbo~mOVHBkXTCsGEGCM9Eio9e7a7FsRmF7ZJz6f6MW5BVtkEjwRVU9XtjpBC5imZ5do-bEckjO6iO7t6JB0-HkhlyGMYlj4Fz1Vlu~EzHFJyA__"
+              className="border rounded-circle p-2 w-25 h-25"
+              alt=""
+            />
+          </p>
+          <p style={{ textAlign: "center", color: "white" }}>
+            International Institute of <br /> Information Technology
+            <br />
+            Bangalore
+          </p>
+        </div>
+
+        <hr className="border border-light w-100 m-1" />
+
+        <div className="d-flex flex-column justify-content-between">
+          <div>
+            <ul
+              className="text-start d-flex flex-column h-75 gap-0 mx-4 navbar-nav"
+              style={{ fontSize: "16px", color: "white" }}
+            >
+              <li className="nav-item">
+                <p
+                  className="dropdown-heading"
+                  onClick={() => toggleDropdown("admin")}
+                >
+                  <i className="fa-sharp fa-solid fa-graduation-cap"></i>{" "}
+                  Administration
+                </p>
+                {dropdownOpen.admin && (
+                  <ul className="dropdown-list">
+                    <li>
+                      <p
+                        className="btn my-auto ps-5"
+                        onClick={() => navigate("/")}
+                        style={{ color: "white" }}
+                      >
+                        <i className="fa-regular fa-user"></i> User
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        className="btn my-auto ps-5"
+                        onClick={() => navigate("/batch")}
+                        style={{ color: "white" }}
+                      >
+                        <i className="fa-regular fa-calendar"></i> Batch
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        className="btn my-auto ps-5"
+                        onClick={() => navigate("/room")}
+                        style={{ color: "white" }}
+                      >
+                        <i className="fa-regular fa-calendar"></i> Room
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        className="btn my-auto ps-5"
+                        onClick={() => navigate("/term")}
+                        style={{ color: "white" }}
+                      >
+                        <i className="fa-regular fa-calendar"></i> Term
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        className="btn my-auto ps-5"
+                        onClick={() => navigate("/course")}
+                        style={{ color: "white" }}
+                      >
+                        <i className="fa-regular fa-calendar"></i> Course
+                      </p>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              <br />
+
+              <li className="nav-item">
+                <p
+                  className="dropdown-heading"
+                  onClick={() => toggleDropdown("examOffice")}
+                >
+                  <i className="fa-solid fa-book"></i> Exam Office
+                </p>
+                {dropdownOpen.examOffice && (
+                  <ul className="dropdown-list">
+                    <li onClick={() => navigate("/schedule")}>
+                      <p
+                        className="btn my-auto ps-5"
+                        style={{ color: "white" }}
+                      >
+                        <i className="fa-regular fa-calendar"></i> Exam
+                        Scheduling
+                      </p>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              <br />
+
+              <li
+                className="nav-item dropdown-heading"
+                onClick={() => navigate("/progCord")}
+              >
+                <p style={{ color: "white" }}>
+                  <i className="fa-solid fa-sheet-plastic"></i> Programme
+                  Co-ordinator
+                </p>
+              </li>
+
+              <br />
+
+              <li className="nav-item">
+                <p
+                  className="dropdown-heading"
+                  onClick={() => toggleDropdown("courseInstructor")}
+                >
+                  <i className="fa-solid fa-chalkboard-user"></i> Course
+                  Instructor
+                </p>
+                {dropdownOpen.courseInstructor && (
+                  <ul className="dropdown-list">
+                    <li>
+                      <p className="btn m-0 ps-5" style={{ color: "white" }}>
+                        <i className="fa-solid fa-chalkboard-user"></i> Upload
+                        Grades
+                      </p>
+                    </li>
+                    <li>
+                      <p className="btn m-0 ps-5" style={{ color: "white" }}>
+                        <i className="fa-solid fa-chalkboard-user"></i> Issue
+                        Reporting
+                      </p>
+                    </li>
+                    <li>
+                      <p className="btn m-0 ps-5" style={{ color: "white" }}>
+                        <i className="fa-solid fa-chalkboard-user"></i> Exam
+                        Mode Update
+                      </p>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              <br />
+
+              <li className="nav-item">
+                <p
+                  className="dropdown-heading"
+                  onClick={() => toggleDropdown("invigilator")}
+                >
+                  <i className="fa-solid fa-person"></i> Invigilator
+                </p>
+                {dropdownOpen.invigilator && (
+                  <ul className="dropdown-list">
+                    <li>
+                      <p
+                        className="btn m-0 ps-5"
+                        style={{ color: "white" }}
+                        onClick={() => navigate("/attend")}
+                      >
+                        <i className="fa-solid fa-chalkboard-user"></i>{" "}
+                        Attendance
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        className="btn m-0 ps-5"
+                        style={{ color: "white" }}
+                        onClick={() => navigate("/incident")}
+                      >
+                        <i className="fa-solid fa-chalkboard-user"></i> Incident
+                        Reporting
+                      </p>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </ul>
           </div>
-    );
+        </div>
+      </div>
+      <div
+        className="d-flex flex-column"
+        style={{ backgroundColor: "#070241", height: "10vh" }}
+      >
+        <i
+          className="fa-solid fa-right-from-bracket fa-2x"
+          style={{ color: "white" }}
+        ></i>
+      </div>
+    </div>
+  );
 }
 
 export default NavBar;
