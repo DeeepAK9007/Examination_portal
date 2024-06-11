@@ -1,7 +1,99 @@
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { LoginContext, User } from "../context/loginContext";
+import { login } from "../apis/backend";
+
 
 function Login() {
+
+  const navigate = useNavigate();
+  const { user, setUser, isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
+  const [formData, setFormData] = useState<User>({
+    email_id: "",
+    password: "",
+  });
+  const [error, setError] = useState(""); // Updated: Added state for error handling
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  useEffect(() => {
+    setUser(formData);
+    console.log("User", user);
+    console.log(formData);
+    const lowerCaseName: string = formData.email_id.toLowerCase();
+    if (
+      lowerCaseName === "admin@rasp.com" &&
+      formData.password === "admin@123"
+    ) {
+      console.log("User inside useEffect", user);
+
+      setIsLoggedIn(true);
+      console.log("Is user Logged In:", isLoggedIn);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [formData]);
+
+  // // Function to check if email is valid
+  // const isEmailValid = () => {
+  //   // console.log("Email validity: ",emailRegex.test(formData.email_id));
+  //   return emailRegex.test(formData.email_id);
+  // };
+
+  // // Function to check if password satisfies requirements
+  // const isPasswordValid = () => {
+  //   // Implement your password validation logic here
+  //   // For example, check if password length is greater than or equal to 8 characters
+  //   // console.log("Password validity: ",formData.password.length >= 6 );
+  //   return formData.password.length >= 6;
+  // };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("handle called",isLoggedIn);
+    // setUser(formData);
+    const lowerCaseName: string = formData.email_id.toLowerCase();
+    if (
+      lowerCaseName === "admin@rasp.com" &&
+      formData.password === "admin@123"
+    ) {
+      setFormData({
+        ...formData,
+        ["email_id"]: lowerCaseName,
+        ["password"]: formData.password,
+      });
+
+      const loginObj: User = formData;
+      console.log("loginUser",loginObj);
+      const ssid = await login(loginObj);
+
+      console.log("retreived ssid",ssid);
+      // const session_id = await res.json();
+      // const ssid = res;
+
+      console.log("User session Id after submit", ssid);
+
+      // setIsLoggedIn(true);
+      // console.log("Is user Logged In after submit:", isLoggedIn);
+
+      // Set data in session storage
+      sessionStorage.setItem("key", ssid);
+      // Get data from session storage
+      const value = sessionStorage.getItem("key");
+      console.log("Ssid after submit:",value); // Output: value
+      navigate("/user");
+    } else if (lowerCaseName !== "admin@rasp.com") {
+      setError("Invalid email"); // Updated: Set error message for invalid credentials
+    } else if (formData.password !== "admin@123") {
+      setError("Invalid password"); // Updated: Set error message for invalid credentials
+    } else {
+      setError("Invalid email or password");
+    }
+    // navigate("/dashboard");
+  };
+
   return (
     <div
       className=""
@@ -67,7 +159,7 @@ function Login() {
             <div className="d-flex justify-content-center">
               <img
                 style={{ height: "252px", width: "233px" }}
-                src="https://s3-alpha-sig.figma.com/img/1c8b/a115/5555c3e534dec5f2c27633aee63a0fe8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mQHPokX3UO-IhGNKk85-IXTYY~gagNwnBoPKrp5Ge8HWaPfkZmIsR8Uvnq9LKEv2ZBCXxL6P1MbJoE76~Al~CdYAMcp7bNn-eiz1G~eG5QxG9WfWmMQ97eGKv2zzYu8p3rkgUgtKlGukgyWg2Ke4Dk2FAK3xAJP9JuKy7~pxoYO~RdzXmuVXAQNdegFYskI3RQGBQedVu5~WqJHNipQcjB75u1qeqpA0FJbyuA2y6Sbo~mOVHBkXTCsGEGCM9Eio9e7a7FsRmF7ZJz6f6MW5BVtkEjwRVU9XtjpBC5imZ5do-bEckjO6iO7t6JB0-HkhlyGMYlj4Fz1Vlu~EzHFJyA__"
+                src="src/components/iiit_logo.png"
                 alt="the pic"
               />
             </div>
@@ -97,11 +189,6 @@ function Login() {
               <i className="fa-brands fa-twitter me-2 fa-2x"></i>
               <i className="fa-brands fa-linkedin me-2 fa-2x"></i>
               <i className="fa-brands fa-youtube me-2 fa-2x"></i>
-              {/* <img src={addresses[0]} style={img_spec}></img>
-                                <img src={addresses[1]} style={img_spec}></img>
-                                <img src={addresses[2]} style={img_spec}></img> 
-                                <img src={addresses[3]} style={img_spec}></img>
-                                <img src={addresses[4]} style={img_spec}></img> */}
             </div>
             <p style={{ textAlign: "center", color: "white" }}>
               {" "}
@@ -120,37 +207,42 @@ function Login() {
             style={{ marginTop: "15vh" }}
           >
             <h3>Login form</h3>
-            <div className="d-flex gap-4 justify-content-end">
-              <input
-                type="email"
-                className="form-control  bg-light  border-1"
-                name="email_id"
-                placeholder="Email"
-              />
-            </div>
-            <div className="d-flex gap-4  justify-content-start">
-              <input
-                type="password"
-                className="form-control bg-light border-1 "
-                name="password"
-                placeholder="Enter Password"
-              />
-            </div>
-            <a href="https://www.google.com">Forgot Password?</a>
-            <button
-              type="button"
-              className="btn btn-primary"
-              style={{ width: "274px" }}
-            >
-              Login
-            </button>
-            <p>
-              New user?<a href="https://www.google.com">Click here </a> to
-              register <br />
-              To change password <a href="https://www.google.com">
-                Click here
-              </a>{" "}
-            </p>
+            <form className="d-flex flex-column" onSubmit={handleSubmit}>
+                  <div className="d-flex gap-4 justify-content-end m-2">
+                    <input
+                      type="email"
+                      className="form-control  bg-light  border-1"
+                      name="email_id"
+                      placeholder="Email"
+                      onChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })}
+                    />
+                  </div>
+                  <div className="d-flex gap-4  justify-content-start m-2">
+                    <input
+                      type="password"
+                      className="form-control bg-light border-1 "
+                      name="password"
+                      placeholder="Enter Password"
+                      onChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })}
+                    />
+                  </div>
+                  <a className="m-3" href="https://www.google.com">Forgot Password?</a>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    style={{ width: "274px" }}
+                    //onClick={handleSubmit}
+                  >
+                    Login
+                  </button>
+                  <p className="m-2">
+                    New user?<a href="https://www.google.com">Click here </a> to
+                    register <br />
+                    To change password <a href="https://www.google.com">
+                      Click here
+                    </a>{" "}
+                  </p>
+              </form>
           </div>
         </div>
       </div>

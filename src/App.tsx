@@ -13,8 +13,8 @@ import Incident from "./components/incident";
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/" element={<User />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/user" element={<User />} />
       <Route path="/schedule" element={<Schedule />} />
       <Route path="/batch" element={<Batch />} />
       <Route path="/room" element={<Room />} />
