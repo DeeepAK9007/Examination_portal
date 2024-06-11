@@ -38,7 +38,7 @@ function NavBar() {
         <div className="my-2">
           <p className="text-center mt-2">
             <img
-              src="https://s3-alpha-sig.figma.com/img/1c8b/a115/5555c3e534dec5f2c27633aee63a0fe8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mQHPokX3UO-IhGNKk85-IXTYY~gagNwnBoPKrp5Ge8HWaPfkZmIsR8Uvnq9LKEv2ZBCXxL6P1MbJoE76~Al~CdYAMcp7bNn-eiz1G~eG5QxG9WfWmMQ97eGKv2zzYu8p3rkgUgtKlGukgyWg2Ke4Dk2FAK3xAJP9JuKy7~pxoYO~RdzXmuVXAQNdegFYskI3RQGBQedVu5~WqJHNipQcjB75u1qeqpA0FJbyuA2y6Sbo~mOVHBkXTCsGEGCM9Eio9e7a7FsRmF7ZJz6f6MW5BVtkEjwRVU9XtjpBC5imZ5do-bEckjO6iO7t6JB0-HkhlyGMYlj4Fz1Vlu~EzHFJyA__"
+              src="src/components/iiit_logo.png"
               className="border rounded-circle p-2 w-25 h-25"
               alt=""
             />
@@ -71,7 +71,7 @@ function NavBar() {
                     <li>
                       <p
                         className="btn my-auto ps-5"
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/user")}
                         style={{ color: "white" }}
                       >
                         <i className="fa-regular fa-user"></i> User
