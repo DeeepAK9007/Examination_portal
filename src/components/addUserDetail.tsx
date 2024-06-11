@@ -5,6 +5,12 @@ function AddUser() {
   const [rollNo, setRollNo] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [file, setFile] = useState<string>("");
+  const [selectedCourse, setSelectedCourse] = useState<string>("");
+  // const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setSelectedCourse(e.target.value);
+  //   console.log(e.target.value);
+  // };
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
@@ -14,11 +20,18 @@ function AddUser() {
 
       <form className="d-flex flex-row jutify-content-evenly w-100">
         <div className="d-flex flex-column ms-5 w-50">
-          <div className="mb-3 mt-5">
+          <div className="mb-3 mt-5 form-group">
+            <div className="palceholder ms-1">
+              <label htmlFor="file">Choose File</label>
+              <span className="star"> *</span>
+            </div>
             <input
               type="file"
               className="form-control"
-              id="exampleInputEmail1"
+              id="file"
+              value={file}
+              onChange={(e) => setFile(e.target.value)}
+              required
             />
           </div>
           <div className="mb-3 form-group">
@@ -66,21 +79,32 @@ function AddUser() {
         </div>
         <div className="d-flex flex-column ms-5 w-50 me-5">
           <div className="mb-3 mt-5 form-group">
-            <div className="">
-              <select
-                name="Exam Role"
-                className="form-select textyformcontrol"
-                id="floatingSelect"
-                aria-label="Floating label select example"
-              >
-                <option value="" disabled selected className="default-option">
-                  Exam Role
-                </option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
+            <div
+              className="palceholder ms-1"
+              style={{ display: selectedCourse ? "none" : "" }}
+            >
+              <label htmlFor="file">Exam Role</label>
+              <span className="star"> *</span>
             </div>
+            <select
+              name="Exam Role"
+              className="form-select textyformcontrol"
+              id="floatingSelect"
+              aria-label="Floating label select example"
+              value={selectedCourse}
+              onChange={(e) => setSelectedCourse(e.target.value)}
+            >
+              <option
+                id="examrole"
+                value=""
+                disabled
+                selected
+                className="default-option"
+              ></option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
           </div>
           <div className="mb-3 form-group">
             <div

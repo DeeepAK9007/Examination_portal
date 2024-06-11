@@ -3,14 +3,13 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState } from "react";
 import YesNoToggle from "./yesNoToggle";
-// import logo from "./iiit_logo.png";
 
 interface PhotoComponentProps {
   value: string;
 }
 
 const PhotoComponent: React.FC<PhotoComponentProps> = (props) => {
-  console.log(props.value);
+  // console.log(props.value);
   return (
     <img
       style={{ height: "100px", width: "100px" }}

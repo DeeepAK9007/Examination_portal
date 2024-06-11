@@ -4,6 +4,11 @@ import "./styles.css";
 function AddRoomDet() {
   const [roomNumber, setRoomNumber] = useState<string>("");
   const [capacity, setCapacity] = useState<string>("");
+  const [selectedCourse, setSelectedCourse] = useState<string>("");
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCourse(event.target.value);
+    console.log(event.target.value);
+  };
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
@@ -50,16 +55,22 @@ function AddRoomDet() {
         </div>
         <div className="d-flex flex-column ms-5 w-50 me-5">
           <div className="mb-3 mt-5 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: selectedCourse ? "none" : "" }}
+            >
+              <label htmlFor="file">Block</label>
+              <span className="star"> *</span>
+            </div>
             <select
               name="block"
               className="form-select"
               id="blockno"
               aria-label="Floating label select example"
+              value={selectedCourse}
+              onChange={handleSelectChange}
             >
-              <option value="" disabled selected>
-                <label>Block</label>
-                <span className="star">*</span>
-              </option>
+              <option id="examrole" value="" disabled selected></option>
               <option value="1">One</option>
               <option value="2">Two</option>
               <option value="3">Three</option>

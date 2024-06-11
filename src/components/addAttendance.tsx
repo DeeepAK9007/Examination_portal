@@ -57,7 +57,7 @@ function AddAttend() {
                 type="search"
                 id="form1"
                 className="form-control"
-                placeholder="Room Number"
+                placeholder="Course Name"
               />
               <label className="form-label"></label>
             </div>

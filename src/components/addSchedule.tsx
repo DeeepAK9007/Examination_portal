@@ -3,6 +3,30 @@ import { useState } from "react";
 function AddSched() {
   const [dateTime, setDateTime] = useState<string>("");
   const [examName, setExamName] = useState<string>("");
+  const [selectedCourse, setSelectedCourse] = useState<string>("");
+  const [roomNumber, setRoomNumber] = useState<string>("");
+  const [invigilator, setInvigilator] = useState<string>("");
+  const [instructor, setInstructor] = useState<string>("");
+  const [supervisor, setSupervisor] = useState<string>("");
+  const [remark, setRemark] = useState<string>("");
+
+  const scheduleData = new FormData();
+  scheduleData.append("dateTime", dateTime);
+  scheduleData.append("examName", examName);
+  scheduleData.append("selectedCourse", selectedCourse);
+  scheduleData.append("roomNumber", roomNumber);
+  scheduleData.append("invigilator", invigilator);
+  scheduleData.append("instructor", instructor);
+  scheduleData.append("supervisor", supervisor);
+  scheduleData.append("remark", remark);
+
+  function handleSubmit() {
+    console.log(scheduleData.values());
+    for (const value of scheduleData.values()) {
+      console.log(value);
+    }
+  }
+
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
@@ -29,19 +53,34 @@ function AddSched() {
               required
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: selectedCourse ? "none" : "" }}
+            >
+              <label htmlFor="file">Select Course</label>
+              <span className="star"> *</span>
+            </div>
             <select
               name="Exam Role"
               className="form-select"
               id="floatingSelect"
               aria-label="Floating label select example"
+              value={selectedCourse}
+              onChange={(e) => setSelectedCourse(e.target.value)}
             >
-              <option value="" disabled selected>
-                Select Course
+              <option
+                id="examrole"
+                value=""
+                disabled
+                selected
+                className="default-option"
+              ></option>
+              <option value="DSA">DSA</option>
+              <option value="Computer Architecture">
+                Computer Architecture
               </option>
-              <option value="1">DSA</option>
-              <option value="2">Computer Architecture</option>
-              <option value="3">DMS</option>
+              <option value="DMS">DMS</option>
             </select>
           </div>
           <div className="mb-3">
@@ -50,6 +89,8 @@ function AddSched() {
               className="form-select"
               id="floatingSelect"
               aria-label="Floating label select example"
+              value={invigilator}
+              onChange={(e) => setInvigilator(e.target.value)}
             >
               <option value="" disabled selected>
                 Assign Invigilator
@@ -65,6 +106,8 @@ function AddSched() {
               className="form-select"
               id="floatingSelect"
               aria-label="Floating label select example"
+              value={supervisor}
+              onChange={(e) => setSupervisor(e.target.value)}
             >
               <option value="" disabled selected>
                 Supervisor
@@ -93,16 +136,29 @@ function AddSched() {
               required
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: roomNumber ? "none" : "" }}
+            >
+              <label htmlFor="loc">Location/Room</label>
+              <span className="star"> *</span>
+            </div>
             <select
               name="Assign invigilator"
               className="form-select"
               id="floatingSelect"
               aria-label="Floating label select example"
+              value={roomNumber}
+              onChange={(e) => setRoomNumber(e.target.value)}
             >
-              <option value="" disabled selected>
-                Location/Room
-              </option>
+              <option
+                id="loc"
+                value=""
+                disabled
+                selected
+                className="default-option"
+              ></option>
               <option value="1">R-203</option>
               <option value="2">R-200</option>
               <option value="3">R-400</option>
@@ -114,6 +170,8 @@ function AddSched() {
               className="form-select"
               id="floatingSelect"
               aria-label="Floating label select example"
+              value={instructor}
+              onChange={(e) => setInstructor(e.target.value)}
             >
               <option value="" disabled selected>
                 Instructor
@@ -124,13 +182,19 @@ function AddSched() {
             </select>
           </div>
           <div className="mb-3">
-            <input className="form-control" placeholder="Remark" />
+            <input
+              className="form-control"
+              placeholder="Remark"
+              value={remark}
+              onChange={(e) => setRemark(e.target.value)}
+            />
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
               type="button"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
+              onClick={handleSubmit}
             >
               Save
             </button>

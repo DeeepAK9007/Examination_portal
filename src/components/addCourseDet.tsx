@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles.css";
+// import { addOneCourse } from "../api/methods";
+
 function AddCourseDet() {
   const [CourseCode, setCourseCode] = useState<string>("");
   const [CourseName, setCourseName] = useState<string>("");
 
-  //   const handleBatchNameChange = (
-  //     event: React.ChangeEvent<HTMLInputElement>
-  //   ) => {
-  //     setBatchName(event.target.value);
-  //   };
+  const courseData = new FormData();
+  courseData.append("CourseCode", CourseCode);
+  courseData.append("CourseName", CourseName);
+
+  useEffect(() => {}, [courseData]);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+  }
+
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
@@ -16,7 +23,10 @@ function AddCourseDet() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form className="d-flex flex-row jutify-content-evenly w-100">
+      <form
+        className="d-flex flex-row jutify-content-evenly w-100"
+        onSubmit={handleSubmit}
+      >
         <div className="d-flex flex-column ms-5 w-50">
           <div className="mb-3 mt-5 form-group">
             <div

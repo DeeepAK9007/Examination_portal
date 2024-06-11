@@ -4,6 +4,8 @@ function AddTerm() {
   const [termName, setTermName] = useState<string>("");
   const [dateTime, setDateTime] = useState<string>("");
 
+  // const termData = new FormData();
+
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>

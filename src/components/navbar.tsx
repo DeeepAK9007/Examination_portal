@@ -20,10 +20,13 @@ function NavBar() {
   });
 
   const toggleDropdown = (section: keyof DropdownState) => {
-    setDropdownOpen((prevState) => ({
-      ...prevState,
-      [section]: !prevState[section],
-    }));
+    setDropdownOpen({
+      admin: false,
+      examOffice: false,
+      courseInstructor: false,
+      invigilator: false,
+      [section]: !dropdownOpen[section],
+    });
   };
 
   return (
@@ -226,12 +229,16 @@ function NavBar() {
         </div>
       </div>
       <div
-        className="d-flex flex-column"
+        className="d-flex flex-row justify-content-around"
         style={{ backgroundColor: "#070241", height: "10vh" }}
       >
+        <div className="ms-3 mt-2" style={{ color: "white" }}>
+          <p className="mb-0 fw-bold">Application Admin</p>
+          <p>application@iiitb.in</p>
+        </div>
         <i
-          className="fa-solid fa-right-from-bracket fa-2x"
-          style={{ color: "white" }}
+          className="fa-solid fa-right-from-bracket fa-2x mb-4 fs-4"
+          style={{ color: "white", transform: "rotate(180deg)" }}
         ></i>
       </div>
     </div>
