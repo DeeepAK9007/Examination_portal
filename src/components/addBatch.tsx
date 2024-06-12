@@ -8,7 +8,18 @@ function AddBatch() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setBatchName(event.target.value);
+    console.log(batchName);
   };
+
+  interface batchType
+  {
+      batch_name: string
+  }
+
+  async function post_batch()
+  { 
+      const new: bat
+  }
 
   return (
     <div>
@@ -41,6 +52,7 @@ function AddBatch() {
               type="button"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
+              onClick={post_batch}
             >
               Save
             </button>
