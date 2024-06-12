@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./styles.css";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 
 function AddUser() {
   const [rollNo, setRollNo] = useState<string>("");
@@ -78,32 +79,29 @@ function AddUser() {
           </div>
         </div>
         <div className="d-flex flex-column ms-5 w-50 me-5">
-          <div className="mb-3 mt-5 form-group">
+        <div className="mb-3 mt-5 form-group">
             <div
               className="palceholder ms-1"
               style={{ display: selectedCourse ? "none" : "" }}
             >
-              <label htmlFor="file">Exam Role</label>
+              <label htmlFor="file">Exam role</label>
               <span className="star"> *</span>
             </div>
             <select
-              name="Exam Role"
-              className="form-select textyformcontrol"
-              id="floatingSelect"
+              name="block"
+              className="form-select"
+              id="blockno"
               aria-label="Floating label select example"
               value={selectedCourse}
-              onChange={(e) => setSelectedCourse(e.target.value)}
             >
-              <option
-                id="examrole"
-                value=""
-                disabled
-                selected
-                className="default-option"
-              ></option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option id="examrole" value="" disabled selected></option>
+              <option value="1">Admin</option>
+              <option value="2">Faculty</option>
+              <option value="3">Student</option>
+              <option value="3">Co-ordinator</option>
+              <option value="3">Invigilator</option>
+              <option value="3">Staff</option>
+              <option value="3">Supervisor</option>
             </select>
           </div>
           <div className="mb-3 form-group">
@@ -149,8 +147,8 @@ function AddUser() {
             </button>
           </div>
         </div>
-      </form>
-    </div>
+      </form >
+    </div >
   );
 }
 
