@@ -5,18 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { LoginContext, User } from "../context/loginContext";
 import { login } from "../apis/backend";
 
-
 function Login() {
-
   const navigate = useNavigate();
   const { user, setUser, isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
+
   const [formData, setFormData] = useState<User>({
     email_id: "",
     password: "",
   });
   const [error, setError] = useState(""); // Updated: Added state for error handling
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   useEffect(() => {
     setUser(formData);
@@ -52,7 +51,8 @@ function Login() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("handle called",isLoggedIn);
+    setIsLoggedIn(true);
+    console.log("handle called", isLoggedIn);
     // setUser(formData);
     const lowerCaseName: string = formData.email_id.toLowerCase();
     if (
@@ -66,10 +66,10 @@ function Login() {
       });
 
       const loginObj: User = formData;
-      console.log("loginUser",loginObj);
+      console.log("loginUser", loginObj);
       const ssid = await login(loginObj);
 
-      console.log("retreived ssid",ssid);
+      console.log("retreived ssid", ssid);
       // const session_id = await res.json();
       // const ssid = res;
 
@@ -82,7 +82,7 @@ function Login() {
       sessionStorage.setItem("key", ssid);
       // Get data from session storage
       const value = sessionStorage.getItem("key");
-      console.log("Ssid after submit:",value); // Output: value
+      console.log("Ssid after submit:", value); // Output: value
       navigate("/user");
     } else if (lowerCaseName !== "admin@rasp.com") {
       setError("Invalid email"); // Updated: Set error message for invalid credentials
@@ -208,41 +208,52 @@ function Login() {
           >
             <h3>Login form</h3>
             <form className="d-flex flex-column" onSubmit={handleSubmit}>
-                  <div className="d-flex gap-4 justify-content-end m-2">
-                    <input
-                      type="email"
-                      className="form-control  bg-light  border-1"
-                      name="email_id"
-                      placeholder="Email"
-                      onChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })}
-                    />
-                  </div>
-                  <div className="d-flex gap-4  justify-content-start m-2">
-                    <input
-                      type="password"
-                      className="form-control bg-light border-1 "
-                      name="password"
-                      placeholder="Enter Password"
-                      onChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })}
-                    />
-                  </div>
-                  <a className="m-3" href="https://www.google.com">Forgot Password?</a>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    style={{ width: "274px" }}
-                    //onClick={handleSubmit}
-                  >
-                    Login
-                  </button>
-                  <p className="m-2">
-                    New user?<a href="https://www.google.com">Click here </a> to
-                    register <br />
-                    To change password <a href="https://www.google.com">
-                      Click here
-                    </a>{" "}
-                  </p>
-              </form>
+              <div className="d-flex gap-4 justify-content-end m-2">
+                <input
+                  type="email"
+                  className="form-control  bg-light  border-1"
+                  name="email_id"
+                  placeholder="Email"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="d-flex gap-4  justify-content-start m-2">
+                <input
+                  type="password"
+                  className="form-control bg-light border-1 "
+                  name="password"
+                  placeholder="Enter Password"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <a className="m-3" href="https://www.google.com">
+                Forgot Password?
+              </a>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{ width: "274px" }}
+                //onClick={handleSubmit}
+              >
+                Login
+              </button>
+              <p className="m-2">
+                New user?<a href="https://www.google.com">Click here </a> to
+                register <br />
+                To change password{" "}
+                <a href="https://www.google.com">Click here</a>{" "}
+              </p>
+            </form>
           </div>
         </div>
       </div>

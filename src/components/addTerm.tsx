@@ -1,10 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { termType } from "../types/myTypes";
+import { addOneTerm } from "../apis/backend";
 
 function AddTerm() {
   const [termName, setTermName] = useState<string>("");
   const [dateTime, setDateTime] = useState<string>("");
 
-  // const termData = new FormData();
+  const [termData, setTermData] = useState<termType>({
+    term_name: "",
+    start_date: "",
+    end_date: "",
+  });
+
+  useEffect(() => {
+    setTermData({
+      term_name: termName,
+      start_date: dateTime,
+      end_date: dateTime,
+    });
+  }, [termName, dateTime]);
+
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("termData: ", termData);
+    addOneTerm(termData);
+  };
 
   return (
     <div>
@@ -13,7 +34,10 @@ function AddTerm() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form className="d-flex flex-row jutify-content-evenly w-100">
+      <form
+        className="d-flex flex-row jutify-content-evenly w-100"
+        onSubmit={handleSubmit}
+      >
         <div className="d-flex flex-column ms-5 w-50">
           <div className="mb-3 mt-5 form-group">
             <div
@@ -53,7 +77,7 @@ function AddTerm() {
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
             >
