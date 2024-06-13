@@ -1,14 +1,44 @@
 import { useState } from "react";
 import "./styles.css";
+import { RoomType } from "../types/myTypes";
 
 function AddRoomDet() {
   const [roomNumber, setRoomNumber] = useState<string>("");
-  const [capacity, setCapacity] = useState<string>("");
-  const [selectedCourse, setSelectedCourse] = useState<string>("");
+  const [roomCapacity, setCapacity] = useState<number | undefined>(undefined);
+  const [selectedBlock, setSelectedBlock] = useState<string>("");
+
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCourse(event.target.value);
+    setSelectedBlock(event.target.value);
     console.log(event.target.value);
   };
+
+async function addSingRoom(e : React.FormEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    const newRoom: RoomType={
+        room_number:roomNumber,
+        block:selectedBlock,
+        capacity:roomCapacity    
+    }
+
+    console.log(newRoom);
+
+    const jsonobj= JSON.stringify(newRoom);
+    console.log(jsonobj);
+    const encode=btoa(jsonobj);
+    console.log(encode);
+    const seshID=sessionStorage.getItem("key");
+    console.log(seshID);
+
+    const response=await fetch("http://localhost:8081/api/room?session_id="+seshID+"&resource="+encode,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors"
+      });
+    console.log(response);
+  }
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
@@ -38,7 +68,7 @@ function AddRoomDet() {
           <div className="mb-3 form-group">
             <div
               className="palceholder"
-              style={{ display: capacity ? "none" : "" }}
+              style={{ display: roomCapacity ? "none" : "" }}
             >
               <label htmlFor="capa">Capacity</label>
               <span className="star">*</span>
@@ -47,8 +77,8 @@ function AddRoomDet() {
               id="capa"
               type="number"
               className="form-control"
-              value={capacity}
-              onChange={(e) => setCapacity(e.target.value)}
+              value={roomCapacity}
+              onChange={(e) => setCapacity(Number(e.target.value))}
               required
             />
           </div>
@@ -57,7 +87,7 @@ function AddRoomDet() {
           <div className="mb-3 mt-5 form-group">
             <div
               className="palceholder ms-1"
-              style={{ display: selectedCourse ? "none" : "" }}
+              style={{ display: selectedBlock ? "none" : "" }}
             >
               <label htmlFor="file">Block</label>
               <span className="star"> *</span>
@@ -67,20 +97,20 @@ function AddRoomDet() {
               className="form-select"
               id="blockno"
               aria-label="Floating label select example"
-              value={selectedCourse}
+              value={selectedBlock}
               onChange={handleSelectChange}
             >
               <option id="examrole" value="" disabled selected></option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option value="Ramanujan">Ramanujan</option>
+              <option value="Bhaskar">Bhaskar</option>
             </select>
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
+              onClick={addSingRoom}
             >
               Save
             </button>
