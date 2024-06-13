@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
-// import { addOneCourse } from "../api/methods";
+import { courseType } from "../types/myTypes";
+import { addOneCourse } from "../apis/backend";
 
 function AddCourseDet() {
   const [CourseCode, setCourseCode] = useState<string>("");
   const [CourseName, setCourseName] = useState<string>("");
 
-  const courseData = new FormData();
-  courseData.append("CourseCode", CourseCode);
-  courseData.append("CourseName", CourseName);
+  const [courseData, setCourseData] = useState<courseType>({
+    course_name: "",
+    course_code: "",
+  });
 
-  useEffect(() => {}, [courseData]);
+  useEffect(() => {
+    setCourseData({
+      course_name: CourseName,
+      course_code: CourseName,
+    });
+  }, [CourseName, CourseCode]);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  }
+    console.log("courseData: ", courseData);
+    addOneCourse(courseData);
+  };
 
   return (
     <div>
@@ -66,7 +75,7 @@ function AddCourseDet() {
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
             >

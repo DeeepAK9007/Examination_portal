@@ -11,16 +11,6 @@ function AddBatch() {
     console.log(batchName);
   };
 
-  interface batchType
-  {
-      batch_name: string
-  }
-
-  async function post_batch()
-  { 
-      const new: bat
-  }
-
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
@@ -52,7 +42,6 @@ function AddBatch() {
               type="button"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
-              onClick={post_batch}
             >
               Save
             </button>

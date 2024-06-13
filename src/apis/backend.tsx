@@ -1,5 +1,6 @@
 import { User } from "../context/loginContext";
-import { termType } from "../types/myTypes";
+import { scheduleType, termType } from "../types/myTypes";
+import { courseType } from "../types/myTypes";
 
 export const login = async (user: User) => {
   console.log("Adding User: ", user);
@@ -60,7 +61,7 @@ export const login = async (user: User) => {
 export const addOneTerm = async (term: termType) => {
   console.log("adding ", term);
   try {
-    const params = new URLSearchParams();
+    // const params = new URLSearchParams();
 
     const jsonObj = term;
     // Convert JSON object to string
@@ -70,26 +71,150 @@ export const addOneTerm = async (term: termType) => {
     // Encode string to Base64
     const base64Encoded = btoa(jsonString);
 
-    console.log(`Base Encoding of adding student: ${base64Encoded}`);
+    // const body = "resource=" + base64Encoded;
 
-    params.append("resource", base64Encoded);
+    console.log(`Base Encoding of adding term: ${base64Encoded}`);
+
+    // params.append("resource", base64Encoded);
     // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
-      params.append("session_id", ssid);
+      console.log("session_id", ssid);
+      // params.append("session_id", ssid);
     } else {
       throw new Error("Session ID is expired");
     }
 
-    const response = await fetch("api/student?" + params.toString(), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
+    const response = await fetch(
+      "http://localhost:8081/api/term?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
 
     console.log("Resposne after adding student: ", response);
   } catch (error) {
     console.log(" error message: ", error);
+  }
+};
+export const addOneCourse = async (course: courseType) => {
+  console.log("adding ", course);
+  try {
+    // const params = new URLSearchParams();
+
+    const jsonObj = course;
+    // Convert JSON object to string
+    const jsonString = JSON.stringify(jsonObj);
+    console.log("Adding term stringify", jsonString);
+
+    // Encode string to Base64
+    const base64Encoded = btoa(jsonString);
+
+    console.log(`Base Encoding of adding course: ${base64Encoded}`);
+
+    // params.append("resource", base64Encoded);
+    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    const ssid = sessionStorage?.getItem("key");
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      // params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    const response = await fetch(
+      "http://localhost:8081/api/course?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+
+    console.log("Resposne after adding course: ", response);
+  } catch (error) {
+    console.log("Error while adding course", error);
+  }
+};
+
+export const addOneSchedule = async (schedule: scheduleType) => {
+  console.log("adding ", schedule);
+  try {
+    // const params = new URLSearchParams();
+
+    const jsonObj = schedule;
+    // Convert JSON object to string
+    const jsonString = JSON.stringify(jsonObj);
+    console.log("Adding schedule stringify", jsonString);
+
+    // Encode string to Base64
+    const base64Encoded = btoa(jsonString);
+
+    // const body = "resource=" + base64Encoded;
+
+    console.log(`Base Encoding of adding schedule: ${base64Encoded}`);
+
+    // params.append("resource", base64Encoded);
+    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    const ssid = sessionStorage?.getItem("key");
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      // params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    const response = await fetch(
+      "http://localhost:8081/api/term?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+
+    console.log("Resposne after adding student: ", response);
+  } catch (error) {
+    console.log(" error message: ", error);
+  }
+};
+
+export const getAllTerms = async () => {
+  try{
+    const ssid = sessionStorage.getItem("key");
+    console.log("Session Id in API: ", ssid);
+    console.log("ssid insde Api Batch", ssid);
+
+    // const response = await fetch("http://localhost:8081/api/term?session_id=" +
+    //     ssid +
+    //     "&resource=" +
+    //     base64Encoded, {
+    //   // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
+    //   method: "GET",
+    //   mode: "cors",
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   },
+    // });
+
+  }catch(error){
+    console.error("Error fetching data from backend:", error);
   }
 };

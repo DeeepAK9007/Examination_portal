@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { scheduleType } from "../types/myTypes";
+import { addOneSchedule } from "../apis/backend";
 
 function AddSched() {
   const [dateTime, setDateTime] = useState<string>("");
@@ -10,22 +12,44 @@ function AddSched() {
   const [supervisor, setSupervisor] = useState<string>("");
   const [remark, setRemark] = useState<string>("");
 
-  const scheduleData = new FormData();
-  scheduleData.append("dateTime", dateTime);
-  scheduleData.append("examName", examName);
-  scheduleData.append("selectedCourse", selectedCourse);
-  scheduleData.append("roomNumber", roomNumber);
-  scheduleData.append("invigilator", invigilator);
-  scheduleData.append("instructor", instructor);
-  scheduleData.append("supervisor", supervisor);
-  scheduleData.append("remark", remark);
+  const [scheduleData, setScheduleData] = useState<scheduleType>({
+    date: "",
+    examination_name: "",
+    course_name: "",
+    room_number: "",
+    invigilator: "",
+    instructor: "",
+    supervisor: "",
+    remarks: "",
+  });
 
-  function handleSubmit() {
-    console.log(scheduleData.values());
-    for (const value of scheduleData.values()) {
-      console.log(value);
-    }
-  }
+  useEffect(() => {
+    setScheduleData({
+      date: dateTime,
+      examination_name: examName,
+      course_name: selectedCourse,
+      room_number: roomNumber,
+      invigilator: invigilator,
+      instructor: instructor,
+      supervisor: supervisor,
+      remarks: remark,
+    });
+  }, [
+    dateTime,
+    examName,
+    selectedCourse,
+    roomNumber,
+    invigilator,
+    instructor,
+    supervisor,
+    remark,
+  ]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("scheduleData: ", scheduleData);
+    addOneSchedule(scheduleData);
+  };
 
   return (
     <div>
@@ -34,7 +58,10 @@ function AddSched() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form className="d-flex flex-row jutify-content-evenly w-100">
+      <form
+        className="d-flex flex-row jutify-content-evenly w-100"
+        onSubmit={handleSubmit}
+      >
         <div className="d-flex flex-column ms-5 w-50">
           <div className="mb-3 mt-5 form-group">
             <div
@@ -95,9 +122,9 @@ function AddSched() {
               <option value="" disabled selected>
                 Assign Invigilator
               </option>
-              <option value="1">Maxx</option>
-              <option value="2">John</option>
-              <option value="3">Cipher</option>
+              <option value="Maxx">Maxx</option>
+              <option value="John">John</option>
+              <option value="Cipher">Cipher</option>
             </select>
           </div>
           <div className="mb-3">
@@ -112,9 +139,9 @@ function AddSched() {
               <option value="" disabled selected>
                 Supervisor
               </option>
-              <option value="1">Maxx</option>
-              <option value="2">John</option>
-              <option value="3">Cipher</option>
+              <option value="Maxx">Maxx</option>
+              <option value="John">John</option>
+              <option value="Cipher">Cipher</option>
             </select>
           </div>
         </div>
@@ -159,9 +186,9 @@ function AddSched() {
                 selected
                 className="default-option"
               ></option>
-              <option value="1">R-203</option>
-              <option value="2">R-200</option>
-              <option value="3">R-400</option>
+              <option value="R-203">R-203</option>
+              <option value="R-200">R-200</option>
+              <option value="R-400">R-400</option>
             </select>
           </div>
           <div className="mb-3">
@@ -176,9 +203,9 @@ function AddSched() {
               <option value="" disabled selected>
                 Instructor
               </option>
-              <option value="1">Andrew NG</option>
-              <option value="2">Angela Yu</option>
-              <option value="3">Harry</option>
+              <option value="Andrew NG">Andrew NG</option>
+              <option value="Angela Yu">Angela Yu</option>
+              <option value="Harry<">Harry</option>
             </select>
           </div>
           <div className="mb-3">
@@ -191,10 +218,9 @@ function AddSched() {
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
-              onClick={handleSubmit}
             >
               Save
             </button>
