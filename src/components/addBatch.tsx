@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./styles.css";
+import { batchType } from "../types/myTypes";
 
 function AddBatch() {
   const [batchName, setBatchName] = useState<string>("");
@@ -11,6 +12,33 @@ function AddBatch() {
     console.log(batchName);
   };
 
+  async function batchAdd(e : React.FormEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    // const params = new URLSearchParams();
+    const newobj: batchType={
+      batch_name: batchName
+    }
+    const jsonobj=JSON.stringify(newobj);
+
+    const encode=btoa(jsonobj);
+    
+    // params.append("resource",encode);
+    const seshID=sessionStorage.getItem("key");
+    // params.append("session_id",seshID);
+
+    const response=await fetch("http://localhost:8081/api/batch?session_id="+seshID+"&resource="+encode,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      mode: "cors"
+    });
+
+    console.log("obj toi send",encode);
+    console.log("sesh id here",seshID);
+    // console.log("param here",params);
+    console.log("response here", response);
+  }
 
   return (
     <div>
@@ -40,9 +68,10 @@ function AddBatch() {
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
+              onClick={batchAdd}
             >
               Save
             </button>
