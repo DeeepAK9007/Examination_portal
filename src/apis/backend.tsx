@@ -294,3 +294,59 @@ export const getAllSchedules = async () => {
     console.error("Error fetching data from backend:", error);
   }
 };
+
+export const getAllUsers= async () =>{
+    const seshId=sessionStorage.getItem("key");
+    console.log("session id: ",seshId);
+
+    const response=await fetch("http://localhost:8081/api/user_type?queryId=GET_ALL&session_id="+seshId,
+      {
+          method:"GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+      });
+
+    console.log(response);
+    const json_users=await response.json();
+    const users=json_users.resource;
+    console.log(users);
+    return users;
+}
+
+export const getAllBatches= async () =>{
+  const seshId=sessionStorage.getItem("key");
+  console.log("session id: ",seshId);
+
+  const response=await fetch("http://localhost:8081/api/batch?queryId=GET_ALL&session_id="+seshId,
+    {
+        method:"GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+    });
+
+  console.log("obtained resposnse here",response);
+  const json_users=await response.json();
+  const batches=json_users.resource;
+  console.log("here are the batches",batches);
+  return batches;
+}
+
+export const getAllRooms= async () =>{
+  const seshId=sessionStorage.getItem("key");
+  const response=await fetch("http://localhost:8081/api/room?queryId=GET_ALL&session_id="+seshId,
+    {
+        method:"GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+    });
+
+  const json_users=await response.json();
+  const rooms=json_users.resource;
+  return rooms;
+}

@@ -4,6 +4,7 @@ import { batchType } from "../types/myTypes";
 
 function AddBatch() {
   const [batchName, setBatchName] = useState<string>("");
+  const [actStatus, setActStatus] = useState<string>("");
 
   const handleBatchNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -16,7 +17,8 @@ function AddBatch() {
     e.preventDefault();
     // const params = new URLSearchParams();
     const newobj: batchType={
-      batch_name: batchName
+      batch_name: batchName,
+      status: actStatus
     }
     const jsonobj=JSON.stringify(newobj);
 
@@ -65,6 +67,27 @@ function AddBatch() {
               onChange={handleBatchNameChange}
               required
             />
+          </div>
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: actStatus ? "none" : "" }}
+            >
+              <label htmlFor="file">Status</label>
+              <span className="star"> *</span>
+            </div>
+            <select
+              name="block"
+              className="form-select"
+              id="blockno"
+              aria-label="Floating label select example"
+              value={actStatus}
+              onChange={(e) => setActStatus(e.target.value)}
+            >
+              <option id="examrole" value="" disabled selected></option>
+              <option value="Active">Active</option>
+              <option value="InActive">InActive</option>
+            </select>
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button

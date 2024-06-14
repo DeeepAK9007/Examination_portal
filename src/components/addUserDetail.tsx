@@ -11,6 +11,7 @@ function AddUser() {
   const [mob_num, setMobNO] = useState<string>("");
   const [card_num, setCardNo] = useState<string>("");
   const [expiry, setExpiry] = useState<string>("");
+  const [actStatus,setActStatus]=useState<string>("");
   // const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   //   setSelectedCourse(e.target.value);
   //   console.log(e.target.value);
@@ -31,7 +32,8 @@ function AddUser() {
         mobile_number:mob_num,
         card_number:card_num,
         expiry_date:expiry,
-        image_url:file
+        image_url:file,
+        status:actStatus
       }
     console.log(newUser);
     
@@ -185,6 +187,27 @@ function AddUser() {
               value={expiry}
               onChange={(e)=>{setExpiry(e.target.value)}}
             />
+          </div>
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: actStatus ? "none" : "" }}
+            >
+              <label htmlFor="file">Status</label>
+              <span className="star"> *</span>
+            </div>
+            <select
+              name="block"
+              className="form-select"
+              id="blockno"
+              aria-label="Floating label select example"
+              value={actStatus}
+              onChange={(e) => setActStatus(e.target.value)}
+            >
+              <option id="examrole" value="" disabled selected></option>
+              <option value="Active">Active</option>
+              <option value="InActive">InActive</option>
+            </select>
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
