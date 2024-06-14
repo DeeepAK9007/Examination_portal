@@ -6,6 +6,7 @@ function AddRoomDet() {
   const [roomNumber, setRoomNumber] = useState<string>("");
   const [roomCapacity, setCapacity] = useState<number | undefined>(undefined);
   const [selectedBlock, setSelectedBlock] = useState<string>("");
+  const [actStatus, setActStat] = useState<string>("");
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedBlock(event.target.value);
@@ -17,7 +18,8 @@ async function addSingRoom(e : React.FormEvent<HTMLButtonElement>) {
     const newRoom: RoomType={
         room_number:roomNumber,
         block:selectedBlock,
-        capacity:roomCapacity    
+        capacity:roomCapacity,
+        status:actStatus 
     }
 
     console.log(newRoom);
@@ -103,6 +105,27 @@ async function addSingRoom(e : React.FormEvent<HTMLButtonElement>) {
               <option id="examrole" value="" disabled selected></option>
               <option value="Ramanujan">Ramanujan</option>
               <option value="Bhaskar">Bhaskar</option>
+            </select>
+          </div>
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: status ? "none" : "" }}
+            >
+              <label htmlFor="file">Status</label>
+              <span className="star"> *</span>
+            </div>
+            <select
+              name="block"
+              className="form-select"
+              id="blockno"
+              aria-label="Floating label select example"
+              value={actStatus}
+              onChange={(e) => setActStat(e.target.value)}
+            >
+              <option id="examrole" value="" disabled selected></option>
+              <option value="Active">Active</option>
+              <option value="InActive">InActive</option>
             </select>
           </div>
           <div className="d-flex justify-content-end mb-3">
