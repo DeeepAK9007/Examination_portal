@@ -1,10 +1,12 @@
 import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Custom_button from "./actions";
 import Modal from "react-modal";
 import PopUp from "./popUp";
+import { courseType } from "../types/myTypes";
+import { getAllCourses } from "../apis/backend";
 
 Modal.setAppElement("#root"); // For accessibility
 
@@ -19,11 +21,13 @@ const CourseConfTab: React.FC = () => {
     setModalIsOpen(false);
   };
 
-  const [rowData, setRowData] = useState([
-    { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
-    { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
-    { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
-  ]);
+  // const [rowData, setRowData] = useState([
+  //   { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
+  //   { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
+  //   { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
+  // ]);
+
+  const [courses, setCourses] = useState<courseType[]>([]);
 
   const [colDefs, setColDefs] = useState([
     {
@@ -51,6 +55,29 @@ const CourseConfTab: React.FC = () => {
     },
   };
 
+  useEffect(() => {
+    const fetchTerms = async () => {
+      try {
+        const res = await getAllCourses();
+        // console.log("Terms", res);
+        const filteredTerms = res.map((course: courseType) => ({
+          Course_Code: course.course_code,
+          Course_Name: course.course_name,
+          Active: true,
+          Actions: "remove", // Ensure this field is correctly mapped if required
+        }));
+        setCourses(filteredTerms);
+        // console.log("Response");
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+    fetchTerms();
+  }, []);
+
+  console.log("Row data:", courses);
+  console.log("Column Data", colDefs);
+
   return (
     <div>
       <div
@@ -60,7 +87,7 @@ const CourseConfTab: React.FC = () => {
         <AgGridReact
           rowSelection="multiple"
           headerCheckboxSelection={true}
-          rowData={rowData}
+          rowData={courses}
           onCellClicked={onCellClicked}
           columnDefs={colDefs}
         />

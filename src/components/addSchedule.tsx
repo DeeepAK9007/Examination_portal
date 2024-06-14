@@ -11,6 +11,7 @@ function AddSched() {
   const [instructor, setInstructor] = useState<string>("");
   const [supervisor, setSupervisor] = useState<string>("");
   const [remark, setRemark] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
   const [scheduleData, setScheduleData] = useState<scheduleType>({
     date: "",
@@ -21,6 +22,7 @@ function AddSched() {
     instructor: "",
     supervisor: "",
     remarks: "",
+    status: "",
   });
 
   useEffect(() => {
@@ -33,6 +35,7 @@ function AddSched() {
       instructor: instructor,
       supervisor: supervisor,
       remarks: remark,
+      status: status,
     });
   }, [
     dateTime,
@@ -43,6 +46,7 @@ function AddSched() {
     instructor,
     supervisor,
     remark,
+    status,
   ]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -68,7 +72,7 @@ function AddSched() {
               className="palceholder"
               style={{ display: dateTime ? "none" : "" }}
             >
-              <label htmlFor="datetime">Date Time</label>
+              <label htmlFor="datetime">StartDate - EndDate</label>
               <span className="star">*</span>
             </div>
             <input
@@ -215,6 +219,27 @@ function AddSched() {
               value={remark}
               onChange={(e) => setRemark(e.target.value)}
             />
+          </div>
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: status ? "none" : "" }}
+            >
+              <label htmlFor="file">Status</label>
+              <span className="star"> *</span>
+            </div>
+            <select
+              name="block"
+              className="form-select"
+              id="blockno"
+              aria-label="Floating label select example"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option id="examrole" value="" disabled selected></option>
+              <option value="Active">Active</option>
+              <option value="InActive">InActive</option>
+            </select>
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button

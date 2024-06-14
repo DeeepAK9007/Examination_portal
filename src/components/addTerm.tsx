@@ -5,11 +5,15 @@ import { addOneTerm } from "../apis/backend";
 function AddTerm() {
   const [termName, setTermName] = useState<string>("");
   const [dateTime, setDateTime] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+
+  console.log(status);
 
   const [termData, setTermData] = useState<termType>({
     term_name: "",
     start_date: "",
     end_date: "",
+    status: "",
   });
 
   useEffect(() => {
@@ -17,9 +21,9 @@ function AddTerm() {
       term_name: termName,
       start_date: dateTime,
       end_date: dateTime,
+      status: status,
     });
-  }, [termName, dateTime]);
-
+  }, [termName, dateTime, status]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,7 +67,7 @@ function AddTerm() {
               className="palceholder"
               style={{ display: dateTime ? "none" : "" }}
             >
-              <label htmlFor="datetime">Date Time</label>
+              <label htmlFor="datetime">StartDate - EndDate</label>
               <span className="star">*</span>
             </div>
             <input
@@ -74,6 +78,27 @@ function AddTerm() {
               onChange={(e) => setDateTime(e.target.value)}
               required
             />
+          </div>
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: status ? "none" : "" }}
+            >
+              <label htmlFor="file">Status</label>
+              <span className="star"> *</span>
+            </div>
+            <select
+              name="block"
+              className="form-select"
+              id="blockno"
+              aria-label="Floating label select example"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option id="examrole" value="" disabled selected></option>
+              <option value="Active">Active</option>
+              <option value="InActive">InActive</option>
+            </select>
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button

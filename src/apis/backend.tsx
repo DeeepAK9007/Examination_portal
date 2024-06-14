@@ -177,7 +177,7 @@ export const addOneSchedule = async (schedule: scheduleType) => {
     }
 
     const response = await fetch(
-      "http://localhost:8081/api/term?session_id=" +
+      "http://localhost:8081/api/exam_schedule?session_id=" +
         ssid +
         "&resource=" +
         base64Encoded,
@@ -197,24 +197,100 @@ export const addOneSchedule = async (schedule: scheduleType) => {
 };
 
 export const getAllTerms = async () => {
-  try{
+  try {
     const ssid = sessionStorage.getItem("key");
     console.log("Session Id in API: ", ssid);
-    console.log("ssid insde Api Batch", ssid);
+    console.log("ssid insde Api term", ssid);
+    const queryId = "GET_ALL";
 
-    // const response = await fetch("http://localhost:8081/api/term?session_id=" +
-    //     ssid +
-    //     "&resource=" +
-    //     base64Encoded, {
-    //   // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
-    //   method: "GET",
-    //   mode: "cors",
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded",
-    //   },
-    // });
+    const response = await fetch(
+      "http://localhost:8081/api/term?queryId=" +
+        queryId +
+        "&session_id=" +
+        ssid,
+      {
+        // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
 
-  }catch(error){
+    console.log("response", response);
+    const jsonData = await response.json();
+    console.log("response json,", jsonData);
+    console.log(jsonData.resource);
+    const terms = jsonData.resource;
+    return terms;
+  } catch (error) {
+    console.error("Error fetching data from backend:", error);
+  }
+};
+
+export const getAllCourses = async () => {
+  try {
+    const ssid = sessionStorage.getItem("key");
+    console.log("Session Id in API: ", ssid);
+    console.log("ssid insde Api course", ssid);
+    const queryId = "GET_ALL";
+
+    const response = await fetch(
+      "http://localhost:8081/api/course?queryId=" +
+        queryId +
+        "&session_id=" +
+        ssid,
+      {
+        // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log("response", response);
+    const jsonData = await response.json();
+    console.log("response json,", jsonData);
+    console.log(jsonData.resource);
+    const terms = jsonData.resource;
+    return terms;
+  } catch (error) {
+    console.error("Error fetching data from backend:", error);
+  }
+};
+
+export const getAllSchedules = async () => {
+  try {
+    const ssid = sessionStorage.getItem("key");
+    console.log("Session Id in API: ", ssid);
+    console.log("ssid insde Api schedule", ssid);
+    const queryId = "GET_ALL";
+
+    const response = await fetch(
+      "http://localhost:8081/api/exam_schedule?queryId=" +
+        queryId +
+        "&session_id=" +
+        ssid,
+      {
+        // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log("response", response);
+    const jsonData = await response.json();
+    console.log("response json,", jsonData);
+    console.log(jsonData.resource);
+    const terms = jsonData.resource;
+    return terms;
+  } catch (error) {
     console.error("Error fetching data from backend:", error);
   }
 };

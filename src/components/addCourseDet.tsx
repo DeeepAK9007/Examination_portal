@@ -6,18 +6,21 @@ import { addOneCourse } from "../apis/backend";
 function AddCourseDet() {
   const [CourseCode, setCourseCode] = useState<string>("");
   const [CourseName, setCourseName] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
   const [courseData, setCourseData] = useState<courseType>({
     course_name: "",
     course_code: "",
+    status: "",
   });
 
   useEffect(() => {
     setCourseData({
       course_name: CourseName,
-      course_code: CourseName,
+      course_code: CourseCode,
+      status: status,
     });
-  }, [CourseName, CourseCode]);
+  }, [CourseName, CourseCode, status]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,6 +75,27 @@ function AddCourseDet() {
               onChange={(e) => setCourseName(e.target.value)}
               required
             />
+          </div>
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: status ? "none" : "" }}
+            >
+              <label htmlFor="file">Status</label>
+              <span className="star"> *</span>
+            </div>
+            <select
+              name="block"
+              className="form-select"
+              id="blockno"
+              aria-label="Floating label select example"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option id="examrole" value="" disabled selected></option>
+              <option value="Active">Active</option>
+              <option value="InActive">InActive</option>
+            </select>
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
