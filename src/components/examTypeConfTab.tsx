@@ -23,7 +23,6 @@ function ExamTypeTab()
         }));
 
         setTypes(mappedRowData);
-        console.log("some data",mappedRowData);
         } catch (error) {
         console.log("Error fetching data:", error);
         }
@@ -54,7 +53,7 @@ function ExamTypeTab()
       return(
         <div>
             <div className="ag-theme-quartz mt-4 ms-5 shadow"style={{ height:400 , width:'90%'}}>
-                <AgGridReact rowSelection="multiple" headerCheckboxSelection={true} rowData={types} columnDefs={colDefs} />
+                <AgGridReact rowSelection="multiple" rowData={types} columnDefs={colDefs} />
             </div>
         
         </div>

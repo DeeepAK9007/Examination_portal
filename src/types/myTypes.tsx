@@ -38,6 +38,7 @@ export interface examModeUpdateType {
 
 export interface batchType {
   batch_name: string;
+  status: string
 }
 
 export interface RoomType {

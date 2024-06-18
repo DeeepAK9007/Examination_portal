@@ -435,6 +435,6 @@ export const getAllTypes= async () =>{
     });
 
   const json_users=await response.json();
-  const modes=json_users.resource;
-  return modes;
+  const types=json_users.resource;
+  return types;
 }
