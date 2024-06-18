@@ -1,5 +1,5 @@
 import { User } from "../context/loginContext";
-import { scheduleType, termType } from "../types/myTypes";
+import { examModeUpdateType, scheduleType, termType } from "../types/myTypes";
 import { courseType } from "../types/myTypes";
 
 export const login = async (user: User) => {
@@ -295,58 +295,110 @@ export const getAllSchedules = async () => {
   }
 };
 
-export const getAllUsers= async () =>{
-    const seshId=sessionStorage.getItem("key");
-    console.log("session id: ",seshId);
+export const getAllUsers = async () => {
+  const seshId = sessionStorage.getItem("key");
+  console.log("session id: ", seshId);
 
-    const response=await fetch("http://localhost:8081/api/user_type?queryId=GET_ALL&session_id="+seshId,
-      {
-          method:"GET",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-      });
-
-    console.log(response);
-    const json_users=await response.json();
-    const users=json_users.resource;
-    console.log(users);
-    return users;
-}
-
-export const getAllBatches= async () =>{
-  const seshId=sessionStorage.getItem("key");
-  console.log("session id: ",seshId);
-
-  const response=await fetch("http://localhost:8081/api/batch?queryId=GET_ALL&session_id="+seshId,
+  const response = await fetch(
+    "http://localhost:8081/api/user_type?queryId=GET_ALL&session_id=" + seshId,
     {
-        method:"GET",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-    });
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
 
-  console.log("obtained resposnse here",response);
-  const json_users=await response.json();
-  const batches=json_users.resource;
-  console.log("here are the batches",batches);
+  console.log(response);
+  const json_users = await response.json();
+  const users = json_users.resource;
+  console.log(users);
+  return users;
+};
+
+export const getAllBatches = async () => {
+  const seshId = sessionStorage.getItem("key");
+  console.log("session id: ", seshId);
+
+  const response = await fetch(
+    "http://localhost:8081/api/batch?queryId=GET_ALL&session_id=" + seshId,
+    {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
+  console.log("obtained resposnse here", response);
+  const json_users = await response.json();
+  const batches = json_users.resource;
+  console.log("here are the batches", batches);
   return batches;
-}
+};
 
-export const getAllRooms= async () =>{
-  const seshId=sessionStorage.getItem("key");
-  const response=await fetch("http://localhost:8081/api/room?queryId=GET_ALL&session_id="+seshId,
+export const getAllRooms = async () => {
+  const seshId = sessionStorage.getItem("key");
+  const response = await fetch(
+    "http://localhost:8081/api/room?queryId=GET_ALL&session_id=" + seshId,
     {
-        method:"GET",
-        mode: "cors",
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
+  const json_users = await response.json();
+  const rooms = json_users.resource;
+  return rooms;
+};
+
+// Exam mode
+export const addExam_mode = async (exam: examModeUpdateType) => {
+  console.log("adding ", exam);
+  try {
+    // const params = new URLSearchParams();
+
+    const jsonObj = exam;
+    // Convert JSON object to string
+    const jsonString = JSON.stringify(jsonObj);
+    console.log("Adding exam stringify", jsonString);
+
+    // Encode string to Base64
+    const base64Encoded = btoa(jsonString);
+
+    console.log(`Base Encoding of adding exam: ${base64Encoded}`);
+
+    // params.append("resource", base64Encoded);
+    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    const ssid = sessionStorage?.getItem("key");
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      // params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    const response = await fetch(
+      "http://localhost:8081/api/course?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded,
+      {
+        method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-    });
+        mode: "cors",
+      }
+    );
 
-  const json_users=await response.json();
-  const rooms=json_users.resource;
-  return rooms;
-}
+    console.log("Resposne after adding exam: ", response);
+  } catch (error) {
+    console.log("Error while adding exam", error);
+  }
+};

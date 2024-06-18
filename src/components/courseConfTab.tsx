@@ -35,7 +35,7 @@ const CourseConfTab: React.FC = () => {
       flex: 1,
     },
     { field: "Course_Name", flex: 1 },
-    { field: "Active", flex: 1 },
+    { field: "Status", flex: 1 },
     { field: "Actions", flex: 1, cellRenderer: Custom_button },
   ]);
 
@@ -63,7 +63,7 @@ const CourseConfTab: React.FC = () => {
         const filteredTerms = res.map((course: courseType) => ({
           Course_Code: course.course_code,
           Course_Name: course.course_name,
-          Active: true,
+          Status: course.status == "Active" ? true : false,
           Actions: "remove", // Ensure this field is correctly mapped if required
         }));
         setCourses(filteredTerms);

@@ -11,7 +11,7 @@ function TermConfTab() {
   const [colDefs, setColDefs] = useState([
     { field: "Date", flex: 1 },
     { field: "Name", flex: 1 },
-    { field: "Active", flex: 1 },
+    { field: "Status", flex: 1 },
     { field: "Actions", flex: 1, cellRenderer: Custom_button },
   ]);
 
@@ -23,7 +23,7 @@ function TermConfTab() {
         const filteredTerms = res.map((term: termType) => ({
           Date: term.start_date,
           Name: term.term_name,
-          Active: true,
+          Status: term.status == "Active" ? true : false,
           Actions: "remove", // Ensure this field is correctly mapped if required
         }));
         setTerms(filteredTerms);

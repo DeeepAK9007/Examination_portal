@@ -175,13 +175,21 @@ function NavBar() {
                       </p>
                     </li>
                     <li>
-                      <p className="btn m-0 ps-5" style={{ color: "white" }}>
+                      <p
+                        className="btn m-0 ps-5"
+                        style={{ color: "white" }}
+                        onClick={() => navigate("/issuereporting")}
+                      >
                         <i className="fa-solid fa-chalkboard-user"></i> Issue
                         Reporting
                       </p>
                     </li>
                     <li>
-                      <p className="btn m-0 ps-5" style={{ color: "white" }}>
+                      <p
+                        className="btn m-0 ps-5"
+                        style={{ color: "white" }}
+                        onClick={() => navigate("/exammodelupdate")}
+                      >
                         <i className="fa-solid fa-chalkboard-user"></i> Exam
                         Mode Update
                       </p>
