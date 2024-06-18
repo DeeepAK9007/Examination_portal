@@ -116,6 +116,24 @@ function NavBar() {
                         <i className="fa-regular fa-calendar"></i> Course
                       </p>
                     </li>
+                    <li>
+                      <p
+                        className="btn my-auto ps-5"
+                        onClick={() => navigate("/examType")}
+                        style={{ color: "white" }}
+                      >
+                        <i className="fa-regular fa-calendar"></i> Exam Type
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        className="btn my-auto ps-5"
+                        onClick={() => navigate("/examMode")}
+                        style={{ color: "white" }}
+                      >
+                        <i className="fa-regular fa-calendar"></i> Exam Mode
+                      </p>
+                    </li>
                   </ul>
                 )}
               </li>

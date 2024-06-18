@@ -77,61 +77,94 @@ export interface userType {
 }
 
 export interface getuserType {
-  card_number: "string";
-  email: "string";
-  expiry_date: "string";
-  g_created_by_id: "string";
-  g_created_by_name: "string";
-  g_creation_time: 1718209940752;
-  g_soft_delete: "string";
-  id: "string";
-  image_url: "string";
-  mobile_number: "string";
-  name: "string";
-  role: "string";
-  roll_number: "string";
-  status: String;
+  card_number: string
+  email:string
+  expiry_date:string
+  g_created_by_id:string
+  g_created_by_name:string
+  g_creation_time:number,
+  g_soft_delete:string
+  id:string
+  image_url:string
+  mobile_number:string
+  name:string
+  role:string
+  roll_number:string
+  status:string
 }
 
-export interface userMappedType {
-  id: "string";
-  roll_number: "string";
-  Uname: "string";
-  email: "string";
-  role: "string";
-  status: String;
+export interface userMappedType{
+  id:string
+  roll_number:string
+  Uname:string
+  email:string
+  role:string
+  status:string
 }
 
-export interface getBatchType {
-  id: "string";
-  g_created_by_id: "string";
-  g_created_by_name: "string";
-  g_creation_time: number;
-  g_soft_delete: "string";
-  batch_name: "string";
-  status: String;
+export interface getBatchType{
+    id:string,
+    g_created_by_id: string,
+    g_created_by_name: string,
+    g_creation_time: number,
+    g_soft_delete: string,
+    batch_name: string
+    status: string
 }
 
-export interface batchMappedType {
-  id: "string";
-  batch_name: "string";
-  status: String;
+export interface batchMappedType{
+    id:string,
+    batch_name:string
+    status:String
 }
 
-export interface getRoomType {
-  id: "string";
-  g_created_by_id: "string";
-  g_created_by_name: "string";
-  g_creation_time: number;
-  g_soft_delete: "string";
-  room_number: "string";
-  block: "string";
-  capacity: number;
-  status: string;
+export interface getRoomType{
+  id: string,
+  g_created_by_id: string
+  g_created_by_name: string,
+  g_creation_time: number,
+  g_soft_delete: string,
+  room_number: string,
+  block: string,
+  capacity: number,
+  status: string
 }
-export interface roomMatchedType {
-  room_number: "string";
-  block: "string";
-  capacity: number;
-  status: string;
+export interface roomMatchedType
+{
+  room_number: string,
+  block: string,
+  capacity: number,
+  status: string
+}
+
+export interface ExamModeType {
+  exam_mode_name: string,
+  remark: string,
+  status:string
+}
+export interface getModeTypes{
+  id: string,
+  g_created_by_id: string,
+  g_created_by_name: string,
+  g_creation_time: number,
+  g_soft_delete: string,
+  exam_mode_name: string,
+  remark: string,
+  status:string
+}
+
+export interface ExamTypeType {
+  exam_type_name: string,
+  remark: string,
+  status:string
+}
+export interface getTypeTypes{
+  id: string,
+  g_created_by_id: string,
+  g_created_by_name: string,
+  g_creation_time: number,
+  g_soft_delete: string,
+  exam_type_name: string,
+  remark: string,
+  status:string
 }

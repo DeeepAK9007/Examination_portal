@@ -9,8 +9,11 @@ import Course from "./components/course";
 import ProgCord from "./components/progCordi";
 import Attendance from "./components/attendance";
 import Incident from "./components/incident";
-import IssueReporting from "./components/issueReporting";
+import ExamType from "./components/examType";
+import ExamMode from "./components/examMode";
 import ExamModelUpdate from "./components/examModelUpdate";
+import IssueReporting from "./components/issueReporting";
+
 
 function App() {
   return (
@@ -25,8 +28,10 @@ function App() {
       <Route path="/progCord" element={<ProgCord />} />
       <Route path="/attend" element={<Attendance />} />
       <Route path="/incident" element={<Incident />} />
+      <Route path="/examType" element={<ExamType />} />
+      <Route path="/examMode" element={<ExamMode />} />
+      <Route path="/examModelupdate" element={<ExamModelUpdate />} />
       <Route path="/issuereporting" element={<IssueReporting />} />
-      <Route path="/exammodelupdate" element={<ExamModelUpdate />} />
     </Routes>
   );
 }

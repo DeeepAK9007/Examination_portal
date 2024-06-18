@@ -3,7 +3,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState, useEffect } from "react";
 import { getAllSchedules } from "../apis/backend";
-import { scheduleType } from "../types/myTypes";
+import { examModeUpdateType, scheduleType } from "../types/myTypes";
 
 function ExamModelUpdateTab() {
   const [schedules, setSchedules] = useState<scheduleType[]>([]);
@@ -14,8 +14,11 @@ function ExamModelUpdateTab() {
     { field: "CourseName" },
     { field: "Room" },
     { field: "Invigilator" },
+    { field: "Instructor" },
     { field: "Supervisor" },
+    { field: "modeOfExam" },
     { field: "Remark", sortable: true },
+    { field: "Action" },
   ]);
 
   useEffect(() => {
@@ -23,14 +26,17 @@ function ExamModelUpdateTab() {
       try {
         const res = await getAllSchedules();
         // console.log("Terms", res);
-        const filteredTerms = res.map((schedule: scheduleType) => ({
+        const filteredTerms = res.map((schedule: examModeUpdateType) => ({
           DateTime: schedule.date,
           ExamName: schedule.examination_name,
           CourseName: schedule.course_name,
           Room: schedule.room_number,
           Invigilator: schedule.invigilator,
+          Instructor: schedule.instructor,
           Supervisor: schedule.supervisor,
-          Remark: schedule.remarks, // Ensure this field is correctly mapped if required
+          modeOfExam: schedule.mode,
+          Remark: schedule.remarks,
+          Action: schedule.status, // Ensure this field is correctly mapped if required
         }));
         setSchedules(filteredTerms);
         // console.log("Response");

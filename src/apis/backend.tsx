@@ -397,8 +397,44 @@ export const addExam_mode = async (exam: examModeUpdateType) => {
       }
     );
 
-    console.log("Resposne after adding exam: ", response);
-  } catch (error) {
-    console.log("Error while adding exam", error);
-  }
-};
+  const json_users=await response.json();
+  const rooms=json_users.resource;
+  return rooms;
+}catch(error){
+  console.log("error",error);
+}
+}
+
+
+
+export const getAllModes= async () =>{
+  const seshId=sessionStorage.getItem("key");
+  const response=await fetch("http://localhost:8081/api/exam_mode?queryId=GET_ALL&session_id="+seshId,
+    {
+        method:"GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+    });
+
+  const json_users=await response.json();
+  const modes=json_users.resource;
+  return modes;
+}
+
+export const getAllTypes= async () =>{
+  const seshId=sessionStorage.getItem("key");
+  const response=await fetch("http://localhost:8081/api/exam_type?queryId=GET_ALL&session_id="+seshId,
+    {
+        method:"GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+    });
+
+  const json_users=await response.json();
+  const modes=json_users.resource;
+  return modes;
+}
