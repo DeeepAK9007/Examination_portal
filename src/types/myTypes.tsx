@@ -6,6 +6,7 @@ export interface termType {
 }
 
 export interface courseType {
+  id: string
   course_name: string;
   course_code: string;
   status: string;
@@ -66,6 +67,7 @@ export interface RoomType {
 }
 
 export interface userType {
+  id?: string
   name: string;
   role: string;
   email: string;
@@ -132,6 +134,7 @@ export interface getRoomType{
 }
 export interface roomMatchedType
 {
+  id:string,
   room_number: string,
   block: string,
   capacity: number,
@@ -139,6 +142,7 @@ export interface roomMatchedType
 }
 
 export interface ExamModeType {
+  id:string,
   exam_mode_name: string,
   remark: string,
   status:string
@@ -155,6 +159,7 @@ export interface getModeTypes{
 }
 
 export interface ExamTypeType {
+  id:string,
   exam_type_name: string,
   remark: string,
   status:string
@@ -168,4 +173,8 @@ export interface getTypeTypes{
   exam_type_name: string,
   remark: string,
   status:string
+}
+
+export interface deletestuff{
+  id: string
 }

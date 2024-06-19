@@ -2,11 +2,69 @@ import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState, useEffect } from "react";
-import Custom_button from "./actions";
 import Modal from "react-modal";
 import PopUp from "./popUp";
 import { courseType } from "../types/myTypes";
 import { getAllCourses } from "../apis/backend";
+import { ColDef, GridApi, ColumnApi, RowNode, Column } from 'ag-grid-community';
+import { deletestuff } from "../types/myTypes";
+
+
+type CustomButtonProps = {
+  rowData: courseType;
+};
+
+const CustomButton = ({ rowData }: CustomButtonProps) => {
+  const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      console.log('Row data:', rowData);
+      console.log(rowData.id);
+      const seshID=sessionStorage.getItem("key");
+      console.log("&resource=id:"+rowData.id);
+      const temp :deletestuff={id: rowData.id};
+      const targ=JSON.stringify(temp);
+      const enc=btoa(targ);
+      const resource= await fetch("http://localhost:8081/api/course?session_id="+seshID+"&resource="+enc+"&action=DELETE",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            mode: "cors"
+          }
+        );
+      console.log("result:",resource);
+  };
+
+  return (
+      <div className="d-flex gap-4 justify-content-around mt-2 ">
+          <i className="fas fa-edit " style={{ cursor: "pointer" }}></i>
+          <i onClick={(e) => { deleteUser(e) }} className="fas fa-trash text-danger" style={{ cursor: "pointer" }}></i>
+      </div>
+  );
+};
+
+type CustomButtonRendererParams = {
+  data: courseType;
+  value: any;
+  valueFormatted: any;
+  getValue: () => any;
+  setValue: (value: any) => void;
+  node: RowNode;
+  colDef: ColDef;
+  column: Column;
+  rowIndex: number;
+  api: GridApi;
+  columnApi: ColumnApi;
+  context: any;
+  refreshCell: () => void;
+  eGridCell: HTMLElement;
+  eParentOfValue: HTMLElement;
+};
+
+const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
+  return <CustomButton rowData={params.data} />;
+};
 
 Modal.setAppElement("#root"); // For accessibility
 
@@ -36,7 +94,7 @@ const CourseConfTab: React.FC = () => {
     },
     { field: "Course_Name", flex: 1 },
     { field: "Status", flex: 1 },
-    { field: "Actions", flex: 1, cellRenderer: Custom_button },
+    { field: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 
   const customStyles = {
@@ -61,6 +119,7 @@ const CourseConfTab: React.FC = () => {
         const res = await getAllCourses();
         // console.log("Terms", res);
         const filteredTerms = res.map((course: courseType) => ({
+          id:course.id,
           Course_Code: course.course_code,
           Course_Name: course.course_name,
           Status: course.status == "Active" ? true : false,
