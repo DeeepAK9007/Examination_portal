@@ -397,44 +397,100 @@ export const addExam_mode = async (exam: examModeUpdateType) => {
       }
     );
 
-  const json_users=await response.json();
-  const rooms=json_users.resource;
-  return rooms;
-}catch(error){
-  console.log("error",error);
-}
-}
+    const json_users = await response.json();
+    const rooms = json_users.resource;
+    return rooms;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 
-
-
-export const getAllModes= async () =>{
-  const seshId=sessionStorage.getItem("key");
-  const response=await fetch("http://localhost:8081/api/exam_mode?queryId=GET_ALL&session_id="+seshId,
+export const getAllModes = async () => {
+  const seshId = sessionStorage.getItem("key");
+  const response = await fetch(
+    "http://localhost:8081/api/exam_mode?queryId=GET_ALL&session_id=" + seshId,
     {
-        method:"GET",
-        mode: "cors",
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
+  const json_users = await response.json();
+  const modes = json_users.resource;
+  return modes;
+};
+
+export const getAllTypes = async () => {
+  const seshId = sessionStorage.getItem("key");
+  const response = await fetch(
+    "http://localhost:8081/api/exam_type?queryId=GET_ALL&session_id=" + seshId,
+    {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
+  const json_users = await response.json();
+  const modes = json_users.resource;
+  return modes;
+};
+
+export const updateOrDeleteTerm = async (
+  termId: string,
+  newData: termType,
+  action: string
+) => {
+  try {
+    const params = new URLSearchParams();
+    const ssid = sessionStorage.getItem("key");
+
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    console.log("Student ID:", termId);
+    console.log("New Data:", newData);
+
+    // If action is DELETE, encode the student ID to base64 and set it as resource
+    // If action is MODIFY, encode the new data to base64 and set it as resource
+    console.log("New Data after stingigy: ", JSON.stringify(newData));
+
+    const base64EncodedData =
+      action === "DELETE"
+        ? btoa(JSON.stringify({ id: termId }))
+        : btoa(JSON.stringify(newData));
+    console.log("Editing data encoding: ", base64EncodedData);
+    params.append("resource", base64EncodedData);
+
+    console.log("http://localhost:8081/api/term?" + params.toString());
+
+    const response = await fetch(
+      "http://localhost:8081/api/term?session_id=" +
+        ssid +
+        "&resource=" +
+        base64EncodedData +
+        "&action=MODIFY",
+      {
+        method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-    });
+      }
+    );
 
-  const json_users=await response.json();
-  const modes=json_users.resource;
-  return modes;
-}
+    console.log(response);
+  } catch (error) {
+    console.log("error while updation: ", error);
+  }
+};
 
-export const getAllTypes= async () =>{
-  const seshId=sessionStorage.getItem("key");
-  const response=await fetch("http://localhost:8081/api/exam_type?queryId=GET_ALL&session_id="+seshId,
-    {
-        method:"GET",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-    });
 
-  const json_users=await response.json();
-  const modes=json_users.resource;
-  return modes;
-}

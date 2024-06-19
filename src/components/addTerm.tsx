@@ -9,6 +9,8 @@ function AddTerm() {
 
   console.log(status);
 
+  const dates = dateTime.split("-");
+
   const [termData, setTermData] = useState<termType>({
     term_name: "",
     start_date: "",
@@ -19,8 +21,8 @@ function AddTerm() {
   useEffect(() => {
     setTermData({
       term_name: termName,
-      start_date: dateTime,
-      end_date: dateTime,
+      start_date: dates[0],
+      end_date: dates[1],
       status: status,
     });
   }, [termName, dateTime, status]);

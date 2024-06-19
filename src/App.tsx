@@ -13,7 +13,7 @@ import ExamType from "./components/examType";
 import ExamMode from "./components/examMode";
 import ExamModelUpdate from "./components/examModelUpdate";
 import IssueReporting from "./components/issueReporting";
-
+import AddResource from "./components/addResource";
 
 function App() {
   return (
@@ -32,6 +32,7 @@ function App() {
       <Route path="/examMode" element={<ExamMode />} />
       <Route path="/examModelupdate" element={<ExamModelUpdate />} />
       <Route path="/issuereporting" element={<IssueReporting />} />
+      <Route path="/editTerm" element={<AddResource />} />
     </Routes>
   );
 }

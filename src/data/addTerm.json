@@ -1,0 +1,61 @@
+{
+  "resource": "term",
+  "table": true,
+  "tile": false,
+  "display_name": "term",
+  "menu_context": "setup",
+  "page_name": {
+    "list": "term",
+    "add": "term",
+    "edit": "term",
+    "view": "term"
+  },
+  "add_required": true,
+  "modify_required": true,
+  "delete_required": true,
+  "login_required": true,
+  "list": {
+    "fields": [
+      {
+        "heading": "Date ",
+        "type": "STRING",
+        "order": 1,
+        "sortable": true,
+        "name": "date"
+      },
+      {
+        "heading": "Name ",
+        "type": "STRING",
+        "order": 1,
+        "sortable": true,
+        "name": "name"
+      },
+      {
+        "heading": "Status",
+        "type": "STRING",
+        "order": 1,
+        "sortable": true,
+        "name": "status"
+      }
+    ]
+  },
+  "form": {
+    "blocks": [
+      {
+        "name": "basic_configuration",
+        "order": 1,
+        "fields": [
+          {
+            "label": "Add Batch",
+            "placeholder": "Enter Batch Name",
+            "order": 4,
+            "type": "STRING",
+            "required": true,
+            "component": "textbox",
+            "name": "batch"
+          }
+        ]
+      }
+    ]
+  }
+}
