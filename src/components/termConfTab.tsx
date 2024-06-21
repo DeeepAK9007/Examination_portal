@@ -37,7 +37,9 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
     console.log(rowData.id);
     const seshID = sessionStorage.getItem("key");
     console.log(seshID);
-    navigate(`/editTerm?term=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`);
+    navigate(
+      `/editTerm?term=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
+    );
   };
   return (
     <div className="d-flex gap-4 justify-content-around mt-2 ">

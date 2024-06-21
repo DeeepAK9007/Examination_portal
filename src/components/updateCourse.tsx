@@ -1,46 +1,63 @@
 import NavBar from "./navbar";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { termType } from "../types/myTypes";
-import { updateOrDeleteTerm } from "../apis/backend";
+import { courseType } from "../types/myTypes";
+import { updateOrDeleteCourse } from "../apis/backend";
 
-function AddResource() {
+function UpdateCourse() {
   const navigate = useNavigate();
-  const [termName, setTermName] = useState<string>("");
-  const [dateTime, setDateTime] = useState<string>("");
+
+  const [CourseCode, setCourseCode] = useState<string>("");
+  const [CourseName, setCourseName] = useState<string>("");
   const [status, setStatus] = useState<string>("");
 
-  console.log(status);
-
-  const dates = dateTime.split("-");
-
   const location = useLocation();
-  const termId = new URLSearchParams(location.search).get("id");
-  //const termDetails = new URLSearchParams(location.search).get("term");
-  console.log("Term id:", termId);
-  const [termData, setTermData] = useState<termType>({
-    id:"",
-    term_name: "",
-    start_date: "",
-    end_date: "",
+  const courseId = new URLSearchParams(location.search).get("id");
+  const courseobj = new URLSearchParams(location.search).get("course");
+  console.log("Course id:", courseId);
+  console.log("Course obj", courseobj);
+  const [courseData, setCourseData] = useState<courseType>({
+    id: "",
+    course_name: "",
+    course_code: "",
     status: "",
   });
 
   useEffect(() => {
-    setTermData({
-      id: termId,
-      term_name: termName,
-      start_date: dates[0],
-      end_date: dates[1],
-      status: status,
-    });
-  }, [termName, dateTime, status]);
+    if (courseId && courseobj) {
+      const jsonobj = JSON.parse(atob(courseobj));
+      setCourseCode(jsonobj.Course_Code);
+      setCourseName(jsonobj.Course_Name);
+      setStatus(jsonobj.Status);
+    } else {
+      console.error("Cousre ID is null");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (courseId && courseobj) {
+      const jsonobj = JSON.parse(atob(courseobj));
+      console.log("jsonobj", jsonobj);
+      setCourseData({
+        id: courseId,
+        course_name: CourseName ? CourseName : jsonobj.Course_Name,
+        course_code: CourseCode ? CourseCode : jsonobj.Course_Code,
+        status: status ? status : jsonobj.Status,
+      });
+    } else {
+      console.error("Course ID is null");
+    }
+  }, [CourseName, CourseCode, status]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("termData: ", termData);
-    updateOrDeleteTerm(termId, termData, "MODIFY");
-      navigate("/term");
+    if (courseId) {
+      console.log("courseData: ", courseData);
+      updateOrDeleteCourse(courseId, courseData, "MODIFY");
+      navigate("/course");
+    } else {
+      console.error("Course ID is null");
+    }
   };
 
   return (
@@ -48,7 +65,7 @@ function AddResource() {
       <NavBar />
       <div className="w-100">
         <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-          Update Term Detail
+          Update Course Details{" "}
         </p>
         <hr style={{ width: "95%", margin: "auto" }} />
 
@@ -60,18 +77,16 @@ function AddResource() {
             <div className="mb-3 mt-5 form-group">
               <div
                 className="palceholder"
-                style={{ display: termName ? "none" : "" }}
+                style={{ display: CourseCode ? "none" : "" }}
               >
-                <label htmlFor="name">Name</label>
-                <span className="star">*</span>
+                <label htmlFor="coursecode">Course Code</label>
               </div>
               <input
-                id="name"
+                id="coursecode"
                 type="text"
                 className="form-control"
-                value={termName}
-                onChange={(e) => setTermName(e.target.value)}
-                required
+                value={CourseCode}
+                onChange={(e) => setCourseCode(e.target.value)}
               />
             </div>
           </div>
@@ -79,18 +94,16 @@ function AddResource() {
             <div className="mb-3 mt-5 form-group">
               <div
                 className="palceholder"
-                style={{ display: dateTime ? "none" : "" }}
+                style={{ display: CourseName ? "none" : "" }}
               >
-                <label htmlFor="datetime">StartDate - EndDate</label>
-                <span className="star">*</span>
+                <label htmlFor="coursename">Course Name</label>
               </div>
               <input
-                id="datetime"
+                id="coursename"
                 type="text"
                 className="form-control"
-                value={dateTime}
-                onChange={(e) => setDateTime(e.target.value)}
-                required
+                value={CourseName}
+                onChange={(e) => setCourseName(e.target.value)}
               />
             </div>
             <div className="mb-3 form-group">
@@ -99,7 +112,6 @@ function AddResource() {
                 style={{ display: status ? "none" : "" }}
               >
                 <label htmlFor="file">Status</label>
-                <span className="star"> *</span>
               </div>
               <select
                 name="block"
@@ -130,4 +142,4 @@ function AddResource() {
   );
 }
 
-export default AddResource;
+export default UpdateCourse;

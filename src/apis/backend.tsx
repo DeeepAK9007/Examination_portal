@@ -1,6 +1,16 @@
 import { User } from "../context/loginContext";
-import { examModeUpdateType, scheduleType, termType } from "../types/myTypes";
+import {
+  examModeUpdateType,
+  getuserType,
+  scheduleType,
+  termType,
+} from "../types/myTypes";
 import { courseType } from "../types/myTypes";
+import { batchMappedType } from "../types/myTypes";
+import { roomMatchedType } from "../types/myTypes";
+import { userType } from "../types/myTypes";
+import { ExamTypeType } from "../types/myTypes";
+import { ExamModeType } from "../types/myTypes";
 
 export const login = async (user: User) => {
   console.log("Adding User: ", user);
@@ -457,7 +467,7 @@ export const updateOrDeleteTerm = async (
       throw new Error("Session ID is expired");
     }
 
-    console.log("Student ID:", termId);
+    console.log("term ID:", termId);
     console.log("New Data:", newData);
 
     // If action is DELETE, encode the student ID to base64 and set it as resource
@@ -471,7 +481,7 @@ export const updateOrDeleteTerm = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
-    console.log("http://localhost:8081/api/term?" + params.toString());
+    //console.log("http://localhost:8081/api/term?" + params.toString());
 
     const response = await fetch(
       "http://localhost:8081/api/term?session_id=" +
@@ -493,4 +503,385 @@ export const updateOrDeleteTerm = async (
   }
 };
 
+export const updateOrDeleteCourse = async (
+  courseId: string,
+  newData: courseType,
+  action: string
+) => {
+  try {
+    const params = new URLSearchParams();
+    const ssid = sessionStorage.getItem("key");
 
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    console.log("course ID:", courseId);
+    console.log("New Data:", newData);
+
+    // If action is DELETE, encode the student ID to base64 and set it as resource
+    // If action is MODIFY, encode the new data to base64 and set it as resource
+    console.log("New Data after stingigy: ", JSON.stringify(newData));
+
+    const base64EncodedData =
+      action === "DELETE"
+        ? btoa(JSON.stringify({ id: courseId }))
+        : btoa(JSON.stringify(newData));
+    console.log("Editing data encoding: ", base64EncodedData);
+    params.append("resource", base64EncodedData);
+
+    const response = await fetch(
+      "http://localhost:8081/api/course?session_id=" +
+        ssid +
+        "&resource=" +
+        base64EncodedData +
+        "&action=MODIFY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log(response);
+  } catch (error) {
+    console.log("error while updating course ", error);
+  }
+};
+
+export const updateOrDeleteBatch = async (
+  batchId: string,
+  newData: batchMappedType,
+  action: string
+) => {
+  try {
+    const params = new URLSearchParams();
+    const ssid = sessionStorage.getItem("key");
+
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    console.log("batch ID:", batchId);
+    console.log("New Data:", newData);
+
+    // If action is DELETE, encode the student ID to base64 and set it as resource
+    // If action is MODIFY, encode the new data to base64 and set it as resource
+    console.log("New Data after stingigy: ", JSON.stringify(newData));
+
+    const base64EncodedData =
+      action === "DELETE"
+        ? btoa(JSON.stringify({ id: batchId }))
+        : btoa(JSON.stringify(newData));
+    console.log("Editing data encoding: ", base64EncodedData);
+    params.append("resource", base64EncodedData);
+
+    const response = await fetch(
+      "http://localhost:8081/api/batch?session_id=" +
+        ssid +
+        "&resource=" +
+        base64EncodedData +
+        "&action=MODIFY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log(response);
+  } catch (error) {
+    console.log("error while updating batch ", error);
+  }
+};
+
+export const updateOrDeleteRoom = async (
+  roomId: string,
+  newData: roomMatchedType,
+  action: string
+) => {
+  try {
+    const params = new URLSearchParams();
+    const ssid = sessionStorage.getItem("key");
+
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    console.log("room ID:", roomId);
+    console.log("New Data:", newData);
+
+    // If action is DELETE, encode the student ID to base64 and set it as resource
+    // If action is MODIFY, encode the new data to base64 and set it as resource
+    console.log("New Data after stingigy: ", JSON.stringify(newData));
+
+    const base64EncodedData =
+      action === "DELETE"
+        ? btoa(JSON.stringify({ id: roomId }))
+        : btoa(JSON.stringify(newData));
+    console.log("Editing data encoding: ", base64EncodedData);
+    params.append("resource", base64EncodedData);
+
+    const response = await fetch(
+      "http://localhost:8081/api/room?session_id=" +
+        ssid +
+        "&resource=" +
+        base64EncodedData +
+        "&action=MODIFY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log(response);
+  } catch (error) {
+    console.log("error while updating room ", error);
+  }
+};
+
+export const updateOrDeleteUser = async (
+  userId: string,
+  newData: userType,
+  action: string
+) => {
+  try {
+    const params = new URLSearchParams();
+    const ssid = sessionStorage.getItem("key");
+
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    console.log("user ID:", userId);
+    console.log("New Data:", newData);
+
+    // If action is DELETE, encode the student ID to base64 and set it as resource
+    // If action is MODIFY, encode the new data to base64 and set it as resource
+    console.log("New Data after stingigy: ", JSON.stringify(newData));
+
+    const base64EncodedData =
+      action === "DELETE"
+        ? btoa(JSON.stringify({ id: userId }))
+        : btoa(JSON.stringify(newData));
+    console.log("Editing data encoding: ", base64EncodedData);
+    params.append("resource", base64EncodedData);
+
+    const response = await fetch(
+      "http://localhost:8081/api/user_type?session_id=" +
+        ssid +
+        "&resource=" +
+        base64EncodedData +
+        "&action=MODIFY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log(response);
+  } catch (error) {
+    console.log("error while updating user ", error);
+  }
+};
+
+export const updateOrDeleteExamType = async (
+  examtypeId: string,
+  newData: ExamTypeType,
+  action: string
+) => {
+  try {
+    const params = new URLSearchParams();
+    const ssid = sessionStorage.getItem("key");
+
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    console.log("examtype ID:", examtypeId);
+    console.log("New Data:", newData);
+
+    // If action is DELETE, encode the student ID to base64 and set it as resource
+    // If action is MODIFY, encode the new data to base64 and set it as resource
+    console.log("New Data after stingigy: ", JSON.stringify(newData));
+
+    const base64EncodedData =
+      action === "DELETE"
+        ? btoa(JSON.stringify({ id: examtypeId }))
+        : btoa(JSON.stringify(newData));
+    console.log("Editing data encoding: ", base64EncodedData);
+    params.append("resource", base64EncodedData);
+
+    const response = await fetch(
+      "http://localhost:8081/api/exam_type?session_id=" +
+        ssid +
+        "&resource=" +
+        base64EncodedData +
+        "&action=MODIFY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log(response);
+  } catch (error) {
+    console.log("error while updating examtype ", error);
+  }
+};
+
+export const updateOrDeleteExamMode = async (
+  examModeId: string,
+  newData: ExamModeType,
+  action: string
+) => {
+  try {
+    const params = new URLSearchParams();
+    const ssid = sessionStorage.getItem("key");
+
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    console.log("examMode ID:", examModeId);
+    console.log("New Data:", newData);
+
+    // If action is DELETE, encode the student ID to base64 and set it as resource
+    // If action is MODIFY, encode the new data to base64 and set it as resource
+    console.log("New Data after stingigy: ", JSON.stringify(newData));
+
+    const base64EncodedData =
+      action === "DELETE"
+        ? btoa(JSON.stringify({ id: examModeId }))
+        : btoa(JSON.stringify(newData));
+    console.log("Editing data encoding: ", base64EncodedData);
+    params.append("resource", base64EncodedData);
+
+    const response = await fetch(
+      "http://localhost:8081/api/exam_mode?session_id=" +
+        ssid +
+        "&resource=" +
+        base64EncodedData +
+        "&action=MODIFY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log(response);
+  } catch (error) {
+    console.log("error while updating examMode ", error);
+  }
+};
+
+export const searchUserById = async (userId: string) => {
+  try {
+    const res = await getAllUsers();
+
+    const foundUser = res.find((user: getuserType) => user.id == userId);
+
+    return foundUser;
+  } catch (error) {
+    console.log("error while searching");
+  }
+};
+
+export const searchCourseById = async (courseId: string) => {
+  try {
+    const res = await getAllCourses();
+
+    const foundCourse = res.find((user: getuserType) => user.id == courseId);
+
+    return foundCourse;
+  } catch (error) {
+    console.log("error while searching");
+  }
+};
+
+export const searchBatchById = async (batchId: string) => {
+  try {
+    const res = await getAllBatches();
+
+    const foundBatch = res.find((user: getuserType) => user.id == batchId);
+
+    return foundBatch;
+  } catch (error) {
+    console.log("error while searching");
+  }
+};
+
+export const searchRoomById = async (roomId: string) => {
+  try {
+    const res = await getAllRooms();
+
+    const foundRoom = res.find((user: getuserType) => user.id == roomId);
+
+    return foundRoom;
+  } catch (error) {
+    console.log("error while searching");
+  }
+};
+export const searchTermById = async (termId: string) => {
+  try {
+    const res = await getAllTerms();
+
+    const foundTerm = res.find((user: getuserType) => user.id == termId);
+
+    return foundTerm;
+  } catch (error) {
+    console.log("error while searching");
+  }
+};
+export const searchExamTypeById = async (examtypeId: string) => {
+  try {
+    const res = await getAllTypes();
+
+    const foundExamtype = res.find(
+      (user: getuserType) => user.id == examtypeId
+    );
+
+    return foundExamtype;
+  } catch (error) {
+    console.log("error while searching");
+  }
+};
+export const searchExamModeById = async (examModeId: string) => {
+  try {
+    const res = await getAllModes();
+
+    const foundMode = res.find((user: getuserType) => user.id == examModeId);
+
+    return foundMode;
+  } catch (error) {
+    console.log("error while searching");
+  }
+};

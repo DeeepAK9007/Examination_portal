@@ -13,32 +13,37 @@ function AddRoomDet() {
     console.log(event.target.value);
   };
 
-async function addSingRoom(e : React.FormEvent<HTMLButtonElement>) {
+  async function addSingRoom(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    const newRoom: RoomType={
-        room_number:roomNumber,
-        block:selectedBlock,
-        capacity:roomCapacity,
-        status:actStatus 
-    }
+    const newRoom: RoomType = {
+      room_number: roomNumber,
+      block: selectedBlock,
+      capacity: roomCapacity,
+      status: actStatus,
+    };
 
     console.log(newRoom);
 
-    const jsonobj= JSON.stringify(newRoom);
+    const jsonobj = JSON.stringify(newRoom);
     console.log(jsonobj);
-    const encode=btoa(jsonobj);
+    const encode = btoa(jsonobj);
     console.log(encode);
-    const seshID=sessionStorage.getItem("key");
+    const seshID = sessionStorage.getItem("key");
     console.log(seshID);
 
-    const response=await fetch("http://localhost:8081/api/room?session_id="+seshID+"&resource="+encode,
+    const response = await fetch(
+      "http://localhost:8081/api/room?session_id=" +
+        seshID +
+        "&resource=" +
+        encode,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        mode: "cors"
-      });
+        mode: "cors",
+      }
+    );
     console.log(response);
   }
   return (
@@ -110,7 +115,7 @@ async function addSingRoom(e : React.FormEvent<HTMLButtonElement>) {
           <div className="mb-3 form-group">
             <div
               className="palceholder ms-1"
-              style={{ display: status ? "none" : "" }}
+              style={{ display: actStatus ? "none" : "" }}
             >
               <label htmlFor="file">Status</label>
               <span className="star"> *</span>

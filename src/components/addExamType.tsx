@@ -3,7 +3,7 @@ import "./styles.css";
 import { ExamTypeType } from "../types/myTypes";
 function AddRoomDet() {
   const [examType, setExamType] = useState<string>("");
-  const [remmarks, setRemmarks] = useState<string>("");
+  const [remarks, setRemarks] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
 
 
@@ -11,7 +11,7 @@ async function addExamType(e : React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
     const newRoom: ExamTypeType={
         exam_type_name:examType,
-        remark:remmarks,
+        remark:remarks,
         status:actStatus 
     }
 
@@ -33,7 +33,7 @@ async function addExamType(e : React.FormEvent<HTMLButtonElement>) {
         mode: "cors"
       });
     console.log(response);
-  }
+    }
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
@@ -41,7 +41,7 @@ async function addExamType(e : React.FormEvent<HTMLButtonElement>) {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form className="d-flex flex-row jutify-content-evenly w-100">
+      <form id="examtypeform" className="d-flex flex-row jutify-content-evenly w-100">
         <div className="d-flex flex-column ms-5 w-50">
           <div className="mb-3 mt-5 form-group">
             <div
@@ -65,7 +65,7 @@ async function addExamType(e : React.FormEvent<HTMLButtonElement>) {
           <div className="mb-3 mt-5 form-group">
             <div
               className="palceholder"
-              style={{ display: remmarks ? "none" : "" }}
+              style={{ display: remarks ? "none" : "" }}
             >
               <label htmlFor="capa">Remarks</label>
               <span className="star">*</span>
@@ -74,8 +74,8 @@ async function addExamType(e : React.FormEvent<HTMLButtonElement>) {
               id="capa"
               type="string"
               className="form-control"
-              value={remmarks}
-              onChange={(e) => setRemmarks(e.target.value)}
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
               required
             />
           </div>

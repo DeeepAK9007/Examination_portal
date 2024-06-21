@@ -157,20 +157,24 @@ function AddExamModelUp() {
           </div>
           <div className="mb-3 form-group">
             <div
-              className="palceholder"
-              style={{ display: mode ? "none" : "" }}
+              className="palceholder ms-1"
+              style={{ display: status ? "none" : "" }}
             >
-              <label htmlFor="mode">Mode</label>
-              <span className="star">*</span>
+              <label htmlFor="file">Mode</label>
+              <span className="star"> *</span>
             </div>
-            <input
-              id="mode"
-              type="text"
-              className="form-control"
+            <select
+              name="block"
+              className="form-select"
+              id="blockno"
+              aria-label="Floating label select example"
               value={mode}
               onChange={(e) => setMode(e.target.value)}
-              required
-            />
+            >
+              <option id="examrole" value="" disabled selected></option>
+              <option value="Active">Off-line</option>
+              <option value="InActive">On-line</option>
+            </select>
           </div>
         </div>
         <div className="d-flex flex-column ms-5 w-50 me-5">

@@ -13,7 +13,13 @@ import ExamType from "./components/examType";
 import ExamMode from "./components/examMode";
 import ExamModelUpdate from "./components/examModelUpdate";
 import IssueReporting from "./components/issueReporting";
-import AddResource from "./components/addResource";
+import AddResource from "./components/updateTerm";
+import UpdateCourse from "./components/updateCourse";
+import UpdateBatch from "./components/updateBatch";
+import UpdateExamMode from "./components/updateExamMode";
+import UpdateExamType from "./components/updateExamType";
+import UpdateRoom from "./components/updateRoom";
+import UpdateUser from "./components/updateUser";
 
 function App() {
   return (
@@ -33,6 +39,12 @@ function App() {
       <Route path="/examModelupdate" element={<ExamModelUpdate />} />
       <Route path="/issuereporting" element={<IssueReporting />} />
       <Route path="/editTerm" element={<AddResource />} />
+      <Route path="/editCourse" element={<UpdateCourse />} />
+      <Route path="/editBatch" element={<UpdateBatch />} />
+      <Route path="/editExamMode" element={<UpdateExamMode />} />
+      <Route path="/editExamType" element={<UpdateExamType />} />
+      <Route path="/editRoom" element={<UpdateRoom />} />
+      <Route path="/editUser" element={<UpdateUser />} />
     </Routes>
   );
 }
