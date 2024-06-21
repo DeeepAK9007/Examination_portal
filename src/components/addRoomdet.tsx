@@ -45,6 +45,7 @@ function AddRoomDet() {
       }
     );
     console.log(response);
+    window.location.reload();
   }
   return (
     <div>

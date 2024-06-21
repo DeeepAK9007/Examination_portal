@@ -9,15 +9,15 @@ function AddRoomDet() {
 
 async function addExamMode(e : React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    const newRoom: ExamModeType={
+    const newExamMode: ExamModeType={
         exam_mode_name:examMode,
         remark:remmarks,
         status:actStatus 
     }
 
-    console.log(newRoom);
+    console.log(newExamMode);
 
-    const jsonobj= JSON.stringify(newRoom);
+    const jsonobj= JSON.stringify(newExamMode);
     console.log(jsonobj);
     const encode=btoa(jsonobj);
     console.log(encode);
@@ -33,6 +33,7 @@ async function addExamMode(e : React.FormEvent<HTMLButtonElement>) {
         mode: "cors"
       });
     console.log(response);
+    window.location.reload();
   }
   return (
     <div>

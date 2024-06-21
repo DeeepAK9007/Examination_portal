@@ -28,29 +28,27 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
     );
   };
   const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    console.log("Row data:", rowData);
-    console.log(rowData.id);
-    const seshID = sessionStorage.getItem("key");
-    console.log("&resource=id:" + rowData.id);
-    const temp: deletestuff = { id: rowData.id };
-    const targ = JSON.stringify(temp);
-    const enc = btoa(targ);
-    const resource = await fetch(
-      "http://localhost:8081/api/exam_mode?session_id=" +
-        seshID +
-        "&resource=" +
-        enc +
-        "&action=DELETE",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        mode: "cors",
-      }
-    );
-    console.log("result:", resource);
+      e.stopPropagation();
+      console.log('Row data:', rowData);
+      console.log(rowData.id);
+      const seshID=sessionStorage.getItem("key");
+      console.log("&resource=id:"+rowData.id);
+      const temp :deletestuff={id: rowData.id};
+      const targ=JSON.stringify(temp);
+      const enc=btoa(targ);
+      const resource= await fetch("http://localhost:8081/api/exam_mode?session_id="+seshID+"&resource="+enc+"&action=DELETE",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            mode: "cors"
+          }
+        );
+      console.log("result:",resource);
+      console.log("now reloading");
+      window.location.reload();
+
   };
 
   return (
@@ -109,8 +107,7 @@ function ExamModeTab() {
         }));
 
         setModes(mappedRowData);
-        console.log("some data", mappedRowData);
-      } catch (error) {
+        } catch (error) {
         console.log("Error fetching data:", error);
       }
     };

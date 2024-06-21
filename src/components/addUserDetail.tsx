@@ -55,6 +55,8 @@ function AddUser() {
     );
 
     console.log(resource);
+    window.location.reload();
+
   }
 
   return (

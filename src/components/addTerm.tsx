@@ -31,6 +31,8 @@ function AddTerm() {
     e.preventDefault();
     console.log("termData: ", termData);
     addOneTerm(termData);
+    window.location.reload();
+
   };
 
   return (

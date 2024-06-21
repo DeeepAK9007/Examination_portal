@@ -56,6 +56,7 @@ function AddExamModelUp() {
     e.preventDefault();
     console.log("examData: ", examData);
     addExam_mode(examData);
+    window.location.reload();
   };
 
   return (

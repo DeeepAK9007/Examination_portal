@@ -329,7 +329,7 @@ export const getAllUsers = async () => {
 
 export const getAllBatches = async () => {
   const seshId = sessionStorage.getItem("key");
-  console.log("session id: ", seshId);
+  // console.log("session id: ", seshId);
 
   const response = await fetch(
     "http://localhost:8081/api/batch?queryId=GET_ALL&session_id=" + seshId,
@@ -342,10 +342,10 @@ export const getAllBatches = async () => {
     }
   );
 
-  console.log("obtained resposnse here", response);
+  //console.log("obtained resposnse here", response);
   const json_users = await response.json();
   const batches = json_users.resource;
-  console.log("here are the batches", batches);
+  //console.log("here are the batches", batches);
   return batches;
 };
 

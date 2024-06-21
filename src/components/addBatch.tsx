@@ -38,8 +38,8 @@ function AddBatch() {
 
     console.log("obj toi send",encode);
     console.log("sesh id here",seshID);
-    // console.log("param here",params);
     console.log("response here", response);
+    window.location.reload();
   }
 
   return (
@@ -49,7 +49,7 @@ function AddBatch() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form className="d-flex flex-row jutify-content-evenly w-100">
+      <form className="d-flex flex-row jutify-content-evenly w-100" id="batchform">
         <div className="d-flex flex-column ms-5 w-50 me-5">
           <div className="mb-3 mt-5 form-group">
             <div
