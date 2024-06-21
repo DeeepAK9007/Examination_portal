@@ -58,36 +58,18 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
-function TermConfTab() {
-  // const navigate = useNavigate();
+interface TermConfTabProps {
+  queryText: string;
+  searchStatus: boolean;
+}
 
-  // function Custom_button_edit(props: any) {
-  //   const myClickEdit = () => {
-  //     console.log("Row Data EDIT: ", props.data);
-  //     navigate(`/editTerm?term=${props.data.Name}&&id=${props.data.id}`);
-  //   };
-  //   // const myClickDelete = async () => {
-  //   //   console.log("Row Data DELTE: ", props.data);
-  //   //   updateOrDeleteStudent(props.data.id, [], "DELETE");
-  //   //   setBatches((prevBatches) =>
-  //   //     prevBatches.filter((term : termType) => term.id !== props.data.id)
-  //   //   );
-  //   // };
-  //   return (
-  //     <div className="d-flex gap-4 justify-content-around mt-2 ">
-  //       <i
-  //         className="fas fa-edit "
-  //         onClick={myClickEdit}
-  //         style={{ cursor: "pointer" }}
-  //       ></i>
-  //       <i
-  //         className="fas fa-trash text-danger"
-  //         style={{ cursor: "pointer" }}
-  //       ></i>
-  //     </div>
-  //   );
-  // }
+const TermConfTab: React.FC<TermConfTabProps> = ({
+  queryText,
+  searchStatus,
+}) => {
   const [terms, setTerms] = useState<termType[]>([]);
+  const [filteredTerms, setFilteredTerms] = useState<termType[]>([]);
+  console.log("query text: ", queryText);
   const [colDefs, setColDefs] = useState([
     { field: "Date", flex: 1 },
     { field: "Name", flex: 1 },
@@ -119,12 +101,23 @@ function TermConfTab() {
   console.log("Row data:", terms);
   console.log("Column Data", colDefs);
 
-  //   const [rowData, setRowData] = useState("");
+  useEffect(() => {
+    const filterTerms = () => {
+      if (!queryText) {
+        setFilteredTerms(terms);
+      } else if (queryText || searchStatus) {
+        const lowerCaseQuery = queryText.toLowerCase();
+        const filtered = terms.filter((term) =>
+          Object.values(term).some((value) =>
+            String(value).toLowerCase().includes(lowerCaseQuery)
+          )
+        );
+        setFilteredTerms(filtered);
+      }
+    };
 
-  //   useEffect(() => {
-  //     // Set batchText state when rowData changes
-  //     setBatchTex(rowData);
-  //   }, [rowData]);
+    filterTerms();
+  }, [queryText, terms]);
 
   return (
     <div>
@@ -135,12 +128,12 @@ function TermConfTab() {
         <AgGridReact
           rowSelection="multiple"
           headerCheckboxSelection={true}
-          rowData={terms}
+          rowData={filteredTerms}
           columnDefs={colDefs}
         />
       </div>
     </div>
   );
-}
+};
 
 export default TermConfTab;

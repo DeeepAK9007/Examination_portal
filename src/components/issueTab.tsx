@@ -2,6 +2,7 @@ import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState } from "react";
+import YesNoToggle from "./yesNoToggle";
 
 interface PhotoComponentProps {
   value: string;
@@ -48,7 +49,7 @@ function IssueTab() {
 
   const [colDefs, setColDefs] = useState([
     { field: "Name", headerCheckboxSelection: true, sort: "asc", flex: 1 },
-    { field: "IncidentReported", flex: 1 },
+    { field: "IncidentReported", flex: 1, cellRenderer: YesNoToggle },
     { field: "Remarks", flex: 1 },
     { field: "MarkedTime", flex: 1 },
     { field: "Photo", sortable: true, flex: 1, cellRenderer: PhotoComponent },

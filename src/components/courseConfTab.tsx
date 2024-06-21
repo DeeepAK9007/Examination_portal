@@ -26,26 +26,31 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       `/editCourse?course=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
     );
   };
-  const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
-      e.stopPropagation();
-      console.log('Row data:', rowData);
-      console.log(rowData.id);
-      const seshID=sessionStorage.getItem("key");
-      console.log("&resource=id:"+rowData.id);
-      const temp :deletestuff={id: rowData.id};
-      const targ=JSON.stringify(temp);
-      const enc=btoa(targ);
-      const resource= await fetch("http://localhost:8081/api/course?session_id="+seshID+"&resource="+enc+"&action=DELETE",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            mode: "cors"
-          }
-        );
-      console.log("result:",resource);
-      window.location.reload();
+  const deleteCourse = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    console.log("Row data:", rowData);
+    console.log(rowData.id);
+    const seshID = sessionStorage.getItem("key");
+    console.log("&resource=id:" + rowData.id);
+    const temp: deletestuff = { id: rowData.id };
+    const targ = JSON.stringify(temp);
+    const enc = btoa(targ);
+    const resource = await fetch(
+      "http://localhost:8081/api/course?session_id=" +
+        seshID +
+        "&resource=" +
+        enc +
+        "&action=DELETE",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+    console.log("result:", resource);
+    window.location.reload();
   };
 
   return (
@@ -56,9 +61,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
         style={{ cursor: "pointer" }}
       ></i>
       <i
-        onClick={(e) => {
-          deleteUser(e);
-        }}
+        onClick={deleteCourse}
         className="fas fa-trash text-danger"
         style={{ cursor: "pointer" }}
       ></i>
@@ -90,7 +93,15 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
 
 Modal.setAppElement("#root"); // For accessibility
 
-const CourseConfTab: React.FC = () => {
+interface CourseConfTabProps {
+  queryText: string;
+  searchStatus: boolean;
+}
+
+const CourseConfTab: React.FC<CourseConfTabProps> = ({
+  queryText,
+  searchStatus,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const onCellClicked = () => {
@@ -101,13 +112,8 @@ const CourseConfTab: React.FC = () => {
     setModalIsOpen(false);
   };
 
-  // const [rowData, setRowData] = useState([
-  //   { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
-  //   { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
-  //   { Course_Code: 500, Course_Name: "Maxx", Active: true, Actions: "Remove" },
-  // ]);
-
   const [courses, setCourses] = useState<courseType[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<courseType[]>([]);
 
   const [colDefs, setColDefs] = useState([
     {
@@ -156,6 +162,24 @@ const CourseConfTab: React.FC = () => {
     fetchTerms();
   }, []);
 
+  useEffect(() => {
+    const filterCourses = () => {
+      if (!queryText) {
+        setFilteredCourses(courses);
+      } else if (queryText || searchStatus) {
+        const lowerCaseQuery = queryText.toLowerCase();
+        const filtered = courses.filter((course) =>
+          Object.values(course).some((value) =>
+            String(value).toLowerCase().includes(lowerCaseQuery)
+          )
+        );
+        setFilteredCourses(filtered);
+      }
+    };
+
+    filterCourses();
+  }, [queryText, courses]);
+
   console.log("Row data:", courses);
   console.log("Column Data", colDefs);
 
@@ -168,7 +192,7 @@ const CourseConfTab: React.FC = () => {
         <AgGridReact
           rowSelection="multiple"
           headerCheckboxSelection={true}
-          rowData={courses}
+          rowData={filteredCourses}
           onCellClicked={onCellClicked}
           columnDefs={colDefs}
         />

@@ -60,7 +60,11 @@ function AddIncident() {
                     className="modal-body-secondary"
                     style={{ height: 200, overflowY: "auto" }}
                   >
-                    Remarks...
+                    <textarea
+                      className="form-control"
+                      placeholder="Remarks"
+                      style={{ width: "100%", height: "100%" }}
+                    ></textarea>
                   </div>
                   <div className="modal-footer">
                     <button type="button" className="btn btn-danger">

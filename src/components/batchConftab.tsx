@@ -92,8 +92,18 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
-function BatchConfTab() {
+interface BatchConfTabProps {
+  queryText: string;
+  searchStatus: boolean;
+}
+
+const BatchConfTab: React.FC<BatchConfTabProps> = ({
+  queryText,
+  searchStatus,
+}) => {
   const [obtBatches, setObtBatches] = useState<batchMappedType[]>([]);
+  const [filteredBatches, setFilteredBatches] = useState<batchMappedType[]>([]);
+  console.log("query text: ", queryText);
 
   useEffect(() => {
     const fetchusers = async () => {
@@ -108,12 +118,31 @@ function BatchConfTab() {
 
         setObtBatches(mappedRowData);
         console.log("some data", mappedRowData);
+        setFilteredBatches(mappedRowData);
       } catch (error) {
         console.log("Error fetching data:", error);
       }
     };
     fetchusers();
   }, []);
+
+  useEffect(() => {
+    const filterBatches = () => {
+      if (!queryText) {
+        setFilteredBatches(obtBatches);
+      } else if (queryText || searchStatus) {
+        const lowerCaseQuery = queryText.toLowerCase();
+        const filtered = obtBatches.filter((batch) =>
+          Object.values(batch).some((value) =>
+            String(value).toLowerCase().includes(lowerCaseQuery)
+          )
+        );
+        setFilteredBatches(filtered);
+      }
+    };
+
+    filterBatches();
+  }, [queryText, obtBatches]);
 
   const [colDefs, setColDefs] = useState<ColDef<batchMappedType, unknown>[]>([
     {
@@ -126,18 +155,6 @@ function BatchConfTab() {
     { headerName: "actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 
-  // // const [rowData, setRowData] = useState([
-  // //         {Batch:'IMT2026',Active: true, Actions: 'Remove'},
-  // //         {Batch:'IMT2025',Active: false, Actions: 'Remove'},
-  // //         {Batch:'IMT2024',Active: false, Actions: 'Remove'},
-  // //     ]);
-
-  // //     const [colDefs, setColDefs] = useState([
-  // //     { field: "Batch",flex:1},
-  // //     { field: "Active",flex:1},
-  // //     { field: "Actions",flex:1, cellRenderer:Custom_button}
-  // //     ]);
-
   return (
     <div>
       <div
@@ -146,12 +163,12 @@ function BatchConfTab() {
       >
         <AgGridReact
           rowSelection="multiple"
-          rowData={obtBatches}
+          rowData={filteredBatches}
           columnDefs={colDefs}
         />
       </div>
     </div>
   );
-}
+};
 
 export default BatchConfTab;

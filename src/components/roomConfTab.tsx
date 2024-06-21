@@ -90,10 +90,17 @@ type CustomButtonRendererParams = {
 const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
-
-function RoomConfTab() {
+interface RoomConfTabProps {
+  queryText: string;
+  searchStatus: boolean;
+}
+const RoomConfTab: React.FC<RoomConfTabProps> = ({
+  queryText,
+  searchStatus,
+}) => {
   const [obtRooms, setObtRooms] = useState<roomMatchedType[]>([]);
-
+  const [filteredRooms, setFilteredRooms] = useState<roomMatchedType[]>([]);
+  console.log("query text: ", queryText);
   useEffect(() => {
     const fetchusers = async () => {
       try {
@@ -104,7 +111,7 @@ function RoomConfTab() {
           room_number: row.room_number,
           block: row.block,
           capacity: row.capacity,
-          status: row.status,
+          status: row.status == "Active" ? true : false,
         }));
 
         setObtRooms(mappedRowData);
@@ -116,6 +123,24 @@ function RoomConfTab() {
     fetchusers();
   }, []);
 
+  useEffect(() => {
+    const filterRooms = () => {
+      if (!queryText) {
+        setFilteredRooms(obtRooms);
+      } else if (queryText || searchStatus) {
+        const lowerCaseQuery = queryText.toLowerCase();
+        const filtered = obtRooms.filter((room) =>
+          Object.values(room).some((value) =>
+            String(value).toLowerCase().includes(lowerCaseQuery)
+          )
+        );
+        setFilteredRooms(filtered);
+      }
+    };
+
+    filterRooms();
+  }, [queryText, obtRooms]);
+
   const [colDefs, setColDefs] = useState<ColDef<roomMatchedType, unknown>[]>([
     {
       field: "room_number",
@@ -125,22 +150,9 @@ function RoomConfTab() {
     },
     { field: "block", headerName: "Block", flex: 1 },
     { field: "capacity", headerName: "Capacity", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
+    { field: "status", flex: 1 },
     { headerName: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
-  // const [rowData, setRowData] = useState([
-  //         {RoomNumber:'203-B',BlockName:'Ramanujan',Capacity:320,Active: true, Actions: 'Remove'},
-  //         {RoomNumber:'204-B',BlockName:'Aryabhatta',Capacity:100,Active: true, Actions: 'Remove'},
-  //         {RoomNumber:'205-B',BlockName:'Newton',Capacity:150,Active: true, Actions: 'Remove'},
-  //     ]);
-
-  //     const [colDefs, setColDefs] = useState([
-  //     { field: "RoomNumber",flex:1},
-  //     { field: "BlockName",flex:1},
-  //     { field: "Capacity",flex:1},
-  //     { field: "Active",flex:1},
-  //     { field: "Actions",flex:1, cellRenderer:Custom_button}
-  //     ]);
 
   return (
     <div>
@@ -150,12 +162,12 @@ function RoomConfTab() {
       >
         <AgGridReact
           rowSelection="multiple"
-          rowData={obtRooms}
+          rowData={filteredRooms}
           columnDefs={colDefs}
         />
       </div>
     </div>
   );
-}
+};
 
 export default RoomConfTab;

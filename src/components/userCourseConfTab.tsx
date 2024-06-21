@@ -90,8 +90,18 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
-const UserCourseConfTab = () => {
+interface UserTabProps {
+  queryText: string;
+  searchStatus: boolean;
+}
+
+const UserCourseConfTab: React.FC<UserTabProps> = ({
+  queryText,
+  searchStatus,
+}) => {
   const [obt_users, setObtUsers] = useState<userMappedType[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<userMappedType[]>([]);
+  console.log("query text: ", queryText);
 
   useEffect(() => {
     const fetchusers = async () => {
@@ -104,7 +114,7 @@ const UserCourseConfTab = () => {
           Uname: row.name,
           email: row.email,
           role: row.role,
-          status: row.status,
+          status: row.status == "Active" ? true : false,
         }));
 
         setObtUsers(mappedRowData);
@@ -116,6 +126,24 @@ const UserCourseConfTab = () => {
     fetchusers();
   }, []);
 
+  useEffect(() => {
+    const filterUsers = () => {
+      if (!queryText) {
+        setFilteredUsers(obt_users);
+      } else if (queryText || searchStatus) {
+        const lowerCaseQuery = queryText.toLowerCase();
+        const filtered = obt_users.filter((user) =>
+          Object.values(user).some((value) =>
+            String(value).toLowerCase().includes(lowerCaseQuery)
+          )
+        );
+        setFilteredUsers(filtered);
+      }
+    };
+
+    filterUsers();
+  }, [queryText, obt_users]);
+
   const [colDefs, setColDefs] = useState<ColDef<userMappedType, unknown>[]>([
     {
       field: "roll_number",
@@ -126,7 +154,7 @@ const UserCourseConfTab = () => {
     { field: "Uname", headerName: "Name", flex: 1 },
     { field: "email", headerName: "Email", flex: 1 },
     { field: "role", headerName: "Role", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
+    { field: "status", flex: 1 },
     { headerName: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 
@@ -138,7 +166,7 @@ const UserCourseConfTab = () => {
       >
         <AgGridReact
           rowSelection="multiple"
-          rowData={obt_users}
+          rowData={filteredUsers}
           columnDefs={colDefs}
         />
       </div>

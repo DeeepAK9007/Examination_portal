@@ -11,52 +11,46 @@ function AddUser() {
   const [mob_num, setMobNO] = useState<string>("");
   const [card_num, setCardNo] = useState<string>("");
   const [expiry, setExpiry] = useState<string>("");
-  const [actStatus,setActStatus]=useState<string>("");
-  // const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setSelectedCourse(e.target.value);
-  //   console.log(e.target.value);
-  // };
+  const [actStatus, setActStatus] = useState<string>("");
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setexamRole(event.target.value);
-    console.log(event.target.value);
-  };
-
-  async function handleclick(e : React.FormEvent<HTMLButtonElement>) {
+  async function handleclick(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    const newUser: userType={
-        name:name,
-        role:examRole,
-        email:email,
-        roll_number:rollNo,
-        mobile_number:mob_num,
-        card_number:card_num,
-        expiry_date:expiry,
-        image_url:file,
-        status:actStatus
-      }
+    const newUser: userType = {
+      name: name,
+      role: examRole,
+      email: email,
+      roll_number: rollNo,
+      mobile_number: mob_num,
+      card_number: card_num,
+      expiry_date: expiry,
+      image_url: file,
+      status: actStatus,
+    };
     console.log(newUser);
-    
-    const jsonobj=JSON.stringify(newUser);
+
+    const jsonobj = JSON.stringify(newUser);
     console.log(jsonobj);
-    const encode=btoa(jsonobj);
+    const encode = btoa(jsonobj);
     console.log(encode);
-    const seshID=sessionStorage.getItem("key");
+    const seshID = sessionStorage.getItem("key");
     console.log(seshID);
 
-    const resource= await fetch("http://localhost:8081/api/user_type?session_id="+seshID+"&resource="+encode,
+    const resource = await fetch(
+      "http://localhost:8081/api/user_type?session_id=" +
+        seshID +
+        "&resource=" +
+        encode,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        mode: "cors"
+        mode: "cors",
       }
     );
 
     console.log(resource);
     window.location.reload();
-
   }
 
   return (
@@ -123,28 +117,30 @@ function AddUser() {
               id="exampleInputPassword1"
               placeholder="Enter Card No"
               value={card_num}
-              onChange={(e)=>{setCardNo(e.target.value)}}
+              onChange={(e) => {
+                setCardNo(e.target.value);
+              }}
             />
           </div>
         </div>
         <div className="d-flex flex-column ms-5 w-50 me-5">
-        <div className="mb-3 mt-5 form-group">
+          <div className="mb-3 mt-5 form-group">
             <div
               className="palceholder ms-1"
               style={{ display: examRole ? "none" : "" }}
-           >
-              <label htmlFor="file">Exam role</label>
+            >
+              <label htmlFor="examrole">Exam role</label>
               <span className="star"> *</span>
             </div>
             <select
-              name="block"
+              name="examrol"
               className="form-select"
-              id="blockno"
+              id="examrole"
               aria-label="Floating label select example"
               value={examRole}
-              onChange={handleSelectChange}
+              onChange={(e) => setexamRole(e.target.value)}
             >
-             <option id="examrole" value="" disabled selected></option>
+              <option id="examrole" value="" disabled selected></option>
               <option value="Admin">Admin</option>
               <option value="Faculty">Faculty</option>
               <option value="Student">Student</option>
@@ -177,7 +173,9 @@ function AddUser() {
               className="form-control"
               placeholder="Enter Mobile"
               value={mob_num}
-              onChange={(e)=>{setMobNO(e.target.value)}}
+              onChange={(e) => {
+                setMobNO(e.target.value);
+              }}
             />
           </div>
           <div className="mb-3">
@@ -187,7 +185,9 @@ function AddUser() {
               id="exampleInputPassword1"
               placeholder="Select Expiry Date"
               value={expiry}
-              onChange={(e)=>{setExpiry(e.target.value)}}
+              onChange={(e) => {
+                setExpiry(e.target.value);
+              }}
             />
           </div>
           <div className="mb-3 form-group">
@@ -195,18 +195,18 @@ function AddUser() {
               className="palceholder ms-1"
               style={{ display: actStatus ? "none" : "" }}
             >
-              <label htmlFor="file">Status</label>
+              <label htmlFor="status">Status</label>
               <span className="star"> *</span>
             </div>
             <select
-              name="block"
+              name="stat"
               className="form-select"
-              id="blockno"
+              id="status"
               aria-label="Floating label select example"
               value={actStatus}
               onChange={(e) => setActStatus(e.target.value)}
             >
-              <option id="examrole" value="" disabled selected></option>
+              <option id="status" value="" disabled selected></option>
               <option value="Active">Active</option>
               <option value="InActive">InActive</option>
             </select>
@@ -222,8 +222,8 @@ function AddUser() {
             </button>
           </div>
         </div>
-      </form >
-    </div >
+      </form>
+    </div>
   );
 }
 

@@ -7,7 +7,7 @@ export interface termType {
 }
 
 export interface courseType {
-  id?:string
+  id?: string;
   course_name: string;
   course_code: string;
   status: string;
@@ -103,7 +103,7 @@ export interface userMappedType {
   Uname: string;
   email: string;
   role: string;
-  status: string;
+  status: boolean;
 }
 
 export interface getBatchType {
@@ -138,14 +138,14 @@ export interface roomMatchedType {
   room_number: string;
   block: string;
   capacity: number;
-  status: string;
+  status: boolean;
 }
 
 export interface ExamModeType {
-  id?:string,
-  exam_mode_name: string,
-  remark: string,
-  status:string
+  id?: string;
+  exam_mode_name: string;
+  remark: string;
+  status: boolean;
 }
 export interface getModeTypes {
   id: string;
@@ -159,10 +159,10 @@ export interface getModeTypes {
 }
 
 export interface ExamTypeType {
-  id?:string,
-  exam_type_name: string,
-  remark: string,
-  status:string
+  id?: string;
+  exam_type_name: string;
+  remark: string;
+  status: boolean;
 }
 export interface getTypeTypes {
   id: string;
@@ -175,6 +175,6 @@ export interface getTypeTypes {
   status: string;
 }
 
-export interface deletestuff{
-  id?: string
+export interface deletestuff {
+  id?: string;
 }

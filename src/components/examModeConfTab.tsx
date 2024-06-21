@@ -28,27 +28,31 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
     );
   };
   const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
-      e.stopPropagation();
-      console.log('Row data:', rowData);
-      console.log(rowData.id);
-      const seshID=sessionStorage.getItem("key");
-      console.log("&resource=id:"+rowData.id);
-      const temp :deletestuff={id: rowData.id};
-      const targ=JSON.stringify(temp);
-      const enc=btoa(targ);
-      const resource= await fetch("http://localhost:8081/api/exam_mode?session_id="+seshID+"&resource="+enc+"&action=DELETE",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            mode: "cors"
-          }
-        );
-      console.log("result:",resource);
-      console.log("now reloading");
-      window.location.reload();
-
+    e.stopPropagation();
+    console.log("Row data:", rowData);
+    console.log(rowData.id);
+    const seshID = sessionStorage.getItem("key");
+    console.log("&resource=id:" + rowData.id);
+    const temp: deletestuff = { id: rowData.id };
+    const targ = JSON.stringify(temp);
+    const enc = btoa(targ);
+    const resource = await fetch(
+      "http://localhost:8081/api/exam_mode?session_id=" +
+        seshID +
+        "&resource=" +
+        enc +
+        "&action=DELETE",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+    console.log("result:", resource);
+    console.log("now reloading");
+    window.location.reload();
   };
 
   return (
@@ -91,28 +95,58 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
-function ExamModeTab() {
+interface ExamModeTabProps {
+  queryText: string;
+  searchStatus: boolean;
+}
+
+const ExamModeTab: React.FC<ExamModeTabProps> = ({
+  queryText,
+  searchStatus,
+}) => {
   const [modes, setModes] = useState<ExamModeType[]>([]);
+  const [filteredExamModes, setFilteredExamModes] = useState<ExamModeType[]>(
+    []
+  );
+  console.log("query text: ", queryText);
 
   useEffect(() => {
     const fetchusers = async () => {
       try {
         const res: getModeTypes[] = await getAllModes();
 
-        const mappedRowData = res.map((row) => ({
+        const mappedRowData: ExamModeType[] = res.map((row) => ({
           id: row.id,
           exam_mode_name: row.exam_mode_name,
           remark: row.remark,
-          status: row.status,
+          status: row.status == "Active" ? true : false,
         }));
 
         setModes(mappedRowData);
-        } catch (error) {
+      } catch (error) {
         console.log("Error fetching data:", error);
       }
     };
     fetchusers();
   }, []);
+
+  useEffect(() => {
+    const filterExamModes = () => {
+      if (!queryText) {
+        setFilteredExamModes(modes);
+      } else if (queryText || searchStatus) {
+        const lowerCaseQuery = queryText.toLowerCase();
+        const filtered = modes.filter((mode) =>
+          Object.values(mode).some((value) =>
+            String(value).toLowerCase().includes(lowerCaseQuery)
+          )
+        );
+        setFilteredExamModes(filtered);
+      }
+    };
+
+    filterExamModes();
+  }, [queryText, modes]);
 
   const [colDefs, setColDefs] = useState<ColDef<ExamModeType, unknown>[]>([
     {
@@ -122,22 +156,9 @@ function ExamModeTab() {
       headerCheckboxSelection: true,
     },
     { field: "remark", headerName: "Remarks", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
+    { field: "status", flex: 1 },
     { headerName: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
-  // const [rowData, setRowData] = useState([
-  //         {RoomNumber:'203-B',BlockName:'Ramanujan',Capacity:320,Active: true, Actions: 'Remove'},
-  //         {RoomNumber:'204-B',BlockName:'Aryabhatta',Capacity:100,Active: true, Actions: 'Remove'},
-  //         {RoomNumber:'205-B',BlockName:'Newton',Capacity:150,Active: true, Actions: 'Remove'},
-  //     ]);
-
-  //     const [colDefs, setColDefs] = useState([
-  //     { field: "RoomNumber",flex:1},
-  //     { field: "BlockName",flex:1},
-  //     { field: "Capacity",flex:1},
-  //     { field: "Active",flex:1},
-  //     { field: "Actions",flex:1, cellRenderer:Custom_button}
-  //     ]);
 
   return (
     <div>
@@ -147,12 +168,12 @@ function ExamModeTab() {
       >
         <AgGridReact
           rowSelection="multiple"
-          rowData={modes}
+          rowData={filteredExamModes}
           columnDefs={colDefs}
         />
       </div>
     </div>
   );
-}
+};
 
 export default ExamModeTab;
