@@ -49,6 +49,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       }
     );
     console.log("result:", resource);
+    window.location.reload();
   };
 
   return (
@@ -105,7 +106,7 @@ const RoomConfTab: React.FC<RoomConfTabProps> = ({
     const fetchusers = async () => {
       try {
         const res: getRoomType[] = await getAllRooms();
-
+        console.log("obt data here",res);
         const mappedRowData = res.map((row) => ({
           id: row.id,
           room_number: row.room_number,

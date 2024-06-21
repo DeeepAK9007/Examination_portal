@@ -20,31 +20,41 @@ import UpdateExamMode from "./components/updateExamMode";
 import UpdateExamType from "./components/updateExamType";
 import UpdateRoom from "./components/updateRoom";
 import UpdateUser from "./components/updateUser";
+import { useContext } from "react";
+import { LoginContext } from "./context/loginContext";
 
 function App() {
+
+  const logstat=useContext(LoginContext);
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/user" element={<User />} />
-      <Route path="/schedule" element={<Schedule />} />
-      <Route path="/batch" element={<Batch />} />
-      <Route path="/room" element={<Room />} />
-      <Route path="/term" element={<Term />} />
-      <Route path="/course" element={<Course />} />
-      <Route path="/progCord" element={<ProgCord />} />
-      <Route path="/attend" element={<Attendance />} />
-      <Route path="/incident" element={<Incident />} />
-      <Route path="/examType" element={<ExamType />} />
-      <Route path="/examMode" element={<ExamMode />} />
-      <Route path="/examModelupdate" element={<ExamModelUpdate />} />
-      <Route path="/issuereporting" element={<IssueReporting />} />
-      <Route path="/editTerm" element={<AddResource />} />
-      <Route path="/editCourse" element={<UpdateCourse />} />
-      <Route path="/editBatch" element={<UpdateBatch />} />
-      <Route path="/editExamMode" element={<UpdateExamMode />} />
-      <Route path="/editExamType" element={<UpdateExamType />} />
-      <Route path="/editRoom" element={<UpdateRoom />} />
-      <Route path="/editUser" element={<UpdateUser />} />
+      
+      {logstat.isLoggedIn}?
+      <>
+        <Route path="/user" element={<User />} />
+        <Route path="/schedule" element={<Schedule />} />
+        <Route path="/batch" element={<Batch />} />
+        <Route path="/room" element={<Room />} />
+        <Route path="/term" element={<Term />} />
+        <Route path="/course" element={<Course />} />
+        <Route path="/progCord" element={<ProgCord />} />
+        <Route path="/attend" element={<Attendance />} />
+        <Route path="/incident" element={<Incident />} />
+        <Route path="/examType" element={<ExamType />} />
+        <Route path="/examMode" element={<ExamMode />} />
+        <Route path="/examModelupdate" element={<ExamModelUpdate />} />
+        <Route path="/issuereporting" element={<IssueReporting />} />
+        <Route path="/editTerm" element={<AddResource />} />
+        <Route path="/editCourse" element={<UpdateCourse />} />
+        <Route path="/editBatch" element={<UpdateBatch />} />
+        <Route path="/editExamMode" element={<UpdateExamMode />} />
+        <Route path="/editExamType" element={<UpdateExamType />} />
+        <Route path="/editRoom" element={<UpdateRoom />} />
+        <Route path="/editUser" element={<UpdateUser />} />
+      </>:
+      <></>
+    
     </Routes>
   );
 }

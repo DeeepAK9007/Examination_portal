@@ -49,7 +49,7 @@ function UserCourseConf() {
             </a>
           </div>
 
-          <div className="input-group">
+          <div className="input-group p-0">
             <div
               id="search-autocomplete"
               className="form-outline"
