@@ -33,6 +33,9 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
           }
         );
       console.log("result:",resource);
+      console.log("now reloading");
+      window.location.reload();
+
   };
 
   return (
@@ -82,7 +85,6 @@ function ExamModeTab()
         }));
 
         setModes(mappedRowData);
-        console.log("some data",mappedRowData);
         } catch (error) {
         console.log("Error fetching data:", error);
         }

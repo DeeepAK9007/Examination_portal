@@ -33,6 +33,8 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
             }
           );
         console.log("result:",resource);
+        window.location.reload();
+
     };
 
     return (

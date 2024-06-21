@@ -69,6 +69,7 @@ function UserCourseConf() {
             type="button"
             className="btn btn-primary me-5"
             style={{ width: "50px", height: "38px" }}
+              onClick={()=>{window.location.reload();}}
           >
             <i className="fa-solid fa-rotate-right"></i>
           </button>

@@ -53,6 +53,7 @@ function AddSched() {
     e.preventDefault();
     console.log("scheduleData: ", scheduleData);
     addOneSchedule(scheduleData);
+  window.location.reload();
   };
 
   return (

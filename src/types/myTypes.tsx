@@ -6,7 +6,7 @@ export interface termType {
 }
 
 export interface courseType {
-  id: string
+  id?:string
   course_name: string;
   course_code: string;
   status: string;
@@ -142,7 +142,7 @@ export interface roomMatchedType
 }
 
 export interface ExamModeType {
-  id:string,
+  id?:string,
   exam_mode_name: string,
   remark: string,
   status:string
@@ -159,7 +159,7 @@ export interface getModeTypes{
 }
 
 export interface ExamTypeType {
-  id:string,
+  id?:string,
   exam_type_name: string,
   remark: string,
   status:string
@@ -176,5 +176,5 @@ export interface getTypeTypes{
 }
 
 export interface deletestuff{
-  id: string
+  id?: string
 }

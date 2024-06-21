@@ -40,6 +40,7 @@ async function addSingRoom(e : React.FormEvent<HTMLButtonElement>) {
         mode: "cors"
       });
     console.log(response);
+    window.location.reload();
   }
   return (
     <div>

@@ -16,10 +16,10 @@ type CustomButtonProps = {
 const CustomButton = ({ rowData }: CustomButtonProps) => {
     const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        console.log('Row data:', rowData);
-        console.log(rowData.id);
+        //console.log('Row data:', rowData);
+        //console.log(rowData.id);
         const seshID=sessionStorage.getItem("key");
-        console.log("&resource=id:"+rowData.id);
+        //console.log("&resource=id:"+rowData.id);
         const temp :deletestuff={id: rowData.id};
         const targ=JSON.stringify(temp);
         const enc=btoa(targ);
@@ -32,7 +32,8 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
               mode: "cors"
             }
           );
-        console.log("result:",resource);
+        //console.log("result:",resource);
+        window.location.reload();
     };
 
     return (
@@ -81,9 +82,9 @@ function BatchConfTab()
         }));
 
         setObtBatches(mappedRowData);
-        console.log("some data",mappedRowData);
+        // //console.log("some data",mappedRowData);
         } catch (error) {
-        console.log("Error fetching data:", error);
+        // //console.log("Error fetching data:", error);
         }
     };
     fetchusers();

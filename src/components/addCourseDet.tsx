@@ -26,6 +26,7 @@ function AddCourseDet() {
     e.preventDefault();
     console.log("courseData: ", courseData);
     addOneCourse(courseData);
+    window.location.reload();
   };
 
   return (
@@ -35,7 +36,7 @@ function AddCourseDet() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form
+      <form id="courseform"
         className="d-flex flex-row jutify-content-evenly w-100"
         onSubmit={handleSubmit}
       >
