@@ -15,6 +15,7 @@ function AddRoomDet() {
 
   async function addSingRoom(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
+    try{
     const newRoom: RoomType = {
       room_number: roomNumber,
       block: selectedBlock,
@@ -46,6 +47,7 @@ function AddRoomDet() {
     );
     console.log(response);
     window.location.reload();
+    }catch(err){alert("Error!!")}
   }
   return (
     <div>

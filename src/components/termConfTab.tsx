@@ -6,7 +6,7 @@ import { getAllTerms } from "../apis/backend";
 import { termType } from "../types/myTypes";
 import { useNavigate } from "react-router-dom";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
-
+import { deletestuff } from "../types/myTypes";
 type CustomButtonProps = {
   rowData: termType;
 };
@@ -41,6 +41,32 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       `/editTerm?term=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
     );
   };
+  const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    console.log("Row data:", rowData);
+    console.log(rowData.id);
+    const seshID = sessionStorage.getItem("key");
+    console.log("&resource=id:" + rowData.id);
+    const temp: deletestuff = { id: rowData.id };
+    const targ = JSON.stringify(temp);
+    const enc = btoa(targ);
+    const resource = await fetch(
+      "http://localhost:8081/api/term?session_id=" +
+        seshID +
+        "&resource=" +
+        enc +
+        "&action=DELETE",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+    console.log("result:", resource);
+    window.location.reload();
+  };
   return (
     <div className="d-flex gap-4 justify-content-around mt-2 ">
       <i
@@ -48,7 +74,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
         onClick={editTerm}
         style={{ cursor: "pointer" }}
       ></i>
-      <i className="fas fa-trash text-danger" style={{ cursor: "pointer" }}></i>
+      <i className="fas fa-trash text-danger" style={{ cursor: "pointer" }} onClick={(e)=>{deleteUser(e);}}></i>
     </div>
   );
 };
