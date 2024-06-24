@@ -145,7 +145,7 @@ export interface ExamModeType {
   id?: string;
   exam_mode_name: string;
   remark: string;
-  status: boolean;
+  status: string;
 }
 export interface getModeTypes {
   id: string;
