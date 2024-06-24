@@ -232,7 +232,7 @@ function NavBar() {
                         className="btn m-0 ps-5"
                         onMouseEnter={()=>{setcol(true); setTarget("xammodeupd") }}
                         onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="xammodupd"?"#509CDB":""}`}}                        
+                        style={{ color: "white", backgroundColor:`${(col) && target==="xammodeupd"?"#509CDB":""}`}}                        
                         onClick={() => navigate("/exammodelupdate")}
                       >
                         <i className="fa-solid fa-chalkboard-user"></i> Exam

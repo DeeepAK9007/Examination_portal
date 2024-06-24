@@ -162,7 +162,7 @@ export interface ExamTypeType {
   id?: string;
   exam_type_name: string;
   remark: string;
-  status: boolean;
+  status: string;
 }
 export interface getTypeTypes {
   id: string;

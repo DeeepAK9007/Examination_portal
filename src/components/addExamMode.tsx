@@ -9,7 +9,7 @@ function AddRoomDet() {
 
 async function addExamMode(e : React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    const newExamMode: ExamModeType={
+    try{const newExamMode: ExamModeType={
         exam_mode_name:examMode,
         remark:remmarks,
         status:actStatus 
@@ -33,7 +33,8 @@ async function addExamMode(e : React.FormEvent<HTMLButtonElement>) {
         mode: "cors"
       });
     console.log(response);
-    window.location.reload();
+    window.location.reload();}
+    catch(e){alert("error!!");}
   }
   return (
     <div>

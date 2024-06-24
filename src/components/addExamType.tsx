@@ -9,7 +9,7 @@ function AddRoomDet() {
 
 async function addExamType(e : React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    const newExamType: ExamTypeType={
+    try{const newExamType: ExamTypeType={
         exam_type_name:examType,
         remark:remarks,
         status:actStatus 
@@ -33,8 +33,9 @@ async function addExamType(e : React.FormEvent<HTMLButtonElement>) {
         mode: "cors"
       });
     console.log(response);
-    window.location.reload();
-    }
+    window.location.reload();}
+    catch(e){alert(e);}
+  }
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>

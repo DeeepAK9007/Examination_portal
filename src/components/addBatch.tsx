@@ -16,7 +16,7 @@ function AddBatch() {
   async function batchAdd(e : React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
     // const params = new URLSearchParams();
-    const newobj: batchType={
+    try{const newobj: batchType={
       batch_name: batchName,
       status: actStatus
     }
@@ -39,7 +39,8 @@ function AddBatch() {
     console.log("obj toi send",encode);
     console.log("sesh id here",seshID);
     console.log("response here", response);
-    window.location.reload();
+    window.location.reload();}
+    catch(e){alert(e);}
   }
 
   return (
