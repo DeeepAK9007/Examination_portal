@@ -1,16 +1,16 @@
 import ExamModeTab from "./examModeConfTab";
-import { useState } from "react";
+// import { useState } from "react";
 
 function ExamModeConf() {
-  const [queryText, setQueryText] = useState<string>("");
-  const [searchStatus, setSearchStatus] = useState<boolean>(false);
+  // const [queryText, setQueryText] = useState<string>("");
+  // const [searchStatus, setSearchStatus] = useState<boolean>(false);
   return (
     <div>
       <hr style={{ width: "95%", margin: "auto" }} />
       <div className="d-flex justify-content-between mt-3">
         <p className="p-0 ms-5 mb-0 mt-2 ">Exam Mode Configuration</p>
 
-        <div className="d-flex flex-row">
+        {/* <div className="d-flex flex-row">
           <div className="input-group">
             <div
               id="search-autocomplete"
@@ -47,9 +47,10 @@ function ExamModeConf() {
           >
             <i className="fa-solid fa-rotate-right"></i>
           </button>
-        </div>
+        </div> */}
       </div>
-      <ExamModeTab queryText={queryText} searchStatus={searchStatus} />
+      {/* <ExamModeTab queryText={queryText} searchStatus={searchStatus} /> */}
+      <ExamModeTab />
     </div>
   );
 }

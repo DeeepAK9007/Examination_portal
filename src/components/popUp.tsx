@@ -84,25 +84,46 @@ function PopUp() {
                 Download
               </a>
             </div>
-            <form
-              className="d-flex mb-3 mt-3"
-              style={{ paddingLeft: "100px", paddingRight: "100px" }}
-            >
-              <input
-                className="form-control fs-5"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-                style={{ height: "50px" }} // Adjust the height as needed
-              />
-              <button
-                className="btn btn-primary px-4"
-                type="submit"
-                style={{ fontSize: "20px" }}
+            <div className="d-flex justify-spacebetween">
+              <form
+                className="d-flex mb-3 mt-3"
+                style={{ paddingLeft: "100px", paddingRight: "100px" }}
               >
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-              </button>
-            </form>
+                <input
+                  className="form-control fs-5"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  style={{ height: "50px", width: "200px" }} // Adjust the height as needed
+                />
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  style={{ fontSize: "18px" }}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </button>
+              </form>
+              <form
+                className="d-flex mb-3 mt-3"
+                style={{ paddingLeft: "150px", paddingRight: "40px" }}
+              >
+                <input
+                  className="form-control fs-5"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  style={{ height: "50px", width: "200px" }} // Adjust the height as needed
+                />
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  style={{ fontSize: "18px" }}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </button>
+              </form>
+            </div>
             <div
               className="d-flex justify-content-between"
               style={{ paddingLeft: "100px", paddingRight: "100px" }}

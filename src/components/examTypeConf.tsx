@@ -1,16 +1,16 @@
 import ExamTypeTab from "./examTypeConfTab";
-import { useState } from "react";
+// import { useState } from "react";
 
 function ExamTypeConf() {
-  const [queryText, setQueryText] = useState<string>("");
-  const [searchStatus, setSearchStatus] = useState<boolean>(false);
+  // const [queryText, setQueryText] = useState<string>("");
+  // const [searchStatus, setSearchStatus] = useState<boolean>(false);
   return (
     <div>
       <hr style={{ width: "95%", margin: "auto" }} />
       <div className="d-flex justify-content-between mt-3">
         <p className="p-0 ms-5 mb-0 mt-2 ">Exam Configuration</p>
 
-        <div className="d-flex flex-row">
+        {/* <div className="d-flex flex-row">
           <div className="input-group">
             <div
               id="search-autocomplete"
@@ -22,7 +22,7 @@ function ExamTypeConf() {
                 id="form1"
                 className="form-control"
                 placeholder="Search"
-                onChange={(e) => setQueryText(e.target.value)}
+                // onChange={(e) => setQueryText(e.target.value)}
               />
               <label className="form-label"></label>
             </div>
@@ -31,7 +31,7 @@ function ExamTypeConf() {
               className="btn btn-primary"
               data-mdb-ripple-init
               style={{ width: "50px", height: "38px" }}
-              onClick={() => setSearchStatus(true)}
+              // onClick={() => setSearchStatus(true)}
             >
               <i className="fas fa-search"></i>
             </button>
@@ -47,9 +47,10 @@ function ExamTypeConf() {
           >
             <i className="fa-solid fa-rotate-right"></i>
           </button>
-        </div>
+        </div> */}
       </div>
-      <ExamTypeTab queryText={queryText} searchStatus={searchStatus} />
+      {/* <ExamTypeTab queryText={queryText} searchStatus={searchStatus} /> */}
+      <ExamTypeTab />
     </div>
   );
 }

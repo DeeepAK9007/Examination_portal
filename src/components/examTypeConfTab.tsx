@@ -95,17 +95,19 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
 };
 
 interface ExamTypeConfTabProps {
-  queryText: string;
-  searchStatus: boolean;
+  // queryText: string;
+  // searchStatus: boolean;
 }
 
-const ExamTypeTab: React.FC<ExamTypeConfTabProps> = ({
-  queryText,
-  searchStatus,
-}) => {
+const ExamTypeTab: React.FC<ExamTypeConfTabProps> = (
+  {
+    // queryText,
+    // searchStatus,
+  }
+) => {
   const [types, setTypes] = useState<ExamTypeType[]>([]);
-  const [filteredTypes, setFilteredTypes] = useState<ExamTypeType[]>([]);
-  console.log("query text: ", queryText);
+  // const [filteredTypes, setFilteredTypes] = useState<ExamTypeType[]>([]);
+  // console.log("query text: ", queryText);
 
   useEffect(() => {
     const fetchusers = async () => {
@@ -127,23 +129,23 @@ const ExamTypeTab: React.FC<ExamTypeConfTabProps> = ({
     fetchusers();
   }, []);
 
-  useEffect(() => {
-    const filterTypes = () => {
-      if (!queryText) {
-        setFilteredTypes(types);
-      } else if (queryText || searchStatus) {
-        const lowerCaseQuery = queryText.toLowerCase();
-        const filtered = types.filter((type) =>
-          Object.values(type).some((value) =>
-            String(value).toLowerCase().includes(lowerCaseQuery)
-          )
-        );
-        setFilteredTypes(filtered);
-      }
-    };
+  // useEffect(() => {
+  //   const filterTypes = () => {
+  //     if (!queryText) {
+  //       setFilteredTypes(types);
+  //     } else if (queryText || searchStatus) {
+  //       const lowerCaseQuery = queryText.toLowerCase();
+  //       const filtered = types.filter((type) =>
+  //         Object.values(type).some((value) =>
+  //           String(value).toLowerCase().includes(lowerCaseQuery)
+  //         )
+  //       );
+  //       setFilteredTypes(filtered);
+  //     }
+  //   };
 
-    filterTypes();
-  }, [queryText, types]);
+  //   filterTypes();
+  // }, [queryText, types]);
 
   const [colDefs, setColDefs] = useState<ColDef<ExamTypeType, unknown>[]>([
     { field: "exam_type_name", headerName: "Type", flex: 1 },
@@ -160,7 +162,7 @@ const ExamTypeTab: React.FC<ExamTypeConfTabProps> = ({
       >
         <AgGridReact
           rowSelection="multiple"
-          rowData={filteredTypes}
+          rowData={types}
           columnDefs={colDefs}
         />
       </div>

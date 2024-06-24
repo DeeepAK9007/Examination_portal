@@ -96,19 +96,21 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
 };
 
 interface ExamModeTabProps {
-  queryText: string;
-  searchStatus: boolean;
+  // queryText: string;
+  // searchStatus: boolean;
 }
 
-const ExamModeTab: React.FC<ExamModeTabProps> = ({
-  queryText,
-  searchStatus,
-}) => {
+const ExamModeTab: React.FC<ExamModeTabProps> = (
+  {
+    // queryText,
+    // searchStatus,
+  }
+) => {
   const [modes, setModes] = useState<ExamModeType[]>([]);
-  const [filteredExamModes, setFilteredExamModes] = useState<ExamModeType[]>(
-    []
-  );
-  console.log("query text: ", queryText);
+  // const [filteredExamModes, setFilteredExamModes] = useState<ExamModeType[]>(
+  //   []
+  // );
+  // console.log("query text: ", queryText);
 
   useEffect(() => {
     const fetchusers = async () => {
@@ -130,23 +132,23 @@ const ExamModeTab: React.FC<ExamModeTabProps> = ({
     fetchusers();
   }, []);
 
-  useEffect(() => {
-    const filterExamModes = () => {
-      if (!queryText) {
-        setFilteredExamModes(modes);
-      } else if (queryText || searchStatus) {
-        const lowerCaseQuery = queryText.toLowerCase();
-        const filtered = modes.filter((mode) =>
-          Object.values(mode).some((value) =>
-            String(value).toLowerCase().includes(lowerCaseQuery)
-          )
-        );
-        setFilteredExamModes(filtered);
-      }
-    };
+  // useEffect(() => {
+  //   const filterExamModes = () => {
+  //     if (!queryText) {
+  //       setFilteredExamModes(modes);
+  //     } else if (queryText || searchStatus) {
+  //       const lowerCaseQuery = queryText.toLowerCase();
+  //       const filtered = modes.filter((mode) =>
+  //         Object.values(mode).some((value) =>
+  //           String(value).toLowerCase().includes(lowerCaseQuery)
+  //         )
+  //       );
+  //       setFilteredExamModes(filtered);
+  //     }
+  //   };
 
-    filterExamModes();
-  }, [queryText, modes]);
+  //   filterExamModes();
+  // }, [queryText, modes]);
 
   const [colDefs, setColDefs] = useState<ColDef<ExamModeType, unknown>[]>([
     {
@@ -168,7 +170,7 @@ const ExamModeTab: React.FC<ExamModeTabProps> = ({
       >
         <AgGridReact
           rowSelection="multiple"
-          rowData={filteredExamModes}
+          rowData={modes}
           columnDefs={colDefs}
         />
       </div>
