@@ -22,6 +22,7 @@ import UpdateRoom from "./components/updateRoom";
 import UpdateUser from "./components/updateUser";
 import { useContext } from "react";
 import { LoginContext } from "./context/loginContext";
+import UploadGrade from "./components/uploadGrades";
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
         <Route path="/editExamType" element={<UpdateExamType />} />
         <Route path="/editRoom" element={<UpdateRoom />} />
         <Route path="/editUser" element={<UpdateUser />} />
+        <Route path="/uploadGrade" element={<UploadGrade/>}/>
       </>:
       <></>
     

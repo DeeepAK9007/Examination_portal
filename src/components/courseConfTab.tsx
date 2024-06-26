@@ -142,7 +142,7 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
   };
 
   useEffect(() => {
-    const fetchTerms = async () => {
+    const fetchCourses = async () => {
       try {
         const res = await getAllCourses();
         // console.log("Terms", res);
@@ -159,7 +159,7 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
         console.log("Error fetching data:", error);
       }
     };
-    fetchTerms();
+    fetchCourses();
   }, []);
 
   useEffect(() => {

@@ -78,7 +78,7 @@ function AddSched() {
             </div>
             <input
               id="datetime"
-              type="text"
+              type="datetime-local"
               className="form-control"
               value={dateTime}
               onChange={(e) => setDateTime(e.target.value)}

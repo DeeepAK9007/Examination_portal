@@ -32,10 +32,10 @@ function TermConf() {
 
                     <div className="input-group">
                         <div id="search-autocomplete" className="form-outline" data-mdb-input-init>
-                            <input type="search" id="form1" className="form-control" placeholder="Term Name" />
+                            <input type="search" id="form1" onChange={(e)=>{setQueryText(e.target.value);}} className="form-control" placeholder="Term Name" />
                             <label className="form-label"></label>
                         </div>
-                        <button type="button" className="btn btn-primary" data-mdb-ripple-init style={{ width: '50px', height: '38px' }}>
+                        <button type="button" className="btn btn-primary" data-mdb-ripple-init onClick={()=>{setSearchStatus(true)}} style={{ width: '50px', height: '38px' }}>
                             <i className="fas fa-search"></i>
                         </button>
                     </div>

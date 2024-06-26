@@ -210,7 +210,8 @@ function NavBar() {
                       <p className="btn m-0 ps-5"                         
                         onMouseEnter={()=>{setcol(true); setTarget("uploadgrad") }}
                         onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="uploadgrad"?"#509CDB":""}`}}>
+                        style={{ color: "white", backgroundColor:`${(col) && target==="uploadgrad"?"#509CDB":""}`}}
+                        onClick={()=>navigate("/uploadGrade")}>
                         <i className="fa-solid fa-chalkboard-user"></i> Upload
                         Grades
                       </p>
