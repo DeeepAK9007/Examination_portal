@@ -13,21 +13,10 @@ type CustomButtonProps = {
 
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
-  const editCourse = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    console.log("Row data:", rowData);
-    console.log(rowData.id);
-    const seshID = sessionStorage.getItem("key");
-    console.log(seshID);
-    navigate(
-      `/editCourse?course=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
-    );
-  };
-
   return (
     <div className="d-flex gap-4 justify-content-around mt-2 ">
       <i
-        onClick={editCourse}
+        // onClick={editCourse}
         className="fa-solid fa-upload"
         style={{ cursor: "pointer" }}
       >Upload Grades</i>
@@ -121,7 +110,26 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
   console.log("Row data:", courses);
   console.log("Column Data", colDefs);
 
+  const putGrades = async (e: any, rowData:any|undefined,navigatee: (path: string) => void) => {
+    e.stopPropagation();
+    console.log("maybe some stuff", e);
+    console.log("maybe some stuff", rowData.Course_Name);
+    console.log("maybe some stuff", rowData);
+
+    // console.log(rowData.id);
+    const seshID = sessionStorage.getItem("key");
+    console.log(seshID);
+    //const navigate=useNavigate();
+    navigatee(
+      // `/editCourse?course=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
+          `/updateGrade?id=${rowData?.id}&&course_nm=${rowData?.Course_Name}`
+    );
+    
+  };
+  const navigate=useNavigate();
+
   return (
+    
     <div>
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
@@ -132,7 +140,8 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
           headerCheckboxSelection={true}
           rowData={filteredCourses}
           columnDefs={colDefs}
-        />
+          onCellClicked={(e) => putGrades(e.event, e.data,navigate)}        
+          />
       </div>
     </div>
   );

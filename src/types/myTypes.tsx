@@ -178,3 +178,11 @@ export interface getTypeTypes {
 export interface deletestuff {
   id?: string;
 }
+
+export interface studsBycourse{
+  id?: string
+  student_id:string
+  stud_name: string
+  grade: string
+  remark:string
+}

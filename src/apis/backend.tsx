@@ -885,3 +885,53 @@ export const searchExamModeById = async (examModeId: string) => {
     console.log("error while searching");
   }
 };
+export const getEnrollbyCours= async (courseID: string|null) =>{
+  const seshId = sessionStorage.getItem("key");
+  console.log("session id: ", seshId);
+
+  const response = await fetch(
+    "http://localhost:8081/api/enrollment?queryId=GET_ENROLLMENTS_BY_COURSE&session_id=" + seshId+ "&args=course_id:" + courseID,
+    {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+  console.log("the response of trying to fetch users by course id ",response);
+  const json_users = await response.json();
+  const result = json_users.resource;
+  
+  const studentDetailsPromises = result.map(async (enrollment: any) => {
+    const userTypeEnrollmentId = enrollment.user_type_enrollment_id;
+    console.log("WHAT DO I SAY YOU TOO STUPID", userTypeEnrollmentId);
+    const studentResponse = await fetch(
+      //     "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +
+      "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +seshId +"&args=id:" +userTypeEnrollmentId,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    //console.log("THE OBTAINED DEEEEEETS ARE HERE",studentResponse);
+    const studentJson = await studentResponse.json();
+    console.log("THE OBTAINED DEEEEEETS ARE HERE",studentJson);
+    console.log("TOOOOOOOOOOOOOOOOOOOOOO",studentJson.resource[0].name);
+    return {
+      id: studentJson.resource[0].id,
+      student_id: studentJson.resource[0].roll_number,
+      stud_name: studentJson.resource[0].name,
+      grade: "satisfactory",
+      remark:"NA"
+    };
+  });
+
+  const studentDetails = await Promise.all(studentDetailsPromises);
+  //return studentDetails;
+  //return result;
+  return studentDetails;
+};

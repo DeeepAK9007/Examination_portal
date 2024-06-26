@@ -39,7 +39,7 @@ function NavBar() {
   const logstat=useContext(LoginContext);
 
   return (
-    <div className="d-flex flex-column" style={{ height: "100vh", width: "319px" }}>
+    <div className="d-flex flex-column" style={{ height: "100vh", width: "319px"}}>
       <div className="d-flex flex-column col-xs-2" style={{ background: "#074E85", height: "90vh", width: "319px" }}>
         <div className="my-2">
           <p className="text-center mt-2">
@@ -295,7 +295,7 @@ function NavBar() {
           <p className="mb-0 fw-bold">Application Admin</p>
           <p>application@iiitb.in</p>
         </div>
-        <i onClick={()=>{logstat.setIsLoggedIn(false); navigate("/")} }
+        <i onClick={()=>{logstat.setIsLoggedIn(false); sessionStorage.clear(); navigate("/");}}
           className="fa-solid fa-right-from-bracket fa-2x mb-4 fs-4"
           style={{ color: "white", transform: "rotate(180deg)", cursor:"pointer"}}
 
