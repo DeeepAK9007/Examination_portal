@@ -1,17 +1,59 @@
-import { useState } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import "./styles.css";
 import { userType } from "../types/myTypes";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function AddUser() {
   const [rollNo, setRollNo] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [file, setFile] = useState<string>("");
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [examRole, setexamRole] = useState<string>("");
   const [mob_num, setMobNO] = useState<string>("");
   const [card_num, setCardNo] = useState<string>("");
   const [expiry, setExpiry] = useState<string>("");
   const [actStatus, setActStatus] = useState<string>("");
+  const [temp,settemp]=useState<string>("");
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (
+      selectedFile &&
+      (selectedFile.type === "image/jpeg" ||
+        selectedFile.type === "image/jpg" ||
+        selectedFile.type === "image/png")
+    ) {
+      setFile(selectedFile);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+        setShowModal(true); // Show the modal when a file is selected
+      };
+      reader.readAsDataURL(selectedFile);
+      settemp(selectedFile.name);
+    } else {
+      setFile(null);
+      setPreviewUrl(null);
+      alert("Please select a JPG or PNG file.");
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    if (showModal) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [showModal]);
 
   async function handleclick(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -23,11 +65,10 @@ function AddUser() {
       mobile_number: mob_num,
       card_number: card_num,
       expiry_date: expiry,
-      image_url: file,
+      image_url: temp || "", // Use previewUrl for the image URL
       status: actStatus,
     };
     console.log(newUser);
-
     const jsonobj = JSON.stringify(newUser);
     console.log(jsonobj);
     const encode = btoa(jsonobj);
@@ -60,7 +101,7 @@ function AddUser() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form className="d-flex flex-row jutify-content-evenly w-100">
+      <form className="d-flex flex-row justify-content-evenly w-100">
         <div className="d-flex flex-column ms-5 w-50">
           <div className="mb-3 mt-5 form-group">
             <div className="palceholder ms-1">
@@ -70,9 +111,9 @@ function AddUser() {
             <input
               type="file"
               className="form-control"
+              accept=".jpg,.jpeg,.png"
               id="file"
-              value={file}
-              onChange={(e) => setFile(e.target.value)}
+              onChange={handleFileChange}
               required
             />
           </div>
@@ -223,6 +264,41 @@ function AddUser() {
           </div>
         </div>
       </form>
+
+      {previewUrl && showModal && (
+        <div className="modal fade show d-block" tabIndex={-1} role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Image Preview</h5>
+                <button
+                  type="button"
+                  className="close"
+                  onClick={handleCloseModal}
+                >
+                  <span>&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <img
+                  src={previewUrl}
+                  alt="Selected File Preview"
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleCloseModal}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

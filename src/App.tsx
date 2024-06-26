@@ -23,6 +23,8 @@ import UpdateUser from "./components/updateUser";
 import UpdateSchedule from "./components/updateSchedule";
 import { useContext } from "react";
 import { LoginContext } from "./context/loginContext";
+import UploadGrade from "./components/uploadGrades";
+import UpdateGrade from "./components/updateGrades";
 import CourseListConf from "./components/courseList";
 
 function App() {
@@ -52,6 +54,9 @@ function App() {
         <Route path="/editExamType" element={<UpdateExamType />} />
         <Route path="/editRoom" element={<UpdateRoom />} />
         <Route path="/editUser" element={<UpdateUser />} />
+        <Route path="/uploadGrade" element={<UploadGrade/>}/>
+        <Route path="/updateGrade" element={<UpdateGrade/>}/>
+
         <Route path="/editSchedule" element={<UpdateSchedule />} />
         <Route path="/coursesList" element={<CourseListConf />} />
       </>

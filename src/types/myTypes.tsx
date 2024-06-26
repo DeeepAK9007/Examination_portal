@@ -196,6 +196,14 @@ export interface deletestuff {
   id?: string;
 }
 
+export interface studsBycourse{
+  id?: string
+  student_id:string
+  stud_name: string
+  grade: string
+  remark:string
+}
+
 export interface enrollmentType {
   user_type_enrollment_id: string;
   course_enrollment_id: string;
