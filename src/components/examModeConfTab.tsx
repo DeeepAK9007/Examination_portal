@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 import { deletestuff } from "../types/myTypes";
 import { useNavigate } from "react-router-dom";
+import { getExamModeTypes } from "../types/myTypes";
 
 type CustomButtonProps = {
   rowData: ExamModeType;
@@ -106,7 +107,7 @@ const ExamModeTab: React.FC<ExamModeTabProps> = (
     // searchStatus,
   }
 ) => {
-  const [modes, setModes] = useState<ExamModeType[]>([]);
+  const [modes, setModes] = useState<getExamModeTypes[]>([]);
   // const [filteredExamModes, setFilteredExamModes] = useState<ExamModeType[]>(
   //   []
   // );
@@ -117,7 +118,7 @@ const ExamModeTab: React.FC<ExamModeTabProps> = (
       try {
         const res: getModeTypes[] = await getAllModes();
 
-        const mappedRowData: ExamModeType[] = res.map((row) => ({
+        const mappedRowData: getExamModeTypes[] = res.map((row) => ({
           id: row.id,
           exam_mode_name: row.exam_mode_name,
           remark: row.remark,

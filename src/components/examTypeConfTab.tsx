@@ -3,7 +3,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState } from "react";
 import { getAllTypes } from "../apis/backend";
-import { ExamTypeType, getTypeTypes } from "../types/myTypes";
+import { ExamTypeType, getTypeTypes, getExamType } from "../types/myTypes";
 import { useEffect } from "react";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 import { deletestuff } from "../types/myTypes";
@@ -105,7 +105,7 @@ const ExamTypeTab: React.FC<ExamTypeConfTabProps> = (
     // searchStatus,
   }
 ) => {
-  const [types, setTypes] = useState<ExamTypeType[]>([]);
+  const [types, setTypes] = useState<getExamType[]>([]);
   // const [filteredTypes, setFilteredTypes] = useState<ExamTypeType[]>([]);
   // console.log("query text: ", queryText);
 

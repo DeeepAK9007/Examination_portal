@@ -113,7 +113,7 @@ const BatchConfTab: React.FC<BatchConfTabProps> = ({
         const mappedRowData = res.map((row) => ({
           id: row.id,
           batch_name: row.batch_name,
-          status: row.status,
+          status: row.status === "Active" ? true : false,
         }));
 
         setObtBatches(mappedRowData);
@@ -151,7 +151,7 @@ const BatchConfTab: React.FC<BatchConfTabProps> = ({
       flex: 1,
       headerCheckboxSelection: true,
     },
-    { field: "status", headerName: "Status", flex: 1 },
+    { field: "status", flex: 1 },
     { headerName: "actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 

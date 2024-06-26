@@ -109,6 +109,8 @@ const UserCourseConfTab: React.FC<UserTabProps> = ({
       try {
         const res: getuserType[] = await getAllUsers();
 
+        console.log("res: ", res);
+
         const mappedRowData = res.map((row) => ({
           id: row.id,
           roll_number: row.roll_number,

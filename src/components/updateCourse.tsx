@@ -2,14 +2,16 @@ import NavBar from "./navbar";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { courseType } from "../types/myTypes";
-import { updateOrDeleteCourse } from "../apis/backend";
+import { getUsersByRole, updateOrDeleteCourse } from "../apis/backend";
 
 function UpdateCourse() {
   const navigate = useNavigate();
 
   const [CourseCode, setCourseCode] = useState<string>("");
+  const [Instructor, setInstructor] = useState<string>("");
   const [CourseName, setCourseName] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [users, setUsers] = useState<{ name: string }[]>([]);
 
   const location = useLocation();
   const courseId = new URLSearchParams(location.search).get("id");
@@ -19,6 +21,7 @@ function UpdateCourse() {
   const [courseData, setCourseData] = useState<courseType>({
     id: "",
     course_name: "",
+    instructor_id: "",
     course_code: "",
     status: "",
   });
@@ -27,6 +30,7 @@ function UpdateCourse() {
     if (courseId && courseobj) {
       const jsonobj = JSON.parse(atob(courseobj));
       setCourseCode(jsonobj.Course_Code);
+      setInstructor(jsonobj.Instructor);
       setCourseName(jsonobj.Course_Name);
       setStatus(jsonobj.Status);
     } else {
@@ -41,13 +45,28 @@ function UpdateCourse() {
       setCourseData({
         id: courseId,
         course_name: CourseName ? CourseName : jsonobj.Course_Name,
+        instructor_id: Instructor ? Instructor : jsonobj.Instructor,
         course_code: CourseCode ? CourseCode : jsonobj.Course_Code,
         status: status ? status : jsonobj.Status,
       });
     } else {
       console.error("Course ID is null");
     }
-  }, [CourseName, CourseCode, status]);
+  }, [CourseName, Instructor, CourseCode, status]);
+
+  useEffect(() => {
+    const fetchusers = async () => {
+      try {
+        const res = await getUsersByRole("Faculty");
+        setUsers(res);
+
+        console.log("users based on role ", res);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+    fetchusers();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,6 +108,30 @@ function UpdateCourse() {
                 onChange={(e) => setCourseCode(e.target.value)}
               />
             </div>
+            <div className="mb-3 form-group">
+              <div
+                className="palceholder ms-1"
+                style={{ display: Instructor ? "none" : "" }}
+              >
+                <label htmlFor="inst">Instructor</label>
+                <span className="star"> *</span>
+              </div>
+              <select
+                name="inst"
+                className="form-select"
+                id="instruct"
+                aria-label="Floating label select example"
+                value={Instructor}
+                onChange={(e) => setInstructor(e.target.value)}
+              >
+                <option id="examrole" value="" disabled selected></option>
+                {users.map((user, index) => (
+                  <option key={index} value={user.name}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div className="d-flex flex-column ms-5 w-50 me-5">
             <div className="mb-3 mt-5 form-group">
@@ -107,10 +150,7 @@ function UpdateCourse() {
               />
             </div>
             <div className="mb-3 form-group">
-              <div
-                className="palceholder ms-1"
-                style={{ display: status ? "none" : "" }}
-              >
+              <div className="palceholder ms-1" style={{ display: "none" }}>
                 <label htmlFor="file">Status</label>
               </div>
               <select

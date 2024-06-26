@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
 import { courseType } from "../types/myTypes";
-import { addOneCourse } from "../apis/backend";
+import { addOneCourse, getUsersByRole } from "../apis/backend";
 
 function AddCourseDet() {
   const [CourseCode, setCourseCode] = useState<string>("");
+  const [Instructor, setInstructor] = useState<string>("");
   const [CourseName, setCourseName] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [users, setUsers] = useState<{ name: string }[]>([]);
 
   const [courseData, setCourseData] = useState<courseType>({
     course_name: "",
+    instructor_id: "",
     course_code: "",
     status: "",
   });
@@ -17,10 +20,25 @@ function AddCourseDet() {
   useEffect(() => {
     setCourseData({
       course_name: CourseName,
+      instructor_id: Instructor,
       course_code: CourseCode,
       status: status,
     });
-  }, [CourseName, CourseCode, status]);
+  }, [CourseName, Instructor, CourseCode, status]);
+
+  useEffect(() => {
+    const fetchusers = async () => {
+      try {
+        const res = await getUsersByRole("Faculty");
+        setUsers(res);
+
+        console.log("users based on role ", res);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+    fetchusers();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +54,8 @@ function AddCourseDet() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form id="courseform"
+      <form
+        id="courseform"
         className="d-flex flex-row jutify-content-evenly w-100"
         onSubmit={handleSubmit}
       >
@@ -57,6 +76,30 @@ function AddCourseDet() {
               onChange={(e) => setCourseCode(e.target.value)}
               required
             />
+          </div>
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: Instructor ? "none" : "" }}
+            >
+              <label htmlFor="inst">Instructor</label>
+              <span className="star"> *</span>
+            </div>
+            <select
+              name="inst"
+              className="form-select"
+              id="instruct"
+              aria-label="Floating label select example"
+              value={Instructor}
+              onChange={(e) => setInstructor(e.target.value)}
+            >
+              <option id="examrole" value="" disabled selected></option>
+              {users.map((user, index) => (
+                <option key={index} value={user.name}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="d-flex flex-column ms-5 w-50 me-5">

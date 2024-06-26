@@ -20,16 +20,16 @@ import UpdateExamMode from "./components/updateExamMode";
 import UpdateExamType from "./components/updateExamType";
 import UpdateRoom from "./components/updateRoom";
 import UpdateUser from "./components/updateUser";
+import UpdateSchedule from "./components/updateSchedule";
 import { useContext } from "react";
 import { LoginContext } from "./context/loginContext";
+import CourseListConf from "./components/courseList";
 
 function App() {
-
-  const logstat=useContext(LoginContext);
+  const logstat = useContext(LoginContext);
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      
       {logstat.isLoggedIn}?
       <>
         <Route path="/user" element={<User />} />
@@ -52,9 +52,10 @@ function App() {
         <Route path="/editExamType" element={<UpdateExamType />} />
         <Route path="/editRoom" element={<UpdateRoom />} />
         <Route path="/editUser" element={<UpdateUser />} />
-      </>:
-      <></>
-    
+        <Route path="/editSchedule" element={<UpdateSchedule />} />
+        <Route path="/coursesList" element={<CourseListConf />} />
+      </>
+      :<></>
     </Routes>
   );
 }

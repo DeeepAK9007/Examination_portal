@@ -32,15 +32,21 @@ function NavBar() {
     });
   };
 
-  const { navitem, setNavItem} = useContext(NavbarContext);
-  const [target,setTarget]=useState<string>("");
-  const [col, setcol]=useState<boolean>(false);
+  const { navitem, setNavItem } = useContext(NavbarContext);
+  const [target, setTarget] = useState<string>("");
+  const [col, setcol] = useState<boolean>(false);
 
-  const logstat=useContext(LoginContext);
+  const logstat = useContext(LoginContext);
 
   return (
-    <div className="d-flex flex-column" style={{ height: "100vh", width: "319px" }}>
-      <div className="d-flex flex-column col-xs-2" style={{ background: "#074E85", height: "90vh", width: "319px" }}>
+    <div
+      className="d-flex flex-column"
+      style={{ height: "100vh", width: "319px" }}
+    >
+      <div
+        className="d-flex flex-column col-xs-2"
+        style={{ background: "#074E85", height: "90vh", width: "319px" }}
+      >
         <div className="my-2">
           <p className="text-center mt-2">
             <img
@@ -67,8 +73,14 @@ function NavBar() {
               <li className="nav-item">
                 <p
                   className="btn dropdown-heading"
-                  onClick={() => {toggleDropdown("admin"); setNavItem("admin")}}
-                  style={{color:"white", backgroundColor: `${(navitem==="admin"?"#509CDB":"")}`}}
+                  onClick={() => {
+                    toggleDropdown("admin");
+                    setNavItem("admin");
+                  }}
+                  style={{
+                    color: "white",
+                    backgroundColor: `${navitem === "admin" ? "#509CDB" : ""}`,
+                  }}
                 >
                   <i className="fa-sharp fa-solid fa-graduation-cap"></i>{" "}
                   Administration
@@ -77,9 +89,19 @@ function NavBar() {
                   <ul className="dropdown-list">
                     <li>
                       <p
-                        onMouseEnter={()=>{setcol(true); setTarget("user") }}
-                        onMouseLeave={()=>{setcol(false)}}                        
-                        style={{ color: "white", backgroundColor:`${(col && target==="user")?"#509CDB":""}`}}
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("user");
+                        }}
+                        onMouseLeave={() => {
+                          setcol(false);
+                        }}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "user" ? "#509CDB" : ""
+                          }`,
+                        }}
                         className="btn my-auto ps-5"
                         onClick={() => navigate("/user")}
                       >
@@ -90,10 +112,18 @@ function NavBar() {
                       <p
                         className="btn my-auto ps-5"
                         onClick={() => navigate("/batch")}
-                        onMouseEnter={()=>{setcol(true); setTarget("batch") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="batch"?"#509CDB":""}`}}                      
-                        >
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("batch");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "batch" ? "#509CDB" : ""
+                          }`,
+                        }}
+                      >
                         <i className="fa-regular fa-calendar"></i> Batch
                       </p>
                     </li>
@@ -101,9 +131,18 @@ function NavBar() {
                       <p
                         className="btn my-auto ps-5"
                         onClick={() => navigate("/room")}
-                        onMouseEnter={()=>{setcol(true); setTarget("room") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="room"?"#509CDB":""}`}}                      >
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("room");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "room" ? "#509CDB" : ""
+                          }`,
+                        }}
+                      >
                         <i className="fa-regular fa-calendar"></i> Room
                       </p>
                     </li>
@@ -111,9 +150,18 @@ function NavBar() {
                       <p
                         className="btn my-auto ps-5"
                         onClick={() => navigate("/term")}
-                        onMouseEnter={()=>{setcol(true); setTarget("term") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="term"?"#509CDB":""}`}}                      >
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("term");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "term" ? "#509CDB" : ""
+                          }`,
+                        }}
+                      >
                         <i className="fa-regular fa-calendar"></i> Term
                       </p>
                     </li>
@@ -121,9 +169,18 @@ function NavBar() {
                       <p
                         className="btn my-auto ps-5"
                         onClick={() => navigate("/course")}
-                        onMouseEnter={()=>{setcol(true); setTarget("course") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="course"?"#509CDB":""}`}}                      >
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("course");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "course" ? "#509CDB" : ""
+                          }`,
+                        }}
+                      >
                         <i className="fa-regular fa-calendar"></i> Course
                       </p>
                     </li>
@@ -131,9 +188,18 @@ function NavBar() {
                       <p
                         className="btn my-auto ps-5"
                         onClick={() => navigate("/examType")}
-                        onMouseEnter={()=>{setcol(true); setTarget("examtyp") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="examtyp"?"#509CDB":""}`}}                      >
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("examtyp");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "examtyp" ? "#509CDB" : ""
+                          }`,
+                        }}
+                      >
                         <i className="fa-regular fa-calendar"></i> Exam Type
                       </p>
                     </li>
@@ -141,9 +207,18 @@ function NavBar() {
                       <p
                         className="btn my-auto ps-5"
                         onClick={() => navigate("/examMode")}
-                        onMouseEnter={()=>{setcol(true); setTarget("exammod") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="exammod"?"#509CDB":""}`}}                      >
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("exammod");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "exammod" ? "#509CDB" : ""
+                          }`,
+                        }}
+                      >
                         <i className="fa-regular fa-calendar"></i> Exam Mode
                       </p>
                     </li>
@@ -156,9 +231,14 @@ function NavBar() {
               <li className="nav-item">
                 <p
                   className="btn dropdown-heading"
-                  onClick={() => {toggleDropdown("examOffice"); setNavItem("xamoff")}}
-                  style={{color:"white", backgroundColor: `${(navitem==="xamoff"?"#509CDB":"")}`}}
-
+                  onClick={() => {
+                    toggleDropdown("examOffice");
+                    setNavItem("xamoff");
+                  }}
+                  style={{
+                    color: "white",
+                    backgroundColor: `${navitem === "xamoff" ? "#509CDB" : ""}`,
+                  }}
                 >
                   <i className="fa-solid fa-book"></i> Exam Office
                 </p>
@@ -167,9 +247,18 @@ function NavBar() {
                     <li onClick={() => navigate("/schedule")}>
                       <p
                         className="btn my-auto ps-5"
-                        onMouseEnter={()=>{setcol(true); setTarget("xamsched") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="xamsched"?"#509CDB":""}`}}                      >
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("xamsched");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "xamsched" ? "#509CDB" : ""
+                          }`,
+                        }}
+                      >
                         <i className="fa-regular fa-calendar"></i> Exam
                         Scheduling
                       </p>
@@ -182,9 +271,13 @@ function NavBar() {
 
               <li
                 className=" btn nav-item dropdown-heading"
-                onClick={() => {navigate("/progCord"); setNavItem("progcord")}}
-                style={{backgroundColor: `${(navitem==="progcord"?"#509CDB":"")}`}}
-
+                onClick={() => {
+                  navigate("/progCord");
+                  setNavItem("progcord");
+                }}
+                style={{
+                  backgroundColor: `${navitem === "progcord" ? "#509CDB" : ""}`,
+                }}
               >
                 <p style={{ color: "white" }}>
                   <i className="fa-solid fa-sheet-plastic"></i> Programme
@@ -197,9 +290,16 @@ function NavBar() {
               <li className="nav-item">
                 <p
                   className=" btn dropdown-heading"
-                  onClick={() => {toggleDropdown("courseInstructor"); setNavItem("coursinst")}}
-                  style={{color:"white",backgroundColor: `${(navitem==="coursinst"?"#509CDB":"")}`}}
-
+                  onClick={() => {
+                    toggleDropdown("courseInstructor");
+                    setNavItem("coursinst");
+                  }}
+                  style={{
+                    color: "white",
+                    backgroundColor: `${
+                      navitem === "coursinst" ? "#509CDB" : ""
+                    }`,
+                  }}
                 >
                   <i className="fa-solid fa-chalkboard-user"></i> Course
                   Instructor
@@ -207,10 +307,20 @@ function NavBar() {
                 {dropdownOpen.courseInstructor && (
                   <ul className="dropdown-list">
                     <li>
-                      <p className="btn m-0 ps-5"                         
-                        onMouseEnter={()=>{setcol(true); setTarget("uploadgrad") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="uploadgrad"?"#509CDB":""}`}}>
+                      <p
+                        className="btn m-0 ps-5"
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("uploadgrad");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "uploadgrad" ? "#509CDB" : ""
+                          }`,
+                        }}
+                      >
                         <i className="fa-solid fa-chalkboard-user"></i> Upload
                         Grades
                       </p>
@@ -218,10 +328,20 @@ function NavBar() {
                     <li>
                       <p
                         className="btn m-0 ps-5"
-                        onMouseEnter={()=>{setcol(true); setTarget("issuerepo") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="issuerepo"?"#509CDB":""}`}}                        
-                        onClick={() => navigate("/issuereporting")}
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("issuerepo");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "issuerepo" ? "#509CDB" : ""
+                          }`,
+                        }}
+                        onClick={() =>
+                          navigate("/coursesList?redirectedPage=issuereporting")
+                        }
                       >
                         <i className="fa-solid fa-chalkboard-user"></i> Issue
                         Reporting
@@ -230,9 +350,17 @@ function NavBar() {
                     <li>
                       <p
                         className="btn m-0 ps-5"
-                        onMouseEnter={()=>{setcol(true); setTarget("xammodeupd") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="xammodupd"?"#509CDB":""}`}}                        
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("xammodeupd");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "xammodupd" ? "#509CDB" : ""
+                          }`,
+                        }}
                         onClick={() => navigate("/exammodelupdate")}
                       >
                         <i className="fa-solid fa-chalkboard-user"></i> Exam
@@ -248,8 +376,14 @@ function NavBar() {
               <li className="nav-item">
                 <p
                   className="btn dropdown-heading"
-                  onClick={() => {toggleDropdown("invigilator"); setNavItem("invig")}}
-                  style={{color:"white",backgroundColor: `${(navitem==="invig"?"#509CDB":"")}`}}
+                  onClick={() => {
+                    toggleDropdown("invigilator");
+                    setNavItem("invig");
+                  }}
+                  style={{
+                    color: "white",
+                    backgroundColor: `${navitem === "invig" ? "#509CDB" : ""}`,
+                  }}
                 >
                   <i className="fa-solid fa-person"></i> Invigilator
                 </p>
@@ -258,10 +392,20 @@ function NavBar() {
                     <li>
                       <p
                         className="btn m-0 ps-5"
-                        onMouseEnter={()=>{setcol(true); setTarget("attend") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="attend"?"#509CDB":""}`}}                        
-                        onClick={() => navigate("/attend")}
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("attend");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "attend" ? "#509CDB" : ""
+                          }`,
+                        }}
+                        onClick={() =>
+                          navigate("/coursesList?redirectedPage=attendance")
+                        }
                       >
                         <i className="fa-solid fa-chalkboard-user"></i>{" "}
                         Attendance
@@ -270,10 +414,20 @@ function NavBar() {
                     <li>
                       <p
                         className="btn m-0 ps-5"
-                        onMouseEnter={()=>{setcol(true); setTarget("incirepo") }}
-                        onMouseLeave={()=>setcol(false)}                        
-                        style={{ color: "white", backgroundColor:`${(col) && target==="incirepo"?"#509CDB":""}`}}                        
-                        onClick={() => navigate("/incident")}
+                        onMouseEnter={() => {
+                          setcol(true);
+                          setTarget("incirepo");
+                        }}
+                        onMouseLeave={() => setcol(false)}
+                        style={{
+                          color: "white",
+                          backgroundColor: `${
+                            col && target === "incirepo" ? "#509CDB" : ""
+                          }`,
+                        }}
+                        onClick={() =>
+                          navigate("/coursesList?redirectedPage=incident")
+                        }
                       >
                         <i className="fa-solid fa-chalkboard-user"></i> Incident
                         Reporting
@@ -294,10 +448,17 @@ function NavBar() {
           <p className="mb-0 fw-bold">Application Admin</p>
           <p>application@iiitb.in</p>
         </div>
-        <i onClick={()=>{logstat.setIsLoggedIn(false); navigate("/")} }
+        <i
+          onClick={() => {
+            logstat.setIsLoggedIn(false);
+            navigate("/");
+          }}
           className="fa-solid fa-right-from-bracket fa-2x mb-4 fs-4"
-          style={{ color: "white", transform: "rotate(180deg)", cursor:"pointer"}}
-
+          style={{
+            color: "white",
+            transform: "rotate(180deg)",
+            cursor: "pointer",
+          }}
         ></i>
       </div>
     </div>

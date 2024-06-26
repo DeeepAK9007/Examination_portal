@@ -1,13 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { addProgCordType } from "../types/myTypes";
+import { addProgCord } from "../apis/backend";
 
 function AddProgSched() {
+  // console.log("hello");
   const [dateTime, setDateTime] = useState<string>("");
   const [examName, setExamName] = useState<string>("");
   const [selectedCourse, setSelectedCourse] = useState<string>("");
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCourse(event.target.value);
-    console.log(event.target.value);
+  const [roomNumber, setRoomNumber] = useState<string>("");
+  const [remark, setRemark] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+
+  const [scheduleData, setScheduleData] = useState<addProgCordType>({
+    date: "",
+    examination_name: "",
+    course_name: "",
+    room_number: "",
+    remarks: "",
+    status: "",
+  });
+
+  useEffect(() => {
+    setScheduleData({
+      date: dateTime,
+      examination_name: examName,
+      course_name: selectedCourse,
+      room_number: roomNumber,
+      remarks: remark,
+      status: status,
+    });
+  }, [dateTime, examName, selectedCourse, roomNumber, remark, status]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("scheduleData: ", scheduleData);
+    addProgCord(scheduleData);
+    // window.location.reload();
   };
+
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
@@ -15,7 +45,10 @@ function AddProgSched() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form className="d-flex flex-row jutify-content-evenly w-100">
+      <form
+        className="d-flex flex-row jutify-content-evenly w-100"
+        onSubmit={handleSubmit}
+      >
         <div className="d-flex flex-column ms-5 w-50">
           <div className="mb-3 mt-5 form-group">
             <div
@@ -48,7 +81,7 @@ function AddProgSched() {
               id="floatingSelect"
               aria-label="Floating label select example"
               value={selectedCourse}
-              onChange={handleSelectChange}
+              onChange={(e) => setSelectedCourse(e.target.value)}
             >
               <option
                 id="examrole"
@@ -65,7 +98,12 @@ function AddProgSched() {
             </select>
           </div>
           <div className="mb-3">
-            <input className="form-control" placeholder="Remark" />
+            <input
+              className="form-control"
+              placeholder="Remark"
+              value={remark}
+              onChange={(e) => setRemark(e.target.value)}
+            />
           </div>
         </div>
         <div className="d-flex flex-column ms-5 w-50 me-5">
@@ -89,9 +127,9 @@ function AddProgSched() {
           <div className="mb-3 form-group">
             <div
               className="palceholder ms-1"
-              style={{ display: selectedCourse ? "none" : "" }}
+              style={{ display: roomNumber ? "none" : "" }}
             >
-              <label htmlFor="file">Location/Room</label>
+              <label htmlFor="loc">Location/Room</label>
               <span className="star"> *</span>
             </div>
             <select
@@ -99,24 +137,45 @@ function AddProgSched() {
               className="form-select"
               id="floatingSelect"
               aria-label="Floating label select example"
-              value={selectedCourse}
-              onChange={handleSelectChange}
+              value={roomNumber}
+              onChange={(e) => setRoomNumber(e.target.value)}
             >
               <option
-                id="examrole"
+                id="loc"
                 value=""
                 disabled
                 selected
                 className="default-option"
               ></option>
-              <option value="1">R-203</option>
-              <option value="2">R-200</option>
-              <option value="3">R-400</option>
+              <option value="R-203">R-203</option>
+              <option value="R-200">R-200</option>
+              <option value="R-400">R-400</option>
+            </select>
+          </div>
+          <div className="mb-3 form-group">
+            <div
+              className="palceholder ms-1"
+              style={{ display: status ? "none" : "" }}
+            >
+              <label htmlFor="stat">Status</label>
+              <span className="star"> *</span>
+            </div>
+            <select
+              name="stat"
+              className="form-select"
+              id="blockno"
+              aria-label="Floating label select example"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option id="examrole" value="" disabled selected></option>
+              <option value="Active">Active</option>
+              <option value="InActive">InActive</option>
             </select>
           </div>
           <div className="d-flex justify-content-end mb-3">
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary"
               style={{ width: "105px", height: "44px" }}
             >

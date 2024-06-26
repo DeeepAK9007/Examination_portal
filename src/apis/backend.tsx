@@ -1,47 +1,21 @@
 import { User } from "../context/loginContext";
-import {
-  examModeUpdateType,
-  getuserType,
-  scheduleType,
-  termType,
-} from "../types/myTypes";
+import { examModeUpdateType, scheduleType, termType } from "../types/myTypes";
 import { courseType } from "../types/myTypes";
-import { batchMappedType } from "../types/myTypes";
+import { batchType } from "../types/myTypes";
 import { roomMatchedType } from "../types/myTypes";
 import { userType } from "../types/myTypes";
 import { ExamTypeType } from "../types/myTypes";
 import { ExamModeType } from "../types/myTypes";
+import { enrollmentType } from "../types/myTypes";
+import { addProgCordType } from "../types/myTypes";
 
 export const login = async (user: User) => {
   console.log("Adding User: ", user);
   try {
-    // const params = new URLSearchParams();
-    // console.log(params);
-
-    // const jsonObj = user;
-    // const jsonString = JSON.stringify(jsonObj);
-    // console.log(jsonString);
-    // // Encode string to Base64
-    // const base64Encoded = btoa(jsonObj);
-    // console.log(base64Encoded);
-
-    // const object= {
-    //   "email_id": user.email_id,
-    //   "password": user.password
-    // };
-
     const new_obj = btoa(JSON.stringify(user));
     console.log("new object here", new_obj);
 
-    //params.append('resource',new_obj);
-    // console.log("updated params here",params);
-    // console.log("paramsdata", params.toString());
-
     const body = "resource=" + new_obj;
-    // console.log(`Base Encoding of adding batch: ${base64Encoded}`);
-
-    // params.append("resource", base64Encoded);
-    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
 
     const response = await fetch("http://localhost:8081/api/login", {
       method: "POST",
@@ -53,16 +27,12 @@ export const login = async (user: User) => {
     });
     console.log(response);
     console.log("body here", body);
-    // console.log("api/login?" + params.toString());
 
-    // console.log("Resposne after submit: ", response);
-    // console.log("response", response);
     const jsonData = await response.json();
     console.log("response json after submit,", jsonData);
     // console.log("Login output after submit",jsonData.resource[0].session_id);
     const ssid = jsonData.resource[0].session_id;
     return ssid;
-    // return response;
   } catch (error) {
     console.error("Error posting data:", error);
   }
@@ -206,6 +176,50 @@ export const addOneSchedule = async (schedule: scheduleType) => {
   }
 };
 
+export const addProgCord = async (pro: addProgCordType) => {
+  console.log("adding ", pro);
+  try {
+    const jsonObj = pro;
+    // Convert JSON object to string
+    const jsonString = JSON.stringify(jsonObj);
+    console.log("Adding term stringify", jsonString);
+
+    // Encode string to Base64
+    const base64Encoded = btoa(jsonString);
+
+    // const body = "resource=" + base64Encoded;
+
+    console.log(`Base Encoding of adding term: ${base64Encoded}`);
+
+    // params.append("resource", base64Encoded);
+    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    const ssid = sessionStorage?.getItem("key");
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      // params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    const response = await fetch(
+      "http://localhost:8081/api/exam_schedule?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+
+    console.log("Resposne after adding student: ", response);
+  } catch (error) {
+    console.log(" error message: ", error);
+  }
+};
 export const getAllTerms = async () => {
   try {
     const ssid = sessionStorage.getItem("key");
@@ -273,6 +287,39 @@ export const getAllCourses = async () => {
 };
 
 export const getAllSchedules = async () => {
+  try {
+    const ssid = sessionStorage.getItem("key");
+    console.log("Session Id in API: ", ssid);
+    console.log("ssid insde Api schedule", ssid);
+    const queryId = "GET_ALL";
+
+    const response = await fetch(
+      "http://localhost:8081/api/exam_schedule?queryId=" +
+        queryId +
+        "&session_id=" +
+        ssid,
+      {
+        // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log("response", response);
+    const jsonData = await response.json();
+    console.log("response json,", jsonData);
+    console.log(jsonData.resource);
+    const terms = jsonData.resource;
+    return terms;
+  } catch (error) {
+    console.error("Error fetching data from backend:", error);
+  }
+};
+
+export const getProgCord = async () => {
   try {
     const ssid = sessionStorage.getItem("key");
     console.log("Session Id in API: ", ssid);
@@ -555,7 +602,7 @@ export const updateOrDeleteCourse = async (
 
 export const updateOrDeleteBatch = async (
   batchId: string,
-  newData: batchMappedType,
+  newData: batchType,
   action: string
 ) => {
   try {
@@ -803,85 +850,181 @@ export const updateOrDeleteExamMode = async (
   }
 };
 
-export const searchUserById = async (userId: string) => {
+export const updateOrDeleteSchedule = async (
+  scheduleId: string,
+  newData: scheduleType,
+  action: string
+) => {
   try {
-    const res = await getAllUsers();
+    const params = new URLSearchParams();
+    const ssid = sessionStorage.getItem("key");
 
-    const foundUser = res.find((user: getuserType) => user.id == userId);
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
 
-    return foundUser;
-  } catch (error) {
-    console.log("error while searching");
-  }
-};
+    console.log("term ID:", scheduleId);
+    console.log("New Data:", newData);
 
-export const searchCourseById = async (courseId: string) => {
-  try {
-    const res = await getAllCourses();
+    // If action is DELETE, encode the student ID to base64 and set it as resource
+    // If action is MODIFY, encode the new data to base64 and set it as resource
+    console.log("New Data after stingigy: ", JSON.stringify(newData));
 
-    const foundCourse = res.find((user: getuserType) => user.id == courseId);
+    const base64EncodedData =
+      action === "DELETE"
+        ? btoa(JSON.stringify({ id: scheduleId }))
+        : btoa(JSON.stringify(newData));
+    console.log("Editing data encoding: ", base64EncodedData);
+    params.append("resource", base64EncodedData);
 
-    return foundCourse;
-  } catch (error) {
-    console.log("error while searching");
-  }
-};
+    //console.log("http://localhost:8081/api/term?" + params.toString());
 
-export const searchBatchById = async (batchId: string) => {
-  try {
-    const res = await getAllBatches();
-
-    const foundBatch = res.find((user: getuserType) => user.id == batchId);
-
-    return foundBatch;
-  } catch (error) {
-    console.log("error while searching");
-  }
-};
-
-export const searchRoomById = async (roomId: string) => {
-  try {
-    const res = await getAllRooms();
-
-    const foundRoom = res.find((user: getuserType) => user.id == roomId);
-
-    return foundRoom;
-  } catch (error) {
-    console.log("error while searching");
-  }
-};
-export const searchTermById = async (termId: string) => {
-  try {
-    const res = await getAllTerms();
-
-    const foundTerm = res.find((user: getuserType) => user.id == termId);
-
-    return foundTerm;
-  } catch (error) {
-    console.log("error while searching");
-  }
-};
-export const searchExamTypeById = async (examtypeId: string) => {
-  try {
-    const res = await getAllTypes();
-
-    const foundExamtype = res.find(
-      (user: getuserType) => user.id == examtypeId
+    const response = await fetch(
+      "http://localhost:8081/api/term?session_id=" +
+        ssid +
+        "&resource=" +
+        base64EncodedData +
+        "&action=MODIFY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
     );
 
-    return foundExamtype;
+    console.log(response);
   } catch (error) {
-    console.log("error while searching");
+    console.log("error while updation: ", error);
   }
 };
-export const searchExamModeById = async (examModeId: string) => {
+
+export const AddEnrolment = async (enroll: enrollmentType[]) => {
+  console.log("adding ", enroll);
   try {
-    const res = await getAllModes();
+    const jsonObj = enroll;
+    const jsonString = JSON.stringify(jsonObj);
+    console.log("Adding enroll stringify", jsonString);
+    const base64Encoded = btoa(jsonString);
+    console.log(`Base Encoding of adding course: ${base64Encoded}`);
 
-    const foundMode = res.find((user: getuserType) => user.id == examModeId);
+    const ssid = sessionStorage?.getItem("key");
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      // params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
 
-    return foundMode;
+    console.log(
+      "api link ",
+      "http://localhost:8081/api/enrollment?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded +
+        "&action=addBulk"
+    );
+
+    const response = await fetch(
+      "http://localhost:8081/api/enrollment?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded +
+        "&action=addBulk",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+
+    console.log("Resposne after adding enrollment: ", response);
   } catch (error) {
-    console.log("error while searching");
+    console.log("Error in the entrolment", error);
+  }
+};
+
+export const getUsersByRole = async (role: string) => {
+  const seshId = sessionStorage.getItem("key");
+  const response = await fetch(
+    "http://localhost:8081/api/user_type?queryId=GET_USERS_BY_ROLE&session_id=" +
+      seshId +
+      "&args=role:" +
+      role,
+    {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
+  const json_users = await response.json();
+  const usersbyrole = json_users.resource;
+  return usersbyrole;
+};
+
+export const getStudentsByCourseId = async (id: string) => {
+  try {
+    const seshId = sessionStorage.getItem("key");
+    console.log("session id", seshId);
+    console.log(
+      "api link",
+      "http://localhost:8081/api/enrollment?queryId=GET_ENROLLMENTS_BY_COURSE&session_id=" +
+        seshId +
+        "&args=course_id:" +
+        id
+    );
+    const response = await fetch(
+      "http://localhost:8081/api/enrollment?queryId=GET_ENROLLMENTS_BY_COURSE&session_id=" +
+        seshId +
+        "&args=course_id:" +
+        id,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const json_users = await response.json();
+    const studentsbyid = json_users.resource;
+    return studentsbyid;
+  } catch (error) {
+    console.log("Error while fetching students of particular course");
+  }
+};
+
+export const getUserById = async (id: string) => {
+  try {
+    const seshId = sessionStorage.getItem("key");
+    console.log("session id", seshId);
+    const response = await fetch(
+      "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +
+        seshId +
+        "&args=id:" +
+        id,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const json_users = await response.json();
+    const studentsbyid = json_users.resource;
+    return studentsbyid;
+  } catch (error) {
+    console.log("Error while get user by Id");
   }
 };

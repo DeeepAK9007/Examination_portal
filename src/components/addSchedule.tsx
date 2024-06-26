@@ -1,8 +1,23 @@
 import { useState, useEffect } from "react";
 import { scheduleType } from "../types/myTypes";
 import { addOneSchedule } from "../apis/backend";
+import { DateRangePicker } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
 
 function AddSched() {
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+
+  // Handle the date range change
+  const handleDateRangeChange = (value: [Date | null, Date | null] | null) => {
+    if (value) {
+      setDateRange(value);
+    } else {
+      setDateRange([null, null]);
+    }
+  };
   const [dateTime, setDateTime] = useState<string>("");
   const [examName, setExamName] = useState<string>("");
   const [selectedCourse, setSelectedCourse] = useState<string>("");
@@ -26,17 +41,19 @@ function AddSched() {
   });
 
   useEffect(() => {
-    setScheduleData({
-      date: dateTime,
-      examination_name: examName,
-      course_name: selectedCourse,
-      room_number: roomNumber,
-      invigilator: invigilator,
-      instructor: instructor,
-      supervisor: supervisor,
-      remarks: remark,
-      status: status,
-    });
+    if (dateRange) {
+      setScheduleData({
+        date: dateRange[0] + dateRange[1],
+        examination_name: examName,
+        course_name: selectedCourse,
+        room_number: roomNumber,
+        invigilator: invigilator,
+        instructor: instructor,
+        supervisor: supervisor,
+        remarks: remark,
+        status: status,
+      });
+    }
   }, [
     dateTime,
     examName,
@@ -53,7 +70,7 @@ function AddSched() {
     e.preventDefault();
     console.log("scheduleData: ", scheduleData);
     addOneSchedule(scheduleData);
-  window.location.reload();
+    window.location.reload();
   };
 
   return (
@@ -76,13 +93,13 @@ function AddSched() {
               <label htmlFor="datetime">StartDate - EndDate</label>
               <span className="star">*</span>
             </div>
-            <input
-              id="datetime"
-              type="text"
-              className="form-control"
-              value={dateTime}
-              onChange={(e) => setDateTime(e.target.value)}
-              required
+            <DateRangePicker
+              name="datetime"
+              format="MM/dd/yyyy hh:mm aa"
+              showMeridian
+              value={dateRange}
+              onChange={handleDateRangeChange}
+              style={{ width: 600, fontSize: "5em" }}
             />
           </div>
           <div className="mb-3 form-group">
@@ -226,11 +243,11 @@ function AddSched() {
               className="palceholder ms-1"
               style={{ display: status ? "none" : "" }}
             >
-              <label htmlFor="file">Status</label>
+              <label htmlFor="stat">Status</label>
               <span className="star"> *</span>
             </div>
             <select
-              name="block"
+              name="stat"
               className="form-select"
               id="blockno"
               aria-label="Floating label select example"

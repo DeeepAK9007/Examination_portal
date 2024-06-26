@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import "./styles.css";
 import NavBar from "./navbar";
-import { batchMappedType } from "../types/myTypes";
+// import { batchMappedType } from "../types/myTypes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateOrDeleteBatch } from "../apis/backend";
-// import { searchBatchById } from "../apis/backend";
+import { batchType } from "../types/myTypes";
 
 function UpdateBatch() {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ function UpdateBatch() {
   const batchobj = new URLSearchParams(location.search).get("batch");
 
   console.log("Batch id:", batchId);
-  const [batchData, setBatchData] = useState<batchMappedType>({
+  const [batchData, setBatchData] = useState<batchType>({
     id: "",
     batch_name: "",
     status: "",
@@ -86,10 +86,7 @@ function UpdateBatch() {
               />
             </div>
             <div className="mb-3 form-group">
-              <div
-                className="palceholder ms-1"
-                style={{ display: actStatus ? "none" : "" }}
-              >
+              <div className="palceholder ms-1" style={{ display: "none" }}>
                 <label htmlFor="file">Status</label>
               </div>
               <select

@@ -91,6 +91,10 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
+// const popUpRenderer = (params: CustomButtonRendererParams)=>{
+
+// }
+
 Modal.setAppElement("#root"); // For accessibility
 
 interface CourseConfTabProps {
@@ -103,9 +107,13 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
   searchStatus,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<courseType | null>(null);
 
-  const onCellClicked = () => {
-    setModalIsOpen(true);
+  const onCellClicked = (params: any) => {
+    if (params.colDef.field === "Course_Code") {
+      setSelectedCourse(params.data);
+      setModalIsOpen(true);
+    }
   };
 
   const closeModal = () => {
@@ -121,6 +129,10 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
       flex: 1,
     },
     { field: "Course_Name", flex: 1 },
+    {
+      field: "Instructor",
+      flex: 1,
+    },
     { field: "Status", flex: 1 },
     { field: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
@@ -142,24 +154,25 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
   };
 
   useEffect(() => {
-    const fetchTerms = async () => {
+    const fetchCourses = async () => {
       try {
         const res = await getAllCourses();
-        // console.log("Terms", res);
-        const filteredTerms = res.map((course: courseType) => ({
+        // console.log("Courses", res);
+        const filteredCourses = res.map((course: courseType) => ({
           id: course.id,
           Course_Code: course.course_code,
           Course_Name: course.course_name,
+          Instructor: course.instructor_id,
           Status: course.status == "Active" ? true : false,
           Actions: "remove", // Ensure this field is correctly mapped if required
         }));
-        setCourses(filteredTerms);
+        setCourses(filteredCourses);
         // console.log("Response");
       } catch (error) {
         console.log("Error fetching data:", error);
       }
     };
-    fetchTerms();
+    fetchCourses();
   }, []);
 
   useEffect(() => {
@@ -204,7 +217,7 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
         contentLabel="Cell Data Modal"
         style={customStyles}
       >
-        <PopUp />
+        {selectedCourse && <PopUp courseData={selectedCourse} />}
       </Modal>
     </div>
   );

@@ -1,35 +1,68 @@
 import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons/faCirclePlus";
 import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { getAllUsers } from "../apis/backend";
+import { userMappedType } from "../types/myTypes";
+import { AddEnrolment } from "../apis/backend";
+import { enrollmentType } from "../types/myTypes";
+//import { courseType } from "../types/myTypes";
 
-function PopUp() {
-  const [rowData, setRowData] = useState([
-    { "SELECT ALL": "IMT2020078" },
-    { "SELECT ALL": "IMT2020079" },
-    { "SELECT ALL": "IMT2020080" },
-    { "SELECT ALL": "IMT2020078" },
-    { "SELECT ALL": "IMT2020079" },
-    { "SELECT ALL": "IMT2020080" },
-    { "SELECT ALL": "IMT2020078" },
-    { "SELECT ALL": "IMT2020079" },
-    { "SELECT ALL": "IMT2020080" },
-    { "SELECT ALL": "IMT2020078" },
-    { "SELECT ALL": "IMT2020079" },
-    { "SELECT ALL": "IMT2020080" },
-    { "SELECT ALL": "IMT2020078" },
-    { "SELECT ALL": "IMT2020079" },
-    { "SELECT ALL": "IMT2020080" },
-    { "SELECT ALL": "IMT2020078" },
-    { "SELECT ALL": "IMT2020079" },
-    { "SELECT ALL": "IMT2020080" },
-  ]);
+const PopUp = (courseData: any) => {
+  console.log("from Popup ", courseData.courseData.id);
+
+  const [rowData, setRowData] = useState([]);
+  const [selectedRowData, setSelectedRowData] = useState<enrollmentType[]>([]);
+  const [selectedRowData2, setSelectedRowData2] = useState<enrollmentType[]>(
+    []
+  );
+  const [isAddClicked, setIsAddClicked] = useState<boolean>(false);
+
+  const CustomHeaderCross = (props) => {
+    const onButtonClick = () => {
+      props.api.refreshCells({ force: true });
+    };
+
+    return (
+      <div className="pt-3">
+        <p>
+          SELECT ALL
+          <button
+            className="btn btn-primary position-absolute top-0 end-0 fs-5"
+            onClick={onButtonClick}
+          >
+            <i className="fa-regular fa-circle-xmark"></i>
+          </button>
+        </p>
+      </div>
+    );
+  };
+
+  const CustomHeaderRefresh = (props) => {
+    const onButtonClick = () => {
+      props.api.refreshCells({ force: true });
+    };
+
+    return (
+      <div className="pt-3">
+        <p>
+          SELECT ALL
+          <button
+            className="btn btn-primary position-absolute top-0 end-0 fs-5"
+            onClick={onButtonClick}
+          >
+            <i className="fa-solid fa-rotate-right"></i>
+          </button>
+        </p>
+      </div>
+    );
+  };
 
   const [colDefs1, setColDefs1] = useState([
     {
@@ -37,10 +70,7 @@ function PopUp() {
       flex: 1,
       checkboxSelection: true,
       headerCheckboxSelection: true,
-      headerComponentParams: {
-        template:
-          '<div class="pt-3"><p>SELECT ALL <button class="btn btn-primary position-absolute top-0 end-0 fs-5"><i class="fa-solid fa-rotate-right"></i></button></p></div>', // the pound symbol will be placed into params
-      },
+      headerComponent: CustomHeaderRefresh,
     },
   ]);
 
@@ -50,12 +80,107 @@ function PopUp() {
       flex: 1,
       checkboxSelection: true,
       headerCheckboxSelection: true,
-      headerComponentParams: {
-        template:
-          '<div class="pt-3"><p>SELECT ALL <button class="btn btn-primary position-absolute top-0 end-0 fs-5"><i class="fa-regular fa-circle-xmark"></i></button></p></div>', // the pound symbol will be placed into params
-      },
+      headerComponent: CustomHeaderCross,
     },
   ]);
+
+  const [enrollmentData, setEnrollmentData] = useState<enrollmentType[]>([
+    {
+      user_type_enrollment_id: "",
+      course_enrollment_id: "",
+    },
+  ]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await getAllUsers();
+        console.log("response recieved", res);
+        const students = res
+          .filter((user: userMappedType) => user.role === "Student")
+          .map((student: any) => ({ "SELECT ALL": student.roll_number }));
+
+        console.log("students retrieved", students);
+        setRowData(students);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  const onSelectionChanged = async (params: any) => {
+    const selectedRows = params.api.getSelectedRows();
+    console.log("selected rows ", selectedRows);
+
+    try {
+      const res = await getAllUsers();
+      console.log("response recieved", res);
+
+      const rollNumbers: any = [];
+
+      selectedRows.forEach((obj: any) => {
+        // console.log("bool", Object.values(obj));
+        rollNumbers.push(Object.values(obj)[0]);
+      });
+
+      console.log("roll numbers", rollNumbers);
+
+      const mapStudentsToCourse = res
+        .filter((user: userMappedType) => {
+          return (
+            rollNumbers.includes(user.roll_number) && user.role === "Student"
+          );
+        })
+        .map((student: any) => ({
+          user_type_enrollment_id: student.id,
+          course_enrollment_id: courseData.courseData.id,
+        }));
+      console.log("mapStudentsToCourse", mapStudentsToCourse);
+      console.log(typeof mapStudentsToCourse);
+      setEnrollmentData(mapStudentsToCourse); // Update state
+
+      // Now you can use enrollmentData immediately after setting it
+      console.log("Updated enrollmentData", enrollmentData);
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+
+    //console.log(enrollmentData);
+    setSelectedRowData(selectedRows);
+  };
+
+  const onSelectionChanged2 = async (params: any) => {
+    const selectedRows = params.api.getSelectedRows();
+    console.log("selected rows 2", selectedRows);
+
+    setSelectedRowData2(selectedRows);
+  };
+
+  const handleAddIcon = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (selectedRowData) {
+      setIsAddClicked(true);
+    }
+  };
+
+  const handleRemoveIcon = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    setIsAddClicked(false);
+    setSelectedRowData([]);
+  };
+
+  const handdleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    try {
+      console.log("data from handleSubmit: ", enrollmentData);
+      await AddEnrolment(enrollmentData);
+    } catch (error) {
+      console.log("Error in enrollment: ", error);
+    }
+  };
 
   return (
     <div>
@@ -142,6 +267,7 @@ function PopUp() {
                   rowData={rowData}
                   columnDefs={colDefs1}
                   domLayout="autoHeight"
+                  onSelectionChanged={onSelectionChanged}
                 />
               </div>
 
@@ -154,6 +280,7 @@ function PopUp() {
                     paddingRight: "100px",
                     paddingLeft: "100px",
                   }}
+                  onClick={handleAddIcon}
                 >
                   <span style={{ fontSize: "20px" }}>add</span>
                   <FontAwesomeIcon icon={faArrowRight} />
@@ -165,6 +292,7 @@ function PopUp() {
                     paddingRight: "100px",
                     paddingLeft: "100px",
                   }}
+                  onClick={handleRemoveIcon}
                 >
                   <span style={{ fontSize: "20px" }}>remove</span>
                   <FontAwesomeIcon icon={faArrowLeft} />
@@ -177,16 +305,21 @@ function PopUp() {
               >
                 <AgGridReact
                   rowSelection="multiple"
-                  headerCheckboxSelection={true}
-                  rowData={rowData}
+                  headerCheckboxSelection={false}
+                  rowData={isAddClicked ? selectedRowData : []}
                   columnDefs={colDefs2}
                   domLayout="autoHeight"
+                  onSelectionChanged={onSelectionChanged2}
                 />
               </div>
             </div>
           </div>
           <div className="modal-footer" style={{ marginRight: "100px" }}>
-            <button type="button" className="btn btn-primary">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handdleSubmit}
+            >
               SAVE
             </button>
           </div>
@@ -194,6 +327,6 @@ function PopUp() {
       </div>
     </div>
   );
-}
+};
 
 export default PopUp;

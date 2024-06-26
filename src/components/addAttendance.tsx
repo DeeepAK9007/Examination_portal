@@ -1,8 +1,12 @@
-function AddAttend() {
+interface AddAttendProps {
+  courseCode: string; // Replace 'string' with the appropriate type if different
+  courseName: string; // Replace 'number' with the appropriate type if different
+}
+const AddAttend: React.FC<AddAttendProps> = ({ courseCode, courseName }) => {
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-        Add Attendance Detail
+        Add Attendance Detail for {"[ " + courseCode + " ]" + "  " + courseName}
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
@@ -74,6 +78,6 @@ function AddAttend() {
       </div>
     </div>
   );
-}
+};
 
 export default AddAttend;

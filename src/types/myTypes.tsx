@@ -9,11 +9,13 @@ export interface termType {
 export interface courseType {
   id?: string;
   course_name: string;
+  instructor_id: string;
   course_code: string;
   status: string;
 }
 
 export interface scheduleType {
+  id?: string;
   date: string;
   examination_name: string;
   course_name: string;
@@ -39,6 +41,7 @@ export interface examModeUpdateType {
 }
 
 export interface batchType {
+  id?: string;
   batch_name: string;
   status: string;
 }
@@ -119,7 +122,7 @@ export interface getBatchType {
 export interface batchMappedType {
   id: string;
   batch_name: string;
-  status: String;
+  status: boolean;
 }
 
 export interface getRoomType {
@@ -145,7 +148,7 @@ export interface ExamModeType {
   id?: string;
   exam_mode_name: string;
   remark: string;
-  status: boolean;
+  status: string;
 }
 export interface getModeTypes {
   id: string;
@@ -158,11 +161,18 @@ export interface getModeTypes {
   status: string;
 }
 
+export interface getExamModeTypes {
+  id?: string;
+  exam_mode_name: string;
+  remark: string;
+  status: boolean;
+}
+
 export interface ExamTypeType {
   id?: string;
   exam_type_name: string;
   remark: string;
-  status: boolean;
+  status: string;
 }
 export interface getTypeTypes {
   id: string;
@@ -175,6 +185,32 @@ export interface getTypeTypes {
   status: string;
 }
 
+export interface getExamType{
+  id?: string;
+  exam_type_name: string;
+  remark: string;
+  status: boolean;
+}
+
 export interface deletestuff {
   id?: string;
+}
+
+export interface enrollmentType {
+  user_type_enrollment_id: string;
+  course_enrollment_id: string;
+}
+
+export interface selectedRollNoType {
+  SELECT_ALL: string;
+}
+
+export interface addProgCordType {
+  id?: string;
+  date: string;
+  examination_name: string;
+  course_name: string;
+  room_number: string;
+  remarks: string;
+  status: string;
 }

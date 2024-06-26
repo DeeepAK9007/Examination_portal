@@ -74,7 +74,13 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
         onClick={editTerm}
         style={{ cursor: "pointer" }}
       ></i>
-      <i className="fas fa-trash text-danger" style={{ cursor: "pointer" }} onClick={(e)=>{deleteUser(e);}}></i>
+      <i
+        className="fas fa-trash text-danger"
+        style={{ cursor: "pointer" }}
+        onClick={(e) => {
+          deleteUser(e);
+        }}
+      ></i>
     </div>
   );
 };
@@ -138,6 +144,7 @@ const TermConfTab: React.FC<TermConfTabProps> = ({
             String(value).toLowerCase().includes(lowerCaseQuery)
           )
         );
+        console.log("filtered", filtered);
         setFilteredTerms(filtered);
       }
     };

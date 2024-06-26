@@ -4,57 +4,78 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied
 import { useState, useEffect } from "react";
 import { getAllSchedules } from "../apis/backend";
 import { scheduleType } from "../types/myTypes";
+import { useNavigate } from "react-router-dom";
+import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
+
+type CustomButtonProps = {
+  rowData: scheduleType;
+};
+
+const CustomButton = ({ rowData }: CustomButtonProps) => {
+  const navigate = useNavigate();
+  const editTerm = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    console.log("Row data:", rowData);
+    console.log(rowData.id);
+    const seshID = sessionStorage.getItem("key");
+    console.log(seshID);
+    navigate(
+      `/editSchedule?schedule=${btoa(JSON.stringify(rowData))}&&id=${
+        rowData.id
+      }`
+    );
+  };
+
+  return (
+    <div className="d-flex gap-4 justify-content-around mt-2 ">
+      <i
+        className="fas fa-edit "
+        onClick={editTerm}
+        style={{ cursor: "pointer" }}
+      ></i>
+    </div>
+  );
+};
+
+type CustomButtonRendererParams = {
+  data: scheduleType;
+  value: any;
+  valueFormatted: any;
+  getValue: () => any;
+  setValue: (value: any) => void;
+  node: RowNode;
+  colDef: ColDef;
+  column: Column;
+  rowIndex: number;
+  api: GridApi;
+  columnApi: ColumnApi;
+  context: any;
+  refreshCell: () => void;
+  eGridCell: HTMLElement;
+  eParentOfValue: HTMLElement;
+};
+
+const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
+  console.log("params", params);
+  return <CustomButton rowData={params.data} />;
+};
 
 function Scheduler() {
-  //   const [rowData, setRowData] = useState([
-  //     {
-  //       DateTime: "22/10/22",
-  //       ExamName: "Machine Learning",
-  //       CourseName: "Machine Learning",
-  //       Room: "R-203",
-  //       Invigilator: "Lucifer",
-  //       Supervisor: "Morningstar",
-  //       Remark: "NOne",
-  //     },
-  //     {
-  //       DateTime: "14/10/22",
-  //       ExamName: "Deep learning",
-  //       CourseName: "Machine Learning",
-  //       Room: "R-203",
-  //       Invigilator: "Lucifer",
-  //       Supervisor: "Morningstar",
-  //       Remark: "NOne",
-  //     },
-  //     {
-  //       DateTime: "12/10/22",
-  //       ExamName: "Natural Language Processing",
-  //       CourseName: "Machine Learning",
-  //       Room: "R-203",
-  //       Invigilator: "Lucifer",
-  //       Supervisor: "Morningstar",
-  //       Remark: "NOne",
-  //     },
-  //     {
-  //       DateTime: "26/10/22",
-  //       ExamName: "CNN",
-  //       CourseName: "Machine Learning",
-  //       Room: "R-203",
-  //       Invigilator: "Lucifer",
-  //       Supervisor: "Morningstar",
-  //       Remark: "NOne",
-  //     },
-  //   ]);
-
   const [schedules, setSchedules] = useState<scheduleType[]>([]);
 
   const [colDefs, setColDefs] = useState([
-    { field: "DateTime", headerCheckboxSelection: true, sort: "asc" },
-    { field: "ExamName" },
-    { field: "CourseName" },
-    { field: "Room" },
-    { field: "Invigilator" },
-    { field: "Supervisor" },
-    { field: "Remark", sortable: true },
+    { field: "DateTime", headerCheckboxSelection: true, sort: "asc", flex: 1 },
+    { field: "ExamName", flex: 1 },
+    { field: "CourseName", flex: 1 },
+    { field: "Room", flex: 1 },
+    { field: "Invigilator", flex: 1 },
+    { field: "Supervisor", flex: 1 },
+    { field: "Remark", sortable: true, flex: 1 },
+    {
+      headerName: "Actions",
+      flex: 1,
+      cellRenderer: CustomButtonRenderer,
+    },
   ]);
 
   useEffect(() => {
@@ -63,13 +84,14 @@ function Scheduler() {
         const res = await getAllSchedules();
         // console.log("Terms", res);
         const filteredTerms = res.map((schedule: scheduleType) => ({
+          id: schedule.id,
           DateTime: schedule.date,
           ExamName: schedule.examination_name,
           CourseName: schedule.course_name,
           Room: schedule.room_number,
           Invigilator: schedule.invigilator,
           Supervisor: schedule.supervisor,
-          Remark: schedule.remarks, // Ensure this field is correctly mapped if required
+          Remark: schedule.remarks,
         }));
         setSchedules(filteredTerms);
         // console.log("Response");
