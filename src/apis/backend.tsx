@@ -1,5 +1,5 @@
 import { User } from "../context/loginContext";
-import { examModeUpdateType, scheduleType, termType } from "../types/myTypes";
+import { examModeUpdateType, scheduleType, termType, updateGradeType } from "../types/myTypes";
 import { courseType } from "../types/myTypes";
 import { batchType } from "../types/myTypes";
 import { roomMatchedType } from "../types/myTypes";
@@ -1048,6 +1048,7 @@ export const getEnrollbyCours= async (courseID: string|null) =>{
   
   const studentDetailsPromises = result.map(async (enrollment: any) => {
     const userTypeEnrollmentId = enrollment.user_type_enrollment_id;
+    console.log("enrollment details here: ",enrollment);
     console.log("WHAT DO I SAY YOU TOO STUPID", userTypeEnrollmentId);
     const studentResponse = await fetch(
       //     "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +
@@ -1063,13 +1064,13 @@ export const getEnrollbyCours= async (courseID: string|null) =>{
     //console.log("THE OBTAINED DEEEEEETS ARE HERE",studentResponse);
     const studentJson = await studentResponse.json();
     console.log("THE OBTAINED DEEEEEETS ARE HERE",studentJson);
-    console.log("TOOOOOOOOOOOOOOOOOOOOOO",studentJson.resource[0].name);
+    console.log("TOOOOOOOOOOOOOOOOOOOOOO",studentJson.resource[0].grade);
     return {
-      id: studentJson.resource[0].id,
+      id: enrollment.id,
       student_id: studentJson.resource[0].roll_number,
       stud_name: studentJson.resource[0].name,
-      grade: "satisfactory",
-      remark:"NA"
+      grade: enrollment.grade ? enrollment.grade :"satisfactory",
+      remarks:enrollment.remarks ? enrollment.remarks :"satisfactory"
     };
   });
 
@@ -1077,4 +1078,51 @@ export const getEnrollbyCours= async (courseID: string|null) =>{
   //return studentDetails;
   //return result;
   return studentDetails;
+};
+
+export const updtGrades= async (enroll: updateGradeType) => {
+  console.log("adding ", enroll);
+  try {
+    const jsonObj = enroll;
+    const jsonString = JSON.stringify(jsonObj);
+    console.log("Adding enroll stringify", jsonString);
+    const base64Encoded = btoa(jsonString);
+    console.log(`Base Encoding of adding course: ${base64Encoded}`);
+
+    const ssid = sessionStorage?.getItem("key");
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      // params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    console.log(
+      "api link ",
+      "http://localhost:8081/api/enrollment?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded +
+        "&action=addBulk"
+    );
+
+    const response = await fetch(
+      "http://localhost:8081/api/enrollment?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded +
+        "&action=MODIFY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+
+    console.log("Resposne after adding enrollment: ", response);
+  } catch (error) {
+    console.log("Error in the entrolment", error);
+  }
 };

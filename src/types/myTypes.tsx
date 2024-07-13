@@ -222,3 +222,16 @@ export interface addProgCordType {
   remarks: string;
   status: string;
 }
+ 
+export interface updateGradeType{
+  id: String | undefined
+  grade:String
+  remarks:String
+}
+
+export interface new_data_type{
+  id: string
+  stud_name: string
+  course_name: string
+  course_id: string
+}

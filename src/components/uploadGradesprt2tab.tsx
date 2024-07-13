@@ -3,10 +3,58 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState, useEffect } from "react";
 import { studsBycourse } from "../types/myTypes";
-import { getAllCourses, getEnrollbyCours } from "../apis/backend";
+import { getEnrollbyCours } from "../apis/backend";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
-import { useNavigate } from "react-router-dom";
+import { updateGradeType } from "../types/myTypes";
+import { updtGrades } from "../apis/backend";
+type CustomButtonProps = {
+  rowData: studsBycourse;
+};
 
+const CustomButton = ({ rowData }: CustomButtonProps) => {
+const [state1,setstat1]=useState(rowData);
+const [state2,setstat2]=useState(rowData);
+
+
+  const upld_grd= async (e : React.MouseEvent<HTMLElement>) => {
+    console.log("heyy there");
+    console.log(rowData);
+    const data:updateGradeType={    
+      id:rowData.id,
+      grade:rowData.Grade,
+      remarks:rowData.Remark
+    }
+    console.log("new dta here!!!",data);
+    const response= updtGrades(data);
+    window.location.reload();
+  }
+  return (
+        <i className="fa-regular fa-floppy-disk" onClick={(e)=>{upld_grd(e)}} style={{cursor:"pointer"}}>
+        </i>
+  );
+};
+
+type CustomButtonRendererParams = {
+  data: studsBycourse;
+  value: any;
+  valueFormatted: any;
+  getValue: () => any;
+  setValue: (value: any) => void;
+  node: RowNode;
+  colDef: ColDef;
+  column: Column;
+  rowIndex: number;
+  api: GridApi;
+  columnApi: ColumnApi;
+  context: any;
+  refreshCell: () => void;
+  eGridCell: HTMLElement;
+  eParentOfValue: HTMLElement;
+};
+
+const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
+  return <CustomButton rowData={params.data} />;
+};
 
 interface CourseConfTabProps {
   queryText: string;
@@ -26,12 +74,13 @@ const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
       flex: 1,
     },
     { field: "StudentName", flex: 1 },
-    { field: "Grade", flex: 1 },
-    { field: "Remark", flex: 1,},
+    { field: "Grade", flex: 1 , editable: true, cellEditor: 'agTextCellEditor'},
+    { field: "Remark", flex: 1, editable: true, cellEditor: 'agTextCellEditor' },
+    {field: "Save Changes", flex: 1, cellRenderer: CustomButtonRenderer} 
   ]);
 
   useEffect(() => {
-    const fetchTerms = async () => {
+    const fetchUsersMapped = async () => {
       try {
         const course_iden = new URLSearchParams(location.search).get("id");
         const res= await getEnrollbyCours(course_iden);
@@ -43,7 +92,7 @@ const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
           StudentId: stud.student_id,
           StudentName: stud.stud_name,
           Grade: stud.grade,
-          Remark: stud.remark, // Ensure this field is correctly mapped if required
+          Remark: stud.remarks, // Ensure this field is correctly mapped if required
         }));
         setCourses(filteredTerms);
         // console.log("Response");
@@ -51,7 +100,7 @@ const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
         console.log("Error fetching data:", error);
       }
     };
-    fetchTerms();
+    fetchUsersMapped();
   }, []);
 
   useEffect(() => {
@@ -87,7 +136,7 @@ const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
           headerCheckboxSelection={true}
           rowData={filteredCourses}
           columnDefs={colDefs}
-          onCellClicked={()=>{alert("bleh b;leh")}}        
+          //onCellEditingStopped={}
           />
       </div>
     </div>
@@ -95,3 +144,5 @@ const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
 };
 
 export default UploadGradesPart2Tab;
+
+
