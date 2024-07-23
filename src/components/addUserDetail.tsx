@@ -147,8 +147,8 @@ function AddUser() {
         <div className="d-flex flex-column ms-5 w-50">
           <div className="mb-3 mt-5 form-group">
             <div className="palceholder ms-1">
-              <label htmlFor="file">Choose File</label>
-              <span className="star"> *</span>
+              <label htmlFor="file" style={{visibility:"hidden"}}>Choose file</label>
+              <span className="star">*</span>
             </div>
             <input
               type="file"

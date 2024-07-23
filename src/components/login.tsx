@@ -78,6 +78,20 @@ function Login() {
 
       const loginObj: User = formData;
       const ssid = await login(loginObj);
+<<<<<<< HEAD
+=======
+
+      console.log("retreived ssid", ssid);
+      // const session_id = await res.json();
+      // const ssid = res;
+
+      console.log("User session Id after submit", ssid);
+
+      // setIsLoggedIn(true); 
+      // console.log("Is user Logged In after submit:", isLoggedIn);
+
+      // Set data in session storage
+>>>>>>> ba1764d29d2535625932c6b5e72319c4cad64f00
       sessionStorage.setItem("key", ssid);
       navigate("/user");
     } else if (lowerCaseName !== "admin@rasp.com") {

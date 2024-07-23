@@ -120,10 +120,7 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
     const seshID = sessionStorage.getItem("key");
     console.log(seshID);
     //const navigate=useNavigate();
-    navigatee(
-      // `/editCourse?course=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
-          `/updateGrade?id=${rowData?.id}&&course_nm=${rowData?.Course_Name}`
-    );
+    navigatee(`/updateGrade?id=${rowData?.id}&&course_nm=${rowData?.Course_Name}`);
     
   };
   const navigate=useNavigate();

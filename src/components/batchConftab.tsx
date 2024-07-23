@@ -153,7 +153,7 @@ const BatchConfTab: React.FC<BatchConfTabProps> = ({
       headerCheckboxSelection: true,
     },
     { field: "status", flex: 1 },
-    { headerName: "actions", flex: 1, cellRenderer: CustomButtonRenderer },
+    { headerName: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 
   return (
