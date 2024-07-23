@@ -1,15 +1,30 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 import NavBar from "./navbar";
 import { roomMatchedType } from "../types/myTypes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateOrDeleteRoom } from "../apis/backend";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function UpdateRoom() {
   const navigate = useNavigate();
   const [roomNumber, setRoomNumber] = useState<string>("");
   const [roomCapacity, setCapacity] = useState<number | undefined>(undefined);
   const [selectedBlock, setSelectedBlock] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
 
   const location = useLocation();
   const roomId = new URLSearchParams(location.search).get("id");
@@ -56,11 +71,29 @@ function UpdateRoom() {
     if (roomId) {
       console.log("RoomData: ", roomData);
       await updateOrDeleteRoom(roomId, roomData, "MODIFY");
+      setSnackbarMessage("Room updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
       navigate("/room");
     } else {
       console.error("Room ID is null");
+      setSnackbarMessage("Failed to update Room.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    navigate("/batch");
+  };
+
   return (
     <div className="d-flex flex-row">
       <NavBar />
@@ -159,6 +192,20 @@ function UpdateRoom() {
           </div>
         </form>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

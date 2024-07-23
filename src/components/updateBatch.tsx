@@ -1,10 +1,19 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 import NavBar from "./navbar";
 // import { batchMappedType } from "../types/myTypes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateOrDeleteBatch } from "../apis/backend";
 import { batchType } from "../types/myTypes";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function UpdateBatch() {
   const navigate = useNavigate();
@@ -14,6 +23,11 @@ function UpdateBatch() {
   const location = useLocation();
   const batchId = new URLSearchParams(location.search).get("id");
   const batchobj = new URLSearchParams(location.search).get("batch");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
 
   console.log("Batch id:", batchId);
   const [batchData, setBatchData] = useState<batchType>({
@@ -50,10 +64,26 @@ function UpdateBatch() {
     if (batchId) {
       console.log("batchData: ", batchData);
       await updateOrDeleteBatch(batchId, batchData, "MODIFY");
-      navigate("/batch");
+      setSnackbarMessage("Batch updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } else {
       console.error("Batch ID is null");
+      setSnackbarMessage("Failed to update Batch.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    navigate("/batch");
   };
 
   return (
@@ -114,6 +144,20 @@ function UpdateBatch() {
           </div>
         </form>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

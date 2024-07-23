@@ -1,12 +1,26 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./styles.css";
 import { RoomType } from "../types/myTypes";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddRoomDet() {
   const [roomNumber, setRoomNumber] = useState<string>("");
   const [roomCapacity, setCapacity] = useState<number | undefined>(undefined);
   const [selectedBlock, setSelectedBlock] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "warning">(
+    "success"
+  );
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedBlock(event.target.value);
@@ -15,44 +29,74 @@ function AddRoomDet() {
 
   async function addSingRoom(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    try{
-    const newRoom: RoomType = {
-      room_number: roomNumber,
-      block: selectedBlock,
-      capacity: roomCapacity,
-      status: actStatus,
-    };
+    if(!roomNumber || !selectedBlock || !roomCapacity || !actStatus){
+      setSnackbarMessage("Please fill all the required fields.");
+      setSnackbarSeverity("warning");
+      setSnackbarOpen(true);
+      return;
+    }
+    try {
+      const newRoom: RoomType = {
+        room_number: roomNumber,
+        block: selectedBlock,
+        capacity: roomCapacity,
+        status: actStatus,
+      };
 
-    console.log(newRoom);
+      console.log(newRoom);
 
-    const jsonobj = JSON.stringify(newRoom);
-    console.log(jsonobj);
-    const encode = btoa(jsonobj);
-    console.log(encode);
-    const seshID = sessionStorage.getItem("key");
-    console.log(seshID);
+      const jsonobj = JSON.stringify(newRoom);
+      console.log(jsonobj);
+      const encode = btoa(jsonobj);
+      console.log(encode);
+      const seshID = sessionStorage.getItem("key");
+      console.log(seshID);
 
-    const response = await fetch(
-      "http://localhost:8081/api/room?session_id=" +
-        seshID +
-        "&resource=" +
-        encode,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        mode: "cors",
+      const response = await fetch(
+        "http://localhost:8081/api/room?session_id=" +
+          seshID +
+          "&resource=" +
+          encode,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          mode: "cors",
+        }
+      );
+      console.log(response);
+      const jsonData = await response?.json();
+      console.log("response json after submit,", jsonData);
+      if (jsonData.errCode == 0) {
+        setSnackbarMessage("Room added successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+      } else {
+        throw new Error("Failed to add Room");
       }
-    );
-    console.log(response);
-    window.location.reload();
-    }catch(err){alert("Error!!")}
+    } catch (error) {
+      setSnackbarMessage("Failed to add Room.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
   }
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    window.location.reload();
+  };
+
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-        Add Room Detail
+        <h3>Add Room Detail</h3>
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
@@ -113,6 +157,7 @@ function AddRoomDet() {
               <option id="examrole" value="" disabled selected></option>
               <option value="Ramanujan">Ramanujan</option>
               <option value="Bhaskar">Bhaskar</option>
+              <option value="Lilawati">Lilawati</option>
             </select>
           </div>
           <div className="mb-3 form-group">
@@ -148,6 +193,20 @@ function AddRoomDet() {
           </div>
         </div>
       </form>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

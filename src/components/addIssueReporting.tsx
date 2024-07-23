@@ -6,7 +6,7 @@ function AddIssue() {
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-        Issue Reporting
+        <h3>Issue Reporting</h3>
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 

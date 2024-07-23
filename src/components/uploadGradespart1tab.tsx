@@ -133,7 +133,7 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
     <div>
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
-        style={{ height: 400, width: "95%" }}
+        style={{ height: 250, width: "95%", overflowY: "auto" }}
       >
         <AgGridReact
           rowSelection="multiple"

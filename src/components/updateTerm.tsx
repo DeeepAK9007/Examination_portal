@@ -1,15 +1,28 @@
 import NavBar from "./navbar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { termType } from "../types/myTypes";
 import { updateOrDeleteTerm } from "../apis/backend";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddResource() {
   const navigate = useNavigate();
   const [termName, setTermName] = useState<string>("");
   const [dateTime, setDateTime] = useState<string>("");
   const [status, setStatus] = useState<string>("");
-
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
   console.log(status);
 
   const dates = dateTime.split("-");
@@ -60,10 +73,26 @@ function AddResource() {
     if (termId) {
       console.log("termData: ", termData);
       updateOrDeleteTerm(termId, termData, "MODIFY");
-      navigate("/term");
+      setSnackbarMessage("Term updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } else {
       console.error("term ID is null");
+      setSnackbarMessage("Failed to update Term.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    navigate("/term");
   };
 
   return (
@@ -144,6 +173,20 @@ function AddResource() {
           </div>
         </form>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

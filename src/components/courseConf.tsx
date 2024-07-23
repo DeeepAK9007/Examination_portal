@@ -8,7 +8,9 @@ function CourseConf() {
     <div>
       <hr style={{ width: "95%", margin: "auto" }} />
       <div className="d-flex justify-content-between mt-3">
-        <p className="p-0 ms-5 mb-0 mt-2 ">Course Configuration</p>
+        <p className="p-0 ms-5 mb-0 mt-2 ">
+          <h3>Course Configuration</h3>
+        </p>
 
         <div className="d-flex flex-row">
           <div className="input-group">

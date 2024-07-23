@@ -2,6 +2,15 @@ import React, { useState, ChangeEvent, useEffect } from "react";
 import "./styles.css";
 import { userType } from "../types/myTypes";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddUser() {
   const [rollNo, setRollNo] = useState<string>("");
@@ -15,7 +24,13 @@ function AddUser() {
   const [card_num, setCardNo] = useState<string>("");
   const [expiry, setExpiry] = useState<string>("");
   const [actStatus, setActStatus] = useState<string>("");
-  const [temp,settemp]=useState<string>("");
+  const [temp, settemp] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "warning"
+  >("success");
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (
@@ -57,6 +72,12 @@ function AddUser() {
 
   async function handleclick(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
+    if (!file || !name || !rollNo || !examRole || !email || !actStatus) {
+      setSnackbarMessage("Please fill all the required fields.");
+      setSnackbarSeverity("warning");
+      setSnackbarOpen(true);
+      return;
+    }
     const newUser: userType = {
       name: name,
       role: examRole,
@@ -68,36 +89,57 @@ function AddUser() {
       image_url: temp || "", // Use previewUrl for the image URL
       status: actStatus,
     };
-    console.log(newUser);
-    const jsonobj = JSON.stringify(newUser);
-    console.log(jsonobj);
-    const encode = btoa(jsonobj);
-    console.log(encode);
-    const seshID = sessionStorage.getItem("key");
-    console.log(seshID);
+    try {
+      const jsonobj = JSON.stringify(newUser);
+      const encode = btoa(jsonobj);
+      const seshID = sessionStorage.getItem("key");
 
-    const resource = await fetch(
-      "http://localhost:8081/api/user_type?session_id=" +
-        seshID +
-        "&resource=" +
-        encode,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        mode: "cors",
+      const response = await fetch(
+        "http://localhost:8081/api/user_type?session_id=" +
+          seshID +
+          "&resource=" +
+          encode,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          mode: "cors",
+        }
+      );
+
+      const jsonData = await response?.json();
+      console.log("response json after submit,", jsonData);
+
+      if (jsonData.errCode == 0) {
+        setSnackbarMessage("User added successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+      } else {
+        throw new Error("Failed to add user");
       }
-    );
-
-    console.log(resource);
-    window.location.reload();
+    } catch (error) {
+      setSnackbarMessage("Failed to add user.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
   }
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    window.location.reload();
+  };
 
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-        Add User Detail
+        <h3>Add User Detail</h3>
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
@@ -170,7 +212,7 @@ function AddUser() {
               className="palceholder ms-1"
               style={{ display: examRole ? "none" : "" }}
             >
-              <label htmlFor="examrole">Exam role</label>
+              <label htmlFor="examrole">User role</label>
               <span className="star"> *</span>
             </div>
             <select
@@ -299,6 +341,21 @@ function AddUser() {
           </div>
         </div>
       )}
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

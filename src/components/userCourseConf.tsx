@@ -8,10 +8,15 @@ function UserCourseConf() {
   const [searchStatus, setSearchStatus] = useState<boolean>(false);
   return (
     <div>
-      <hr style={{ width: "95%", margin: "auto" }} />
+      <hr style={{ width: "100%", margin: "auto" }} />
       <div className="d-flex justify-content-between mt-3">
-        <p className="p-0 ms-5 mb-0 mt-2 ">Course Configuration</p>
-        <div className="d-flex flex-row">
+        <p className="p-0 ms-5 mb-0 mt-2 ">
+          <h3>User Configuration</h3>
+        </p>
+        <div
+          className="d-flex flex-row justify-content-end"
+          style={{ marginRight: "0px", paddingRight: "0px" }}
+        >
           <button
             type="button"
             className="btn btn-primary me-5"
@@ -19,7 +24,6 @@ function UserCourseConf() {
               width: "350px",
               height: "38px",
               fontSize: "14px",
-              marginLeft: "400px",
             }}
           >
             <FontAwesomeIcon icon={faCirclePlus} /> Template
@@ -49,7 +53,7 @@ function UserCourseConf() {
             </a>
           </div>
 
-          <div className="input-group p-0">
+          <div className="input-group me-0 p-0">
             <div
               id="search-autocomplete"
               className="form-outline"
@@ -72,18 +76,23 @@ function UserCourseConf() {
             >
               <i className="fas fa-search"></i>
             </button>
+            <button
+              type="button"
+              className="btn btn-primary me-5"
+              style={{
+                width: "50px",
+                height: "38px",
+                marginLeft: "10px",
+                marginRight: "0px",
+                paddingRight: "0px",
+              }}
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              <i className="fa-solid fa-rotate-right"></i>
+            </button>
           </div>
-
-          <button
-            type="button"
-            className="btn btn-primary me-5"
-            style={{ width: "50px", height: "38px" }}
-            onClick={() => {
-              window.location.reload();
-            }}
-          >
-            <i className="fa-solid fa-rotate-right"></i>
-          </button>
         </div>
       </div>
       <UserCourseConfTab queryText={queryText} searchStatus={searchStatus} />

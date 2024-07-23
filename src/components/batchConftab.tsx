@@ -8,6 +8,7 @@ import { getAllBatches } from "../apis/backend";
 import { deletestuff } from "../types/myTypes";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 import { useNavigate } from "react-router-dom";
+import AttendTab from "./attendTab";
 
 type CustomButtonProps = {
   rowData: batchMappedType;
@@ -159,7 +160,7 @@ const BatchConfTab: React.FC<BatchConfTabProps> = ({
     <div>
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
-        style={{ height: 400, width: "90%" }}
+        style={{ height: 250, width: "93%", overflowY: "auto" }}
       >
         <AgGridReact
           rowSelection="multiple"

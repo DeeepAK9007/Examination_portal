@@ -1,10 +1,24 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./styles.css";
 import { batchType } from "../types/myTypes";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddBatch() {
   const [batchName, setBatchName] = useState<string>("");
   const [actStatus, setActStatus] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "warning"
+  >("success");
 
   const handleBatchNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -13,44 +27,81 @@ function AddBatch() {
     console.log(batchName);
   };
 
-  async function batchAdd(e : React.FormEvent<HTMLButtonElement>) {
+  async function batchAdd(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    // const params = new URLSearchParams();
-    try{const newobj: batchType={
-      batch_name: batchName,
-      status: actStatus
+    if (!batchName || !actStatus) {
+      setSnackbarMessage("Please fill all the required fields.");
+      setSnackbarSeverity("warning");
+      setSnackbarOpen(true);
+      return;
     }
-    const jsonobj=JSON.stringify(newobj);
+    try {
+      const newobj: batchType = {
+        batch_name: batchName,
+        status: actStatus,
+      };
+      const jsonobj = JSON.stringify(newobj);
 
-    const encode=btoa(jsonobj);
-    
-    // params.append("resource",encode);
-    const seshID=sessionStorage.getItem("key");
-    // params.append("session_id",seshID);
+      const encode = btoa(jsonobj);
 
-    const response=await fetch("http://localhost:8081/api/batch?session_id="+seshID+"&resource="+encode,{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      mode: "cors"
-    });
+      const seshID = sessionStorage.getItem("key");
 
-    console.log("obj toi send",encode);
-    console.log("sesh id here",seshID);
-    console.log("response here", response);
-    window.location.reload();}
-    catch(e){alert(e);}
+      const response = await fetch(
+        "http://localhost:8081/api/batch?session_id=" +
+          seshID +
+          "&resource=" +
+          encode,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          mode: "cors",
+        }
+      );
+
+      const jsonData = await response.json();
+      console.log("response json after submit,", jsonData);
+
+      console.log("obj toi send", encode);
+      console.log("sesh id here", seshID);
+      console.log("response here", response);
+      if (jsonData.errCode == 0) {
+        setSnackbarMessage("Batch added successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+      } else {
+        throw new Error("Failed to add Batch");
+      }
+    } catch (error) {
+      setSnackbarMessage("Failed to add Batch.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
   }
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    window.location.reload();
+  };
 
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-        Add Batch Detail
+        <h3>Add Batch Detail</h3>
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
-      <form className="d-flex flex-row jutify-content-evenly w-100" id="batchform">
+      <form
+        className="d-flex flex-row jutify-content-evenly w-100"
+        id="batchform"
+      >
         <div className="d-flex flex-column ms-5 w-50 me-5">
           <div className="mb-3 mt-5 form-group">
             <div
@@ -102,6 +153,20 @@ function AddBatch() {
           </div>
         </div>
       </form>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

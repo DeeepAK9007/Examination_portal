@@ -1,10 +1,20 @@
 import NavBar from "./navbar";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { scheduleType } from "../types/myTypes";
-import { updateOrDeleteSchedule } from "../apis/backend";
+import { getScheduleById, updateOrDeleteSchedule } from "../apis/backend";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DateRangePicker } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
+import parseISO from "date-fns/parseISO";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function UpdateSchedule() {
   const navigate = useNavigate();
@@ -30,6 +40,11 @@ function UpdateSchedule() {
   const [supervisor, setSupervisor] = useState<string>("");
   const [remark, setRemark] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
 
   const location = useLocation();
   const scheduleId = new URLSearchParams(location.search).get("id");
@@ -50,12 +65,51 @@ function UpdateSchedule() {
   });
 
   useEffect(() => {
-    if (scheduleId && scheduleobj) {
-      const jsonobj = JSON.parse(atob(scheduleobj));
-      setStatus(jsonobj.Status);
-    } else {
-      console.error("Schedule ID is null");
-    }
+    const sideOperation = async () => {
+      try {
+        if (scheduleId && scheduleobj) {
+          // Decode and parse the schedule object
+          let jsonobj;
+          try {
+            jsonobj = JSON.parse(atob(scheduleobj));
+          } catch (error) {
+            console.error("Invalid base64 or JSON format", error);
+            return;
+          }
+
+          // Fetch the schedule by ID
+          const scheduleObject = await getScheduleById(jsonobj.id);
+
+          // Debug log to verify fetched scheduleObject
+          console.log("from update schedule", scheduleObject);
+
+          // Check if scheduleObject and jsonobj have the expected properties
+          const parsedDate = parseISO(jsonobj.DateTime);
+          console.log("parsed date", parsedDate);
+          setDateRange(parsedDate);
+
+          if (scheduleObject[0].examination_name) {
+            setExamName(scheduleObject[0].examination_name);
+          } else {
+            console.warn("scheduleObject.examination_name is undefined");
+          }
+
+          setSelectedCourse(jsonobj.CourseName);
+          setRoomNumber(jsonobj.Room);
+          setInvigilator(jsonobj.Invigilator);
+          setInstructor(jsonobj.Instructor);
+          setSupervisor(scheduleObject[0].supervisor);
+          setRemark(jsonobj.Remark);
+          setStatus(scheduleObject[0].status);
+        } else {
+          console.error("Schedule ID or scheduleobj is null");
+        }
+      } catch (error) {
+        console.error("An error occurred in sideOperation", error);
+      }
+    };
+
+    sideOperation();
   }, []);
 
   useEffect(() => {
@@ -67,15 +121,15 @@ function UpdateSchedule() {
         date:
           dateRange[0] + dateRange[1]
             ? dateRange[0] + dateRange[1]
-            : jsonobj.date,
-        examination_name: examName ? examName : jsonobj.examination_name,
-        course_name: selectedCourse ? selectedCourse : jsonobj.course_name,
-        room_number: roomNumber ? roomNumber : jsonobj.room_number,
-        invigilator: invigilator ? invigilator : jsonobj.invigilator,
-        instructor: instructor ? instructor : jsonobj.instructor,
-        supervisor: supervisor ? supervisor : jsonobj.supervisor,
-        remarks: remark ? remark : jsonobj.remarks,
-        status: status ? status : jsonobj.status,
+            : jsonobj.DateTime,
+        examination_name: examName ? examName : jsonobj.ExamName,
+        course_name: selectedCourse ? selectedCourse : jsonobj.CourseName,
+        room_number: roomNumber ? roomNumber : jsonobj.Room,
+        invigilator: invigilator ? invigilator : jsonobj.Invigilator,
+        instructor: instructor ? instructor : jsonobj.Instructor,
+        supervisor: supervisor ? supervisor : jsonobj.Supervisor,
+        remarks: remark ? remark : jsonobj.Remarks,
+        status: status ? status : jsonobj.Status,
       });
     } else {
       console.error("Schedule ID is null");
@@ -97,11 +151,28 @@ function UpdateSchedule() {
     if (scheduleId) {
       console.log("scheduleData: ", scheduleData);
       updateOrDeleteSchedule(scheduleId, scheduleData, "MODIFY");
-      navigate("/schedule");
+      setSnackbarMessage("Schedule updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } else {
       console.error("Schedule ID is null");
+      setSnackbarMessage("Failed to update Schedule.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    navigate("/schedule");
+  };
+
   return (
     <div className="d-flex flex-row">
       <NavBar />
@@ -296,6 +367,20 @@ function UpdateSchedule() {
           </div>
         </form>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

@@ -54,7 +54,9 @@ function ExamModelUpdateTab() {
     <div>
       <hr style={{ width: "95%", margin: "auto" }} />
       <div className="d-flex justify-content-between mt-3">
-        <p className="p-0 ms-5 mb-0 mt-2 ">Exam Mode Update Configuration</p>
+        <p className="p-0 ms-5 mb-0 mt-2 ">
+          <h3>Exam Mode Update Configuration</h3>
+        </p>
         <div className="dropdown-center me-5">
           <button
             className="btn btn-danger dropdown-toggle"
@@ -81,7 +83,7 @@ function ExamModelUpdateTab() {
 
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
-        style={{ height: 400, width: "93%" }}
+        style={{ height: 250, width: "93%", overflowY: "auto" }}
       >
         <AgGridReact
           rowSelection="multiple"

@@ -106,7 +106,7 @@ const RoomConfTab: React.FC<RoomConfTabProps> = ({
     const fetchusers = async () => {
       try {
         const res: getRoomType[] = await getAllRooms();
-        console.log("obt data here",res);
+        console.log("obt data here", res);
         const mappedRowData = res.map((row) => ({
           id: row.id,
           room_number: row.room_number,
@@ -159,7 +159,7 @@ const RoomConfTab: React.FC<RoomConfTabProps> = ({
     <div>
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
-        style={{ height: 400, width: "90%" }}
+        style={{ height: 250, width: "93%", overflowY: "auto" }}
       >
         <AgGridReact
           rowSelection="multiple"

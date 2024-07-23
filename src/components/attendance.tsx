@@ -3,6 +3,8 @@ import AttendTab from "./attendTab";
 import NavBar from "./navbar";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { AttendanceProvider } from "../context/AuthContext";
+
 function Attendance() {
   const location = useLocation();
   const [CourseCode, setCourseCode] = useState<string>("");
@@ -25,8 +27,10 @@ function Attendance() {
     <div className="d-flex flex-row">
       <NavBar />
       <div className="d-flex flex-column w-100 justify-content-between">
-        <AddAttend courseCode={CourseCode} courseName={CourseName} />
-        <AttendTab id={courseId} />
+        <AttendanceProvider>
+          <AddAttend courseCode={CourseCode} courseName={CourseName} />
+          <AttendTab id={courseId} />
+        </AttendanceProvider>
       </div>
     </div>
   );

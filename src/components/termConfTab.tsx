@@ -106,7 +106,7 @@ const TermConfTab: React.FC<TermConfTabProps> = ({
     { field: "Date", flex: 1 },
     { field: "Name", flex: 1 },
     { field: "Status", flex: 1 },
-    { field: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
+    { field: "Action", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 
   useEffect(() => {
@@ -119,7 +119,7 @@ const TermConfTab: React.FC<TermConfTabProps> = ({
           Date: term.start_date + " - " + term.end_date,
           Name: term.term_name,
           Status: term.status == "Active" ? true : false,
-          Actions: "remove", // Ensure this field is correctly mapped if required
+          Action: "remove", // Ensure this field is correctly mapped if required
         }));
         setTerms(filteredTerms);
         // console.log("Response");
@@ -156,7 +156,7 @@ const TermConfTab: React.FC<TermConfTabProps> = ({
     <div>
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
-        style={{ height: 400, width: "90%" }}
+        style={{ height: 250, width: "93%", overflowY: "auto" }}
       >
         <AgGridReact
           rowSelection="multiple"

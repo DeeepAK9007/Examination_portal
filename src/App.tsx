@@ -26,13 +26,14 @@ import { LoginContext } from "./context/loginContext";
 import UploadGrade from "./components/uploadGrades";
 import UpdateGrade from "./components/updateGrades";
 import CourseListConf from "./components/courseList";
+import "./App.css";
 
 function App() {
   const logstat = useContext(LoginContext);
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      {logstat.isLoggedIn}?
+      {logstat.isLoggedIn && sessionStorage.length !== 0}?
       <>
         <Route path="/user" element={<User />} />
         <Route path="/schedule" element={<Schedule />} />
@@ -54,8 +55,8 @@ function App() {
         <Route path="/editExamType" element={<UpdateExamType />} />
         <Route path="/editRoom" element={<UpdateRoom />} />
         <Route path="/editUser" element={<UpdateUser />} />
-        <Route path="/uploadGrade" element={<UploadGrade/>}/>
-        <Route path="/updateGrade" element={<UpdateGrade/>}/>
+        <Route path="/uploadGrade" element={<UploadGrade />} />
+        <Route path="/updateGrade" element={<UpdateGrade />} />
 
         <Route path="/editSchedule" element={<UpdateSchedule />} />
         <Route path="/coursesList" element={<CourseListConf />} />

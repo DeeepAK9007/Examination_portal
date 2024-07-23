@@ -165,12 +165,13 @@ const UserCourseConfTab: React.FC<UserTabProps> = ({
     <div>
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
-        style={{ height: 400, width: "90%" }}
+        style={{ height: 250, width: "93%", overflowY: "auto" }}
       >
         <AgGridReact
           rowSelection="multiple"
           rowData={filteredUsers}
           columnDefs={colDefs}
+          domLayout="autoHeight"
         />
       </div>
     </div>

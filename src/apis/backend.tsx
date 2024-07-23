@@ -8,6 +8,7 @@ import { ExamTypeType } from "../types/myTypes";
 import { ExamModeType } from "../types/myTypes";
 import { enrollmentType } from "../types/myTypes";
 import { addProgCordType } from "../types/myTypes";
+import { attendance } from "../types/myTypes";
 
 export const login = async (user: User) => {
   console.log("Adding User: ", user);
@@ -79,7 +80,11 @@ export const addOneTerm = async (term: termType) => {
       }
     );
 
-    console.log("Resposne after adding student: ", response);
+    const jsonData = await response.json();
+    console.log("response json after submit,", jsonData);
+
+    console.log("Resposne after adding term: ", response);
+    return response;
   } catch (error) {
     console.log(" error message: ", error);
   }
@@ -124,6 +129,7 @@ export const addOneCourse = async (course: courseType) => {
     );
 
     console.log("Resposne after adding course: ", response);
+    return response;
   } catch (error) {
     console.log("Error while adding course", error);
   }
@@ -171,6 +177,7 @@ export const addOneSchedule = async (schedule: scheduleType) => {
     );
 
     console.log("Resposne after adding student: ", response);
+    return response;
   } catch (error) {
     console.log(" error message: ", error);
   }
@@ -203,6 +210,52 @@ export const addProgCord = async (pro: addProgCordType) => {
 
     const response = await fetch(
       "http://localhost:8081/api/exam_schedule?session_id=" +
+        ssid +
+        "&resource=" +
+        base64Encoded,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+      }
+    );
+
+    console.log("Resposne after adding student: ", response);
+    return response;
+  } catch (error) {
+    console.log(" error message: ", error);
+  }
+};
+
+export const addAttendance = async (att: attendance[]) => {
+  console.log("adding ", att);
+  try {
+    const jsonObj = att;
+    // Convert JSON object to string
+    const jsonString = JSON.stringify(jsonObj);
+    console.log("Adding attendance stringify", jsonString);
+
+    // Encode string to Base64
+    const base64Encoded = btoa(jsonString);
+
+    // const body = "resource=" + base64Encoded;
+
+    console.log(`Base Encoding of adding term: ${base64Encoded}`);
+
+    // params.append("resource", base64Encoded);
+    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    const ssid = sessionStorage?.getItem("key");
+    if (ssid !== null) {
+      console.log("session_id", ssid);
+      // params.append("session_id", ssid);
+    } else {
+      throw new Error("Session ID is expired");
+    }
+
+    const response = await fetch(
+      "http://localhost:8081/api/attendance?session_id=" +
         ssid +
         "&resource=" +
         base64Encoded,
@@ -455,8 +508,8 @@ export const addExam_mode = async (exam: examModeUpdateType) => {
     );
 
     const json_users = await response.json();
-    const rooms = json_users.resource;
-    return rooms;
+    const exammode = json_users.resource;
+    return exammode;
   } catch (error) {
     console.log("error", error);
   }
@@ -478,6 +531,31 @@ export const getAllModes = async () => {
   const json_users = await response.json();
   const modes = json_users.resource;
   return modes;
+};
+
+export const getScheduleById = async (id: string) => {
+  try {
+    const seshId = sessionStorage.getItem("key");
+    const response = await fetch(
+      "http://localhost:8081/api/exam_schedule?queryId=GET_EXAM_SCHEDULE_BY_ID&session_id=" +
+        seshId +
+        "&args=id:" +
+        id,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const json_users = await response.json();
+    const sche = json_users.resource;
+    return sche;
+  } catch (error) {
+    console.log("error while getting schedule.");
+  }
 };
 
 export const getAllTypes = async () => {
@@ -883,7 +961,7 @@ export const updateOrDeleteSchedule = async (
     //console.log("http://localhost:8081/api/term?" + params.toString());
 
     const response = await fetch(
-      "http://localhost:8081/api/term?session_id=" +
+      "http://localhost:8081/api/exam_schedule?session_id=" +
         ssid +
         "&resource=" +
         base64EncodedData +
@@ -1028,12 +1106,15 @@ export const getUserById = async (id: string) => {
     console.log("Error while get user by Id");
   }
 };
-export const getEnrollbyCours= async (courseID: string|null) =>{
+export const getEnrollbyCours = async (courseID: string | null) => {
   const seshId = sessionStorage.getItem("key");
   console.log("session id: ", seshId);
 
   const response = await fetch(
-    "http://localhost:8081/api/enrollment?queryId=GET_ENROLLMENTS_BY_COURSE&session_id=" + seshId+ "&args=course_id:" + courseID,
+    "http://localhost:8081/api/enrollment?queryId=GET_ENROLLMENTS_BY_COURSE&session_id=" +
+      seshId +
+      "&args=course_id:" +
+      courseID,
     {
       method: "GET",
       mode: "cors",
@@ -1042,16 +1123,19 @@ export const getEnrollbyCours= async (courseID: string|null) =>{
       },
     }
   );
-  console.log("the response of trying to fetch users by course id ",response);
+  console.log("the response of trying to fetch users by course id ", response);
   const json_users = await response.json();
   const result = json_users.resource;
-  
+
   const studentDetailsPromises = result.map(async (enrollment: any) => {
     const userTypeEnrollmentId = enrollment.user_type_enrollment_id;
     console.log("WHAT DO I SAY YOU TOO STUPID", userTypeEnrollmentId);
     const studentResponse = await fetch(
       //     "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +
-      "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +seshId +"&args=id:" +userTypeEnrollmentId,
+      "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +
+        seshId +
+        "&args=id:" +
+        userTypeEnrollmentId,
       {
         method: "GET",
         mode: "cors",
@@ -1062,14 +1146,14 @@ export const getEnrollbyCours= async (courseID: string|null) =>{
     );
     //console.log("THE OBTAINED DEEEEEETS ARE HERE",studentResponse);
     const studentJson = await studentResponse.json();
-    console.log("THE OBTAINED DEEEEEETS ARE HERE",studentJson);
-    console.log("TOOOOOOOOOOOOOOOOOOOOOO",studentJson.resource[0].name);
+    console.log("THE OBTAINED DEEEEEETS ARE HERE", studentJson);
+    console.log("TOOOOOOOOOOOOOOOOOOOOOO", studentJson.resource[0].name);
     return {
       id: studentJson.resource[0].id,
       student_id: studentJson.resource[0].roll_number,
       stud_name: studentJson.resource[0].name,
       grade: "satisfactory",
-      remark:"NA"
+      remark: "NA",
     };
   });
 

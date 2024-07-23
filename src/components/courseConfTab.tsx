@@ -91,10 +91,6 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
-// const popUpRenderer = (params: CustomButtonRendererParams)=>{
-
-// }
-
 Modal.setAppElement("#root"); // For accessibility
 
 interface CourseConfTabProps {
@@ -134,7 +130,7 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
       flex: 1,
     },
     { field: "Status", flex: 1 },
-    { field: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
+    { field: "Action", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 
   const customStyles = {
@@ -145,11 +141,11 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
       bottom: "auto",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
-      width: "60%", // You can adjust the width and height as needed
+      width: "60%",
       height: "80%",
     },
     overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.75)", // Adjust the background color as needed
+      backgroundColor: "rgba(0, 0, 0, 0.75)",
     },
   };
 
@@ -164,7 +160,7 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
           Course_Name: course.course_name,
           Instructor: course.instructor_id,
           Status: course.status == "Active" ? true : false,
-          Actions: "remove", // Ensure this field is correctly mapped if required
+          Action: "remove", 
         }));
         setCourses(filteredCourses);
         // console.log("Response");
@@ -200,12 +196,13 @@ const CourseConfTab: React.FC<CourseConfTabProps> = ({
     <div>
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
-        style={{ height: 400, width: "90%" }}
+        style={{ height: 400, width: "93%", overflowY: "auto" }}
       >
         <AgGridReact
           rowSelection="multiple"
           headerCheckboxSelection={true}
           rowData={filteredCourses}
+          domLayout="autoHeight"
           onCellClicked={onCellClicked}
           columnDefs={colDefs}
         />

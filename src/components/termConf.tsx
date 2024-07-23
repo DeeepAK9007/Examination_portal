@@ -8,7 +8,9 @@ function TermConf() {
     <div>
       <hr style={{ width: "95%", margin: "auto" }} />
       <div className="d-flex justify-content-between mt-3">
-        <p className="p-0 ms-5 mb-0 mt-2 ">Term Configuration</p>
+        <p className="p-0 ms-5 mb-0 mt-2 ">
+          <h3>Term Configuration</h3>
+        </p>
 
         <div className="d-flex flex-row">
           <div className="dropdown-center me-5">
@@ -23,7 +25,7 @@ function TermConf() {
             <ul className="dropdown-menu">
               <li>
                 <a className="dropdown-item" style={{ color: "red" }} href="#">
-                  Donwload Hall ticket
+                  Download Hall ticket
                 </a>
               </li>
             </ul>

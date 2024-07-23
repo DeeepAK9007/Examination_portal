@@ -1,11 +1,40 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { termType } from "../types/myTypes";
 import { addOneTerm } from "../apis/backend";
+import { DateRangePicker } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddTerm() {
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+
+  // Handle the date range change
+  const handleDateRangeChange = (value: [Date | null, Date | null] | null) => {
+    if (value) {
+      setDateRange(value);
+    } else {
+      setDateRange([null, null]);
+    }
+  };
   const [termName, setTermName] = useState<string>("");
   const [dateTime, setDateTime] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "warning"
+  >("success");
 
   console.log(status);
 
@@ -21,24 +50,54 @@ function AddTerm() {
   useEffect(() => {
     setTermData({
       term_name: termName,
-      start_date: dates[0],
-      end_date: dates[1],
+      start_date: dateRange[0],
+      end_date: dateRange[1],
       status: status,
     });
   }, [termName, dateTime, status]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("termData: ", termData);
-    addOneTerm(termData);
-    window.location.reload();
+    if (!termName || !dateRange || !status) {
+      setSnackbarMessage("Please fill all the required fields.");
+      setSnackbarSeverity("warning");
+      setSnackbarOpen(true);
+      return;
+    }
+    try {
+      console.log("termData: ", termData);
+      const response = await addOneTerm(termData);
 
+      const jsonData = await response?.json();
+      console.log("response json after submit,", jsonData);
+
+      if (jsonData.errCode == 0) {
+        setSnackbarMessage("Term added successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      setSnackbarMessage("Failed to add Term.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    window.location.reload();
   };
 
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-        Add Term Detail
+        <h3>Add Term Detail</h3>
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
@@ -74,13 +133,15 @@ function AddTerm() {
               <label htmlFor="datetime">StartDate - EndDate</label>
               <span className="star">*</span>
             </div>
-            <input
-              id="datetime"
-              type="text"
-              className="form-control"
-              value={dateTime}
-              onChange={(e) => setDateTime(e.target.value)}
-              required
+            <DateRangePicker
+              name="datetime"
+              format="MM/dd/yyyy hh:mm aa"
+              label="StartDate ~ EndDate"
+              // caretAs={faCalendar}
+              showMeridian
+              value={dateRange}
+              onChange={handleDateRangeChange}
+              style={{ width: 730, fontSize: "5em" }}
             />
           </div>
           <div className="mb-3 form-group">
@@ -115,6 +176,20 @@ function AddTerm() {
           </div>
         </div>
       </form>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

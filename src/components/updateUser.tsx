@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 import NavBar from "./navbar";
 import { userType } from "../types/myTypes";
@@ -6,6 +6,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { updateOrDeleteUser } from "../apis/backend";
 import { getuserType } from "../types/myTypes";
 import { getAllUsers } from "../apis/backend";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function UpdateUser() {
   const navigate = useNavigate();
@@ -18,6 +27,11 @@ function UpdateUser() {
   const [card_num, setCardNo] = useState<string>("");
   const [expiry, setExpiry] = useState<string>("");
   const [actStatus, setActStatus] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
 
   const location = useLocation();
   const userId = new URLSearchParams(location.search).get("id");
@@ -68,8 +82,8 @@ function UpdateUser() {
     };
 
     initializeFields();
-  }, [userId]); 
-  
+  }, [userId]);
+
   useEffect(() => {
     const fetchusers = async () => {
       try {
@@ -122,10 +136,26 @@ function UpdateUser() {
     if (userId) {
       console.log("userData: ", userData);
       await updateOrDeleteUser(userId, userData, "MODIFY");
-      navigate("/user");
+      setSnackbarMessage("User updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } else {
       console.error("user ID is null");
+      setSnackbarMessage("Failed to update User.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    navigate("/user");
   };
 
   return (
@@ -293,6 +323,20 @@ function UpdateUser() {
           </div>
         </form>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons/faCirclePlus";
@@ -12,7 +12,15 @@ import { getAllUsers } from "../apis/backend";
 import { userMappedType } from "../types/myTypes";
 import { AddEnrolment } from "../apis/backend";
 import { enrollmentType } from "../types/myTypes";
-//import { courseType } from "../types/myTypes";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const PopUp = (courseData: any) => {
   console.log("from Popup ", courseData.courseData.id);
@@ -23,10 +31,19 @@ const PopUp = (courseData: any) => {
     []
   );
   const [isAddClicked, setIsAddClicked] = useState<boolean>(false);
+  const [filteredRowData, setFilteredRowData] = useState([]);
+  const [filteredRowDat1, setFilteredRowData1] = useState([]);
+  const [searchQuery1, setSearchQuery1] = useState("");
+  const [searchQuery2, setSearchQuery2] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
 
   const CustomHeaderCross = (props) => {
     const onButtonClick = () => {
-      props.api.refreshCells({ force: true });
+      setFilteredRowData1([]);
     };
 
     return (
@@ -137,7 +154,6 @@ const PopUp = (courseData: any) => {
           course_enrollment_id: courseData.courseData.id,
         }));
       console.log("mapStudentsToCourse", mapStudentsToCourse);
-      console.log(typeof mapStudentsToCourse);
       setEnrollmentData(mapStudentsToCourse); // Update state
 
       // Now you can use enrollmentData immediately after setting it
@@ -177,9 +193,64 @@ const PopUp = (courseData: any) => {
     try {
       console.log("data from handleSubmit: ", enrollmentData);
       await AddEnrolment(enrollmentData);
+      setSnackbarMessage("Enrollment successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       console.log("Error in enrollment: ", error);
+      setSnackbarMessage("Failed to add Enrollment.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+  };
+
+  useEffect(() => {
+    const filterData = () => {
+      if (!searchQuery1) {
+        setFilteredRowData(rowData);
+      } else if (searchQuery1) {
+        const lowerCaseQuery = searchQuery1.toLowerCase();
+        const filtered = rowData.filter((batch) =>
+          Object.values(batch).some((value) =>
+            String(value).toLowerCase().includes(lowerCaseQuery)
+          )
+        );
+        console.log("filtered data", filtered);
+        setFilteredRowData(filtered);
+      }
+    };
+
+    filterData();
+  }, [searchQuery1, rowData]);
+
+  useEffect(() => {
+    const filterData = () => {
+      if (!searchQuery2) {
+        setFilteredRowData1(selectedRowData);
+      } else if (searchQuery2) {
+        const lowerCaseQuery = searchQuery2.toLowerCase();
+        const filtered = selectedRowData.filter((batch) =>
+          Object.values(batch).some((value) =>
+            String(value).toLowerCase().includes(lowerCaseQuery)
+          )
+        );
+        console.log("filtered data", filtered);
+        setFilteredRowData1(filtered);
+      }
+    };
+
+    filterData();
+  }, [searchQuery2, selectedRowData]);
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    window.location.reload();
   };
 
   return (
@@ -219,6 +290,8 @@ const PopUp = (courseData: any) => {
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
+                  value={searchQuery1}
+                  onChange={(e) => setSearchQuery1(e.target.value)}
                   style={{ height: "50px", width: "200px" }} // Adjust the height as needed
                 />
                 <button
@@ -238,6 +311,8 @@ const PopUp = (courseData: any) => {
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
+                  value={searchQuery2}
+                  onChange={(e) => setSearchQuery2(e.target.value)}
                   style={{ height: "50px", width: "200px" }} // Adjust the height as needed
                 />
                 <button
@@ -264,7 +339,7 @@ const PopUp = (courseData: any) => {
                 <AgGridReact
                   rowSelection="multiple"
                   headerCheckboxSelection={true}
-                  rowData={rowData}
+                  rowData={filteredRowData}
                   columnDefs={colDefs1}
                   domLayout="autoHeight"
                   onSelectionChanged={onSelectionChanged}
@@ -306,7 +381,7 @@ const PopUp = (courseData: any) => {
                 <AgGridReact
                   rowSelection="multiple"
                   headerCheckboxSelection={false}
-                  rowData={isAddClicked ? selectedRowData : []}
+                  rowData={isAddClicked ? filteredRowDat1 : []}
                   columnDefs={colDefs2}
                   domLayout="autoHeight"
                   onSelectionChanged={onSelectionChanged2}
@@ -325,6 +400,20 @@ const PopUp = (courseData: any) => {
           </div>
         </div>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

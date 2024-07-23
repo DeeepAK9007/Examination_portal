@@ -1,18 +1,42 @@
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { IncidentContext } from "../context/IncidentContext";
+import { useContext, useEffect, useRef, useState } from "react";
+import { AddAttendProps } from "../types/myTypes";
 
-function AddIncident() {
+const AddIncident: React.FC<AddAttendProps> = ({ courseCode, courseName }) => {
+  const { isCellClicked, setQueryHandler } = useContext(IncidentContext);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [querytext, setQueryText] = useState<string>("");
+
+  // dropdown opening function
+
+  useEffect(() => {
+    if (isCellClicked && dropdownRef.current) {
+      const modalElement = dropdownRef.current.querySelector("#exampleModal");
+      if (modalElement) {
+        const modalInstance = new window.bootstrap.Modal(modalElement);
+        modalInstance.show();
+      }
+    }
+    setQueryHandler(querytext);
+  }, [isCellClicked, querytext]);
+
+  console.log("data from addIncident:", isCellClicked);
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-        Incident Reporting
+        <h3>
+          Incident Reporting for {"[ " + courseCode + " ]" + "  " + courseName}
+        </h3>
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
       <div className="d-flex justify-content-end mt-3">
         <div className="d-flex flex-row me-5 float-end">
-          <div className="dropdown-center me-5">
+          <div ref={dropdownRef} className="dropdown-center me-5">
             <button
               className="btn btn-danger dropdown-toggle"
               type="button"
@@ -85,7 +109,9 @@ function AddIncident() {
                 type="search"
                 id="form1"
                 className="form-control"
-                placeholder="Course Name"
+                placeholder="Search"
+                value={querytext}
+                onChange={(e) => setQueryText(e.target.value)}
               />
               <label className="form-label"></label>
             </div>
@@ -103,6 +129,7 @@ function AddIncident() {
                 className="btn btn-primary"
                 data-mdb-ripple-init
                 style={{ width: "50px", height: "38px" }}
+                onClick={() => window.location.reload()}
               >
                 <FontAwesomeIcon icon={faRotateRight} />
               </button>
@@ -112,6 +139,6 @@ function AddIncident() {
       </div>
     </div>
   );
-}
+};
 
 export default AddIncident;

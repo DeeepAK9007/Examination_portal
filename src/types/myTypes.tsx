@@ -185,7 +185,7 @@ export interface getTypeTypes {
   status: string;
 }
 
-export interface getExamType{
+export interface getExamType {
   id?: string;
   exam_type_name: string;
   remark: string;
@@ -196,12 +196,12 @@ export interface deletestuff {
   id?: string;
 }
 
-export interface studsBycourse{
-  id?: string
-  student_id:string
-  stud_name: string
-  grade: string
-  remark:string
+export interface studsBycourse {
+  id?: string;
+  student_id: string;
+  stud_name: string;
+  grade: string;
+  remark: string;
 }
 
 export interface enrollmentType {
@@ -221,4 +221,57 @@ export interface addProgCordType {
   room_number: string;
   remarks: string;
   status: string;
+}
+
+export interface attendanceType {
+  id?: string;
+  name?: string;
+  marktime?: string;
+  photo?: string;
+}
+
+export interface attendance {
+  id?: string;
+  exam_schedule_id?: string;
+  user_id?: string;
+  attendance: string;
+  incident_report?: string;
+  remarks?: string;
+}
+
+export interface incidentType {
+  id?: string;
+  name?: string;
+  marktime?: string;
+  photo?: string;
+}
+
+export interface incident {
+  id?: string;
+  exam_schedule_id?: string;
+  user_id?: string;
+  attendance: attendanceType;
+  incident_report: string;
+  remarks: string;
+}
+
+export interface issueType {
+  id?: string;
+  name?: string;
+  marktime?: string;
+  photo?: string;
+}
+
+export interface issue {
+  id?: string;
+  exam_schedule_id?: string;
+  user_id?: string;
+  attendance: attendanceType;
+  incident_report: string;
+  remarks: string;
+}
+
+export interface AddAttendProps {
+  courseCode: string;
+  courseName: string;
 }

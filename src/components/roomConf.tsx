@@ -2,14 +2,16 @@ import RoomConfTab from "./roomConfTab";
 import { useState } from "react";
 
 function RoomConf() {
-    const [queryText, setQueryText] = useState<string>("");
-    const [searchStatus, setSearchStatus] = useState<boolean>(false);
+  const [queryText, setQueryText] = useState<string>("");
+  const [searchStatus, setSearchStatus] = useState<boolean>(false);
 
   return (
     <div>
       <hr style={{ width: "95%", margin: "auto" }} />
       <div className="d-flex justify-content-between mt-3">
-        <p className="p-0 ms-5 mb-0 mt-2 ">Room Configuration</p>
+        <p className="p-0 ms-5 mb-0 mt-2 ">
+          <h3>Room Configuration</h3>
+        </p>
 
         <div className="d-flex flex-row">
           <div className="input-group">
@@ -50,7 +52,7 @@ function RoomConf() {
           </button>
         </div>
       </div>
-      <RoomConfTab queryText={queryText} searchStatus={searchStatus}/>
+      <RoomConfTab queryText={queryText} searchStatus={searchStatus} />
     </div>
   );
 }

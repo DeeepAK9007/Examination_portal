@@ -2,6 +2,16 @@ import { useEffect, useState } from "react";
 import "./styles.css";
 import { courseType } from "../types/myTypes";
 import { addOneCourse, getUsersByRole } from "../apis/backend";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import React from "react";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddCourseDet() {
   const [CourseCode, setCourseCode] = useState<string>("");
@@ -16,6 +26,12 @@ function AddCourseDet() {
     course_code: "",
     status: "",
   });
+
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "warning"
+  >("success");
 
   useEffect(() => {
     setCourseData({
@@ -42,15 +58,46 @@ function AddCourseDet() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("courseData: ", courseData);
-    addOneCourse(courseData);
+    if (!CourseCode || !Instructor || !CourseName || !status) {
+      setSnackbarMessage("Please fill all the required fields.");
+      setSnackbarSeverity("warning");
+      setSnackbarOpen(true);
+      return;
+    }
+    try {
+      console.log("courseData: ", courseData);
+      const response = await addOneCourse(courseData);
+
+      const jsonData = await response?.json();
+      console.log("response json after submit,", jsonData);
+
+      if (jsonData.errCode == 0) {
+        setSnackbarMessage("Course added successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      setSnackbarMessage("Failed to add course.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
     window.location.reload();
   };
 
   return (
     <div>
       <p className="p-0 ms-5 mb-0 mt-5" style={{ paddingTop: "1px" }}>
-        Add Course Details{" "}
+        <h3>Add Course Details</h3>
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
@@ -92,6 +139,7 @@ function AddCourseDet() {
               aria-label="Floating label select example"
               value={Instructor}
               onChange={(e) => setInstructor(e.target.value)}
+              required
             >
               <option id="examrole" value="" disabled selected></option>
               {users.map((user, index) => (
@@ -152,6 +200,20 @@ function AddCourseDet() {
           </div>
         </div>
       </form>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

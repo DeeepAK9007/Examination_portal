@@ -1,15 +1,29 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 import NavBar from "./navbar";
 import { ExamModeType } from "../types/myTypes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateOrDeleteExamMode } from "../apis/backend";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function UpdateExamMode() {
   const navigate = useNavigate();
   const [examMode, setExamMode] = useState<string>("");
   const [remmarks, setRemmarks] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
 
   const location = useLocation();
   const examModeId = new URLSearchParams(location.search).get("id");
@@ -53,11 +67,29 @@ function UpdateExamMode() {
     if (examModeId) {
       console.log("examModeData: ", examModeData);
       await updateOrDeleteExamMode(examModeId, examModeData, "MODIFY");
+      setSnackbarMessage("ExamMode updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
       navigate("/examMode");
     } else {
       console.error("Exam Mode ID is null");
+      setSnackbarMessage("Failed to update ExamMode.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    navigate("/examMode");
+  };
+
   return (
     <div className="d-flex flex-row">
       <NavBar />
@@ -136,6 +168,20 @@ function UpdateExamMode() {
           </div>
         </form>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

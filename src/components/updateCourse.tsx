@@ -1,8 +1,17 @@
 import NavBar from "./navbar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { courseType } from "../types/myTypes";
 import { getUsersByRole, updateOrDeleteCourse } from "../apis/backend";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function UpdateCourse() {
   const navigate = useNavigate();
@@ -16,6 +25,11 @@ function UpdateCourse() {
   const location = useLocation();
   const courseId = new URLSearchParams(location.search).get("id");
   const courseobj = new URLSearchParams(location.search).get("course");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
   console.log("Course id:", courseId);
   console.log("Course obj", courseobj);
   const [courseData, setCourseData] = useState<courseType>({
@@ -73,10 +87,26 @@ function UpdateCourse() {
     if (courseId) {
       console.log("courseData: ", courseData);
       updateOrDeleteCourse(courseId, courseData, "MODIFY");
-      navigate("/course");
+      setSnackbarMessage("Course updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } else {
       console.error("Course ID is null");
+      setSnackbarMessage("Failed to update Course.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+    navigate("/course");
   };
 
   return (
@@ -178,6 +208,20 @@ function UpdateCourse() {
           </div>
         </form>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
