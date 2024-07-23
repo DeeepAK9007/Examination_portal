@@ -75,7 +75,7 @@ function Login() {
 
       console.log("User session Id after submit", ssid);
 
-      // setIsLoggedIn(true);
+      // setIsLoggedIn(true); 
       // console.log("Is user Logged In after submit:", isLoggedIn);
 
       // Set data in session storage
@@ -164,7 +164,7 @@ function Login() {
               />
             </div>
             <h3 style={{ textAlign: "center", color: "white" }}>
-              International Institue of Information
+              International Institute of Information
               <br />
               Technology Bangalore
             </h3>
