@@ -2,14 +2,15 @@ import { useState } from "react";
 import UploadGradesPart1Tab from "./uploadGradespart1tab";
 
 function UploadGradesPart1() {
-    const [queryText, setQueryText] = useState<string>("");
+  const [queryText, setQueryText] = useState<string>("");
   const [searchStatus, setSearchStatus] = useState<boolean>(false);
   return (
     <div>
-      <p className="p-0 ms-5 mb-0 mt-2 ">Courses List</p>
+      <p className="p-0 ms-5 mb-0 mt-2 ">
+        <h3>Courses List</h3>
+      </p>
       <hr style={{ width: "95%", margin: "auto" }} />
       <div className="d-flex justify-content-end mt-3">
-
         <div className="d-flex flex-row">
           <div className="input-group">
             <div

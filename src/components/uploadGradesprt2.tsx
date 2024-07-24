@@ -2,20 +2,21 @@ import { useState } from "react";
 import UploadGradesPart2Tab from "./uploadGradesprt2tab";
 
 function UploadGradesPart2() {
-    const [queryText, setQueryText] = useState<string>("");
+  const [queryText, setQueryText] = useState<string>("");
   const [searchStatus, setSearchStatus] = useState<boolean>(false);
-  
+
   const termId = new URLSearchParams(location.search).get("id");
-  const corsse= new URLSearchParams(location.search).get("course_nm");
-  console.log("term id here",termId);
-  console.log("term id here",corsse);
-  
+  const corsse = new URLSearchParams(location.search).get("course_nm");
+  console.log("term id here", termId);
+  console.log("term id here", corsse);
+
   return (
     <div>
-      <p className="p-0 ms-5 mb-0 mt-2 ">Course-{corsse}</p>
+      <p className="p-0 ms-5 mb-0 mt-2 ">
+        <h3>Course-{corsse}</h3>
+      </p>
       <hr style={{ width: "95%", margin: "auto" }} />
       <div className="d-flex justify-content-end mt-3">
-
         <div className="d-flex flex-row">
           <div className="input-group">
             <div

@@ -1,6 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserCourseConfTab from "./userCourseConfTab";
-import { faCirclePlus, faDownload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlus,
+  faDownload,
+  faSearch,
+  faRotateRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 function UserCourseConf() {
@@ -10,33 +15,31 @@ function UserCourseConf() {
     <div>
       <hr style={{ width: "100%", margin: "auto" }} />
       <div className="d-flex justify-content-between mt-3">
-        <p className="p-0 ms-5 mb-0 mt-2 ">
+        <div className="ms-5 mb-0 mt-2">
           <h3>User Configuration</h3>
-        </p>
-        <div
-          className="d-flex flex-row justify-content-end"
-          style={{ marginRight: "0px", paddingRight: "0px" }}
-        >
-          <button
-            type="button"
-            className="btn btn-primary me-5"
-            style={{
-              width: "350px",
-              height: "38px",
-              fontSize: "14px",
-            }}
-          >
-            <FontAwesomeIcon icon={faCirclePlus} /> Template
-          </button>
+        </div>
+        <div className="d-flex flex-row justify-content-end me-5">
           <div>
             <button
               type="button"
               className="btn btn-primary me-5"
               style={{
+                width: "250px",
+                height: "38px",
+                fontSize: "14px",
+              }}
+            >
+              <FontAwesomeIcon icon={faCirclePlus} /> Template
+            </button>
+          </div>
+          <div>
+            <button
+              type="button"
+              className="btn btn-primary me-2"
+              style={{
                 width: "130px",
                 height: "38px",
                 fontSize: "14px",
-                marginBottom: "10px",
               }}
             >
               <FontAwesomeIcon icon={faCirclePlus} /> Bulk Upload
@@ -53,7 +56,7 @@ function UserCourseConf() {
             </a>
           </div>
 
-          <div className="input-group me-0 p-0">
+          <div className="input-group me-2">
             <div
               id="search-autocomplete"
               className="form-outline"
@@ -74,23 +77,19 @@ function UserCourseConf() {
               style={{ width: "50px", height: "38px" }}
               onClick={() => setSearchStatus(true)}
             >
-              <i className="fas fa-search"></i>
+              <FontAwesomeIcon icon={faSearch} />
             </button>
+          </div>
+          <div>
             <button
               type="button"
-              className="btn btn-primary me-5"
-              style={{
-                width: "50px",
-                height: "38px",
-                marginLeft: "10px",
-                marginRight: "0px",
-                paddingRight: "0px",
-              }}
+              className="btn btn-primary me-4"
+              style={{ width: "50px", height: "38px" }}
               onClick={() => {
                 window.location.reload();
               }}
             >
-              <i className="fa-solid fa-rotate-right"></i>
+              <FontAwesomeIcon icon={faRotateRight} />
             </button>
           </div>
         </div>

@@ -38,6 +38,14 @@ function NavBar() {
 
   const logstat = useContext(LoginContext);
 
+  const handleLogout = () => {
+    logstat.setIsLoggedIn(false);
+    sessionStorage.clear();
+    console.log("session storage length", sessionStorage.length);
+    navigate("/");
+    console.log("is logged in", logstat.isLoggedIn);
+  };
+
   return (
     <div
       className="d-flex flex-column"
@@ -450,13 +458,7 @@ function NavBar() {
           <p>application@iiitb.in</p>
         </div>
         <i
-          onClick={() => {
-            logstat.setIsLoggedIn(false);
-            sessionStorage.clear();
-            console.log("session storage length", sessionStorage.length);
-            navigate("/");
-            console.log("is logged in", logstat.isLoggedIn);
-          }}
+          onClick={handleLogout}
           className="fa-solid fa-right-from-bracket fa-2x mb-4 fs-4"
           style={{
             color: "white",

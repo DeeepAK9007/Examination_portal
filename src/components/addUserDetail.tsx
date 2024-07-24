@@ -78,6 +78,13 @@ function AddUser() {
       setSnackbarOpen(true);
       return;
     }
+
+    if (mob_num.length !== 10) {
+      setSnackbarMessage("Invalid mobile number. It should be 10 digits long.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
     const newUser: userType = {
       name: name,
       role: examRole,
@@ -147,8 +154,10 @@ function AddUser() {
         <div className="d-flex flex-column ms-5 w-50">
           <div className="mb-3 mt-5 form-group">
             <div className="palceholder ms-1">
-              <label htmlFor="file" style={{visibility:"hidden"}}>Choose file</label>
-              <span className="star">*</span>
+              <label htmlFor="file" style={{ visibility: "hidden" }}>
+                Choose File{" "}
+              </label>
+              <span className="star"> *</span>
             </div>
             <input
               type="file"
@@ -186,7 +195,7 @@ function AddUser() {
             </div>
             <input
               id="emailId"
-              type="text"
+              type="email"
               className="form-control"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

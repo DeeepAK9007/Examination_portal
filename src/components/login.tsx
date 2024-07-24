@@ -106,7 +106,7 @@ function Login() {
 
   return (
     <div
-      className="d-flex flex-column login-container"
+      className="d-flex flex-column login-container justify-content-center"
       style={{
         backgroundImage: "linear-gradient(to bottom right,#ADD8E6,white)",
         minHeight: "100vh",
