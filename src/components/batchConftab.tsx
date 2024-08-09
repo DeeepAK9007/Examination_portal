@@ -8,16 +8,18 @@ import { getAllBatches } from "../apis/backend";
 import { deletestuff } from "../types/myTypes";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 import { useNavigate } from "react-router-dom";
-import AttendTab from "./attendTab";
 
+// Component for rendering custom action buttons in the grid
 type CustomButtonProps = {
   rowData: batchMappedType;
 };
 
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
+
+  // Handler for editing a batch
   const editBatch = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent event from propagating to grid
     console.log("Row data:", rowData);
     console.log(rowData.id);
     const seshID = sessionStorage.getItem("key");
@@ -26,8 +28,10 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       `/editBatch?batch=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
     );
   };
-  const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
+
+  // Handler for deleting a batch
+  const deleteBatch = async (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation(); // Prevent event from propagating to grid
     console.log("Row data:", rowData);
     console.log(rowData.id);
     const seshID = sessionStorage.getItem("key");
@@ -50,7 +54,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       }
     );
     console.log("result:", resource);
-    window.location.reload();
+    window.location.reload(); // Refresh the page after deletion
   };
 
   return (
@@ -62,7 +66,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       ></i>
       <i
         onClick={(e) => {
-          deleteUser(e);
+          deleteBatch(e);
         }}
         className="fas fa-trash text-danger"
         style={{ cursor: "pointer" }}
@@ -71,6 +75,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
   );
 };
 
+// Renderer for the custom action buttons
 type CustomButtonRendererParams = {
   data: batchMappedType;
   value: any;
@@ -94,18 +99,20 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
 };
 
 interface BatchConfTabProps {
-  queryText: string;
-  searchStatus: boolean;
+  queryText: string; // Search query text
+  searchStatus: boolean; // Search status flag
 }
 
 const BatchConfTab: React.FC<BatchConfTabProps> = ({
   queryText,
   searchStatus,
 }) => {
+  // State for batches and filtered batches
   const [obtBatches, setObtBatches] = useState<batchMappedType[]>([]);
   const [filteredBatches, setFilteredBatches] = useState<batchMappedType[]>([]);
   console.log("query text: ", queryText);
 
+  // Fetch batches from the backend
   useEffect(() => {
     const fetchusers = async () => {
       try {
@@ -127,6 +134,7 @@ const BatchConfTab: React.FC<BatchConfTabProps> = ({
     fetchusers();
   }, []);
 
+  // Filter batches based on the search query
   useEffect(() => {
     const filterBatches = () => {
       if (!queryText) {
@@ -145,6 +153,7 @@ const BatchConfTab: React.FC<BatchConfTabProps> = ({
     filterBatches();
   }, [queryText, obtBatches]);
 
+  // Define column definitions for the grid
   const [colDefs, setColDefs] = useState<ColDef<batchMappedType, unknown>[]>([
     {
       field: "batch_name",

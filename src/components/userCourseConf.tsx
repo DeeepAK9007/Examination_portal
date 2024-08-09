@@ -9,8 +9,8 @@ import {
 import { useState } from "react";
 
 function UserCourseConf() {
-  const [queryText, setQueryText] = useState<string>("");
-  const [searchStatus, setSearchStatus] = useState<boolean>(false);
+  const [queryText, setQueryText] = useState<string>(""); // State for search query
+  const [searchStatus, setSearchStatus] = useState<boolean>(false); // State to trigger search
   return (
     <div>
       <hr style={{ width: "100%", margin: "auto" }} />
@@ -94,6 +94,7 @@ function UserCourseConf() {
           </div>
         </div>
       </div>
+      {/* UserCourseConfTab Component with search functionality */}
       <UserCourseConfTab queryText={queryText} searchStatus={searchStatus} />
     </div>
   );

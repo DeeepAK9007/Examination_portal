@@ -1,16 +1,14 @@
 import AddExamMode from "./addExamMode";
-// import AddTerm from "./addTerm";
 import ExamModeConf from "./examModeConf";
 import NavBar from "./navbar";
-// import TermConf from "./termConf";
 
 function ExamMode() {
   return (
     <div className="d-flex flex-row">
-      <NavBar />
+      <NavBar />{/* Render the navigation bar on the left side */}
       <div className="d-flex flex-column w-100 justify-content-between">
-        <AddExamMode />
-        <ExamModeConf />
+        <AddExamMode />{/* Render the component to add new exam modes */}
+        <ExamModeConf />{/* Render the component to configure existing exam modes */}
       </div>
     </div>
   );

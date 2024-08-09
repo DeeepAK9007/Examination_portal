@@ -7,6 +7,7 @@ import { updateOrDeleteExamType } from "../apis/backend";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Creating a custom Alert component using forwardRef for Material-UI Snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -15,19 +16,22 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function UpdateExamType() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook for programmatic navigation
+  // intialize states
   const [examType, setExamType] = useState<string>("");
   const [remarks, setRemarks] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
+
+  // intialize states for snack bar message
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
 
-  const location = useLocation();
-  const examTypeId = new URLSearchParams(location.search).get("id");
-  const examtypeobj = new URLSearchParams(location.search).get("examtype");
+  const location = useLocation();// Hook to access the current location
+  const examTypeId = new URLSearchParams(location.search).get("id");// Extracting the exam type ID from the query parameters
+  const examtypeobj = new URLSearchParams(location.search).get("examtype");// Extracting the exam type object from the query parameters
   console.log("ExamType id:", examTypeId);
   const [examTypeData, setExamTypeData] = useState<ExamTypeType>({
     id: "",
@@ -37,8 +41,9 @@ function UpdateExamType() {
   });
 
   useEffect(() => {
+    // Effect to populate the form fields when the component mounts
     if (examTypeId && examtypeobj) {
-      const jsonobj = JSON.parse(atob(examtypeobj));
+      const jsonobj = JSON.parse(atob(examtypeobj));// Decoding and parsing the exam type object
       setExamType(jsonobj.exam_type_name);
       setRemarks(jsonobj.remark);
       setActStat(jsonobj.status);
@@ -48,9 +53,11 @@ function UpdateExamType() {
   }, []);
 
   useEffect(() => {
+    // Effect to update the exam type data object when any field changes
     if (examTypeId && examtypeobj) {
       const jsonobj = JSON.parse(atob(examtypeobj));
       console.log(jsonobj);
+      // updating data
       setExamTypeData({
         id: examTypeId,
         exam_type_name: examType ? examType : jsonobj.exam_type_name,
@@ -62,6 +69,7 @@ function UpdateExamType() {
     }
   }, [examType, remarks, actStatus]);
 
+  // Function to handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (examTypeId) {
@@ -79,6 +87,7 @@ function UpdateExamType() {
     }
   };
 
+  // Function to handle Snackbar close event
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

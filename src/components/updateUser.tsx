@@ -9,6 +9,7 @@ import { getAllUsers } from "../apis/backend";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Define Alert component for Snackbar notifications
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -17,7 +18,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function UpdateUser() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook for navigation
+  // intiialize states for input values
   const [rollNo, setRollNo] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -27,6 +29,8 @@ function UpdateUser() {
   const [card_num, setCardNo] = useState<string>("");
   const [expiry, setExpiry] = useState<string>("");
   const [actStatus, setActStatus] = useState<string>("");
+
+  // intialize state for snack bar messages
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
@@ -52,6 +56,7 @@ function UpdateUser() {
 
   console.log("Component re-rendered");
 
+  // Fetch user details based on user ID when component mounts or userId changes
   useEffect(() => {
     const initializeFields = async () => {
       try {
@@ -84,6 +89,7 @@ function UpdateUser() {
     initializeFields();
   }, [userId]);
 
+  // Update user data based on state changes
   useEffect(() => {
     const fetchusers = async () => {
       try {
@@ -131,6 +137,7 @@ function UpdateUser() {
     actStatus,
   ]);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (userId) {
@@ -147,6 +154,7 @@ function UpdateUser() {
     }
   };
 
+  // Handle Snackbar close
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

@@ -11,6 +11,7 @@ type CustomButtonProps = {
   rowData: courseType;
 };
 
+// Component for custom button actions in the grid
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
   return (
@@ -19,7 +20,9 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
         // onClick={editCourse}
         className="fa-solid fa-upload"
         style={{ cursor: "pointer" }}
-      >Upload Grades</i>
+      >
+        Upload Grades
+      </i>
     </div>
   );
 };
@@ -42,22 +45,25 @@ type CustomButtonRendererParams = {
   eParentOfValue: HTMLElement;
 };
 
+// Custom cell renderer for the grid to display buttons
 const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
 interface CourseConfTabProps {
-  queryText: string;
-  searchStatus: boolean;
+  queryText: string; // Search query text
+  searchStatus: boolean; // Status of the search operation
 }
 
+// Main component for displaying the courses list with grid
 const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
   queryText,
   searchStatus,
 }) => {
-  const [courses, setCourses] = useState<courseType[]>([]);
-  const [filteredCourses, setFilteredCourses] = useState<courseType[]>([]);
+  const [courses, setCourses] = useState<courseType[]>([]); // State to store all courses
+  const [filteredCourses, setFilteredCourses] = useState<courseType[]>([]); // State to store filtered courses
 
+  // Column definitions for the grid
   const [colDefs, setColDefs] = useState([
     {
       field: "Course_Code",
@@ -68,11 +74,13 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
     { field: "Actions", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 
+  // Fetch courses from the backend and set the courses state
   useEffect(() => {
     const fetchTerms = async () => {
       try {
-        const res = await getAllCourses();
+        const res = await getAllCourses(); // Fetch course data
         // console.log("Terms", res);
+        // Map the fetched data to the format required by ag-Grid
         const filteredTerms = res.map((course: courseType) => ({
           id: course.id,
           Course_Code: course.course_code,
@@ -89,6 +97,7 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
     fetchTerms();
   }, []);
 
+  // Filter courses based on the query text and search status
   useEffect(() => {
     const filterCourses = () => {
       if (!queryText) {
@@ -110,7 +119,12 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
   console.log("Row data:", courses);
   console.log("Column Data", colDefs);
 
-  const putGrades = async (e: any, rowData:any|undefined,navigatee: (path: string) => void) => {
+  // Function to handle grade upload (placeholder function)
+  const putGrades = async (
+    e: any,
+    rowData: any | undefined,
+    navigatee: (path: string) => void
+  ) => {
     e.stopPropagation();
     console.log("maybe some stuff", e);
     console.log("maybe some stuff", rowData.Course_Name);
@@ -120,13 +134,13 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
     const seshID = sessionStorage.getItem("key");
     console.log(seshID);
     //const navigate=useNavigate();
-    navigatee(`/updateGrade?id=${rowData?.id}&&course_nm=${rowData?.Course_Name}`);
-    
+    navigatee(
+      `/updateGrade?id=${rowData?.id}&&course_nm=${rowData?.Course_Name}`
+    );
   };
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   return (
-    
     <div>
       <div
         className="ag-theme-quartz mt-4 ms-5 shadow"
@@ -137,8 +151,8 @@ const UploadGradesPart1Tab: React.FC<CourseConfTabProps> = ({
           headerCheckboxSelection={true}
           rowData={filteredCourses}
           columnDefs={colDefs}
-          onCellClicked={(e) => putGrades(e.event, e.data,navigate)}        
-          />
+          onCellClicked={(e) => putGrades(e.event, e.data, navigate)}
+        />
       </div>
     </div>
   );

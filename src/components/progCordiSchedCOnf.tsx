@@ -9,6 +9,7 @@ function ProgCordSchedConf() {
           <h3>Scheduler Configuration</h3>
         </p>
       </div>
+      {/* Include the ProgCordiTab component */}
       <ProgCordiTab />
     </div>
   );

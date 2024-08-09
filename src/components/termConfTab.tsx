@@ -7,10 +7,13 @@ import { termType } from "../types/myTypes";
 import { useNavigate } from "react-router-dom";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 import { deletestuff } from "../types/myTypes";
+
+// Define properties for the CustomButton component
 type CustomButtonProps = {
   rowData: termType;
 };
 
+// Define parameters for the CustomButtonRenderer component
 type CustomButtonRendererParams = {
   data: termType;
   value: any;
@@ -29,23 +32,27 @@ type CustomButtonRendererParams = {
   eParentOfValue: HTMLElement;
 };
 
+// CustomButton component to render edit and delete icons
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
+
+  // Function to handle editing a term
   const editTerm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
     console.log(rowData.id);
-    const seshID = sessionStorage.getItem("key");
+    const seshID = sessionStorage.getItem("key");// Retrieve session key from storage
     console.log(seshID);
+    // Navigate to the edit term page with encoded row data
     navigate(
       `/editTerm?term=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
     );
   };
-  const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
+  const deleteTerm = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
     console.log(rowData.id);
-    const seshID = sessionStorage.getItem("key");
+    const seshID = sessionStorage.getItem("key");// Retrieve session key from storage
     console.log("&resource=id:" + rowData.id);
     const temp: deletestuff = { id: rowData.id };
     const targ = JSON.stringify(temp);
@@ -78,23 +85,26 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
         className="fas fa-trash text-danger"
         style={{ cursor: "pointer" }}
         onClick={(e) => {
-          deleteUser(e);
+          deleteTerm(e);
         }}
       ></i>
     </div>
   );
 };
 
+// CustomButtonRenderer component to render CustomButton inside Ag-Grid cells
 const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   // console.log(params);
   return <CustomButton rowData={params.data} />;
 };
 
+// Define properties for the TermConfTab component
 interface TermConfTabProps {
   queryText: string;
   searchStatus: boolean;
 }
 
+// TermConfTab component definition
 const TermConfTab: React.FC<TermConfTabProps> = ({
   queryText,
   searchStatus,
@@ -110,9 +120,10 @@ const TermConfTab: React.FC<TermConfTabProps> = ({
   ]);
 
   useEffect(() => {
+    // Fetch all terms on component mount
     const fetchTerms = async () => {
       try {
-        const res = await getAllTerms();
+        const res = await getAllTerms();// Call the API to get terms
         // console.log("Terms", res);
         const filteredTerms = res.map((term: termType) => ({
           id: term.id,
@@ -133,6 +144,7 @@ const TermConfTab: React.FC<TermConfTabProps> = ({
   console.log("Row data:", terms);
   console.log("Column Data", colDefs);
 
+  //search operation
   useEffect(() => {
     const filterTerms = () => {
       if (!queryText) {

@@ -7,18 +7,22 @@ import { scheduleType } from "../types/myTypes";
 import { useNavigate } from "react-router-dom";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 
+// Component to render custom button for each row
 type CustomButtonProps = {
   rowData: scheduleType;
 };
 
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
+
+  // Function to handle editing a schedule
   const editTerm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
     console.log(rowData.id);
     const seshID = sessionStorage.getItem("key");
     console.log(seshID);
+    // Navigate to edit schedule page with encoded schedule data
     navigate(
       `/editSchedule?schedule=${btoa(JSON.stringify(rowData))}&&id=${
         rowData.id
@@ -37,6 +41,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
   );
 };
 
+// Custom button renderer for ag-Grid
 type CustomButtonRendererParams = {
   data: scheduleType;
   value: any;
@@ -61,8 +66,10 @@ const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
 };
 
 function Scheduler() {
+  // State to store schedule data
   const [schedules, setSchedules] = useState<scheduleType[]>([]);
 
+  // State to define column definitions for ag-Grid
   const [colDefs, setColDefs] = useState([
     { field: "DateTime", headerCheckboxSelection: true, sort: "asc", flex: 1 },
     { field: "ExamName", flex: 1 },
@@ -81,7 +88,8 @@ function Scheduler() {
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const res = await getAllSchedules();
+        const res = await getAllSchedules(); // Fetch schedules from backend
+        // Map fetched data to match column definitions
         // console.log("Terms", res);
         const filteredTerms = res.map((schedule: scheduleType) => ({
           id: schedule.id,
@@ -93,7 +101,7 @@ function Scheduler() {
           Supervisor: schedule.supervisor,
           Remark: schedule.remarks,
         }));
-        setSchedules(filteredTerms);
+        setSchedules(filteredTerms); // Update state with fetched and mapped data
         // console.log("Response");
       } catch (error) {
         console.log("Error fetching data:", error);

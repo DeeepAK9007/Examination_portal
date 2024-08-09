@@ -2,12 +2,13 @@ import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useState, useEffect } from "react";
-import { getAllSchedules } from "../apis/backend";
-import { examModeUpdateType, scheduleType } from "../types/myTypes";
+import { getAllSchedules } from "../apis/backend"; // Importing API call to fetch schedules
+import { examModeUpdateType, scheduleType } from "../types/myTypes"; // Importing type definitions
 
 function ExamModelUpdateTab() {
-  const [schedules, setSchedules] = useState<scheduleType[]>([]);
+  const [schedules, setSchedules] = useState<scheduleType[]>([]); // State to hold schedule data
 
+  // Column definitions for the data grid
   const [colDefs, setColDefs] = useState([
     { field: "DateTime", headerCheckboxSelection: true, sort: "asc" },
     { field: "ExamName" },
@@ -21,11 +22,11 @@ function ExamModelUpdateTab() {
     { field: "Action" },
   ]);
 
+  // Fetch schedules from the backend when the component mounts
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const res = await getAllSchedules();
-        // console.log("Terms", res);
+        const res = await getAllSchedules(); // Fetch schedules from the backend
         const filteredTerms = res.map((schedule: examModeUpdateType) => ({
           DateTime: schedule.date,
           ExamName: schedule.examination_name,
@@ -38,7 +39,7 @@ function ExamModelUpdateTab() {
           Remark: schedule.remarks,
           Action: schedule.status, // Ensure this field is correctly mapped if required
         }));
-        setSchedules(filteredTerms);
+        setSchedules(filteredTerms); // Update state with mapped data
         // console.log("Response");
       } catch (error) {
         console.log("Error fetching data:", error);
@@ -58,6 +59,7 @@ function ExamModelUpdateTab() {
           <h3>Exam Mode Update Configuration</h3>
         </p>
         <div className="dropdown-center me-5">
+          {/* Dropdown menu for actions */}
           <button
             className="btn btn-danger dropdown-toggle"
             type="button"

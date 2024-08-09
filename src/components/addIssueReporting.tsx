@@ -13,6 +13,7 @@ function AddIssue() {
       <div className="d-flex justify-content-end mt-3">
         <div className="d-flex flex-row me-5 float-end">
           <div className="dropdown-center me-5">
+            {/* Button to trigger the modal for reporting an incident */}
             <button
               className="btn btn-danger dropdown-toggle"
               type="button"
@@ -23,6 +24,7 @@ function AddIssue() {
               Report Incident
             </button>
 
+            {/* Modal for incident reporting */}
             <div
               className="modal fade"
               id="exampleModal"
@@ -39,6 +41,7 @@ function AddIssue() {
                   }}
                 >
                   <div className="modal-header">
+                    {/* File input for uploading proof */}
                     <label>
                       <input type="file" style={{ display: "none" }} />
                       <a
@@ -60,6 +63,7 @@ function AddIssue() {
                     className="modal-body-secondary"
                     style={{ height: 200, overflowY: "auto" }}
                   >
+                    {/* Textarea for entering remarks */}
                     <textarea
                       className="form-control"
                       placeholder="Remarks"
@@ -67,6 +71,7 @@ function AddIssue() {
                     ></textarea>
                   </div>
                   <div className="modal-footer">
+                    {/* Button to submit the incident report */}
                     <button type="button" className="btn btn-danger">
                       Submit
                     </button>
@@ -81,6 +86,7 @@ function AddIssue() {
               className="form-outline"
               data-mdb-input-init
             >
+              {/* Input field for searching course name */}
               <input
                 type="search"
                 id="form1"
@@ -89,6 +95,7 @@ function AddIssue() {
               />
               <label className="form-label"></label>
             </div>
+            {/* Button to initiate the search */}
             <button
               type="button"
               className="btn btn-primary"
@@ -97,6 +104,7 @@ function AddIssue() {
             >
               <i className="fas fa-search"></i>
             </button>
+            {/* Button to reload the page */}
             <div style={{ marginLeft: "50px" }}>
               <button
                 type="button"

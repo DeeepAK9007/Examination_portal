@@ -4,6 +4,7 @@ import { ExamModeType } from "../types/myTypes";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Custom Alert component using Material UI's Alert
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -12,6 +13,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddRoomDet() {
+  // State hooks for managing form data
   const [examMode, setExamMode] = useState<string>("");
   const [remmarks, setRemmarks] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
@@ -21,6 +23,7 @@ function AddRoomDet() {
     "success" | "error" | "warning"
   >("success");
 
+  // Function to handle form submission
   async function addExamMode(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
     if (!examMode || !remmarks || !actStatus) {
@@ -30,6 +33,7 @@ function AddRoomDet() {
       return;
     }
     try {
+      // Create a new exam mode object
       const newExamMode: ExamModeType = {
         exam_mode_name: examMode,
         remark: remmarks,
@@ -37,14 +41,17 @@ function AddRoomDet() {
       };
 
       console.log(newExamMode);
-
+      
       const jsonobj = JSON.stringify(newExamMode);
       console.log(jsonobj);
       const encode = btoa(jsonobj);
       console.log(encode);
+
+      // Get the session ID from session storage
       const seshID = sessionStorage.getItem("key");
       console.log(seshID);
 
+      // Send a POST request to the server
       const response = await fetch(
         "http://localhost:8081/api/exam_mode?session_id=" +
           seshID +
@@ -62,6 +69,7 @@ function AddRoomDet() {
       const jsonData = await response.json();
       console.log("response json after submit,", jsonData);
 
+      // Check the response and display a success message
       if (jsonData.errCode == 0) {
         setSnackbarMessage("Exam Mode added successfully!");
         setSnackbarSeverity("success");
@@ -70,12 +78,14 @@ function AddRoomDet() {
         throw new Error("Failed to add Exam Mode");
       }
     } catch (error) {
+      // Display an error message if the request fails
       setSnackbarMessage("Failed to add Exam Mode.");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
   }
 
+  // Function to handle closing the snackbar
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

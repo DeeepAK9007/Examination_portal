@@ -15,6 +15,7 @@ import { enrollmentType } from "../types/myTypes";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Alert component for Snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -25,6 +26,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 const PopUp = (courseData: any) => {
   console.log("from Popup ", courseData.courseData.id);
 
+  // State for row data and selected rows
   const [rowData, setRowData] = useState([]);
   const [selectedRowData, setSelectedRowData] = useState<enrollmentType[]>([]);
   const [selectedRowData2, setSelectedRowData2] = useState<enrollmentType[]>(
@@ -41,6 +43,7 @@ const PopUp = (courseData: any) => {
     "success"
   );
 
+  // Custom header component for select all with cross icon
   const CustomHeaderCross = (props) => {
     const onButtonClick = () => {
       setFilteredRowData1([]);
@@ -61,6 +64,7 @@ const PopUp = (courseData: any) => {
     );
   };
 
+  // Custom header component for select all with refresh icon
   const CustomHeaderRefresh = (props) => {
     const onButtonClick = () => {
       props.api.refreshCells({ force: true });
@@ -81,6 +85,7 @@ const PopUp = (courseData: any) => {
     );
   };
 
+  // Column definitions for the data grids
   const [colDefs1, setColDefs1] = useState([
     {
       field: "SELECT ALL",
@@ -101,6 +106,7 @@ const PopUp = (courseData: any) => {
     },
   ]);
 
+  // State for storing enrollment data
   const [enrollmentData, setEnrollmentData] = useState<enrollmentType[]>([
     {
       user_type_enrollment_id: "",
@@ -108,6 +114,7 @@ const PopUp = (courseData: any) => {
     },
   ]);
 
+  // Fetch users when the component mounts
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -126,6 +133,7 @@ const PopUp = (courseData: any) => {
     fetchUsers();
   }, []);
 
+  // Handle row selection for the first grid
   const onSelectionChanged = async (params: any) => {
     const selectedRows = params.api.getSelectedRows();
     console.log("selected rows ", selectedRows);
@@ -166,6 +174,7 @@ const PopUp = (courseData: any) => {
     setSelectedRowData(selectedRows);
   };
 
+  // Handle row selection for the second grid
   const onSelectionChanged2 = async (params: any) => {
     const selectedRows = params.api.getSelectedRows();
     console.log("selected rows 2", selectedRows);
@@ -173,6 +182,7 @@ const PopUp = (courseData: any) => {
     setSelectedRowData2(selectedRows);
   };
 
+  // Handle Add button click
   const handleAddIcon = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
 
@@ -181,6 +191,7 @@ const PopUp = (courseData: any) => {
     }
   };
 
+  // Handle Remove button click
   const handleRemoveIcon = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
 
@@ -188,6 +199,7 @@ const PopUp = (courseData: any) => {
     setSelectedRowData([]);
   };
 
+  // Handle form submission
   const handdleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     try {
@@ -204,6 +216,7 @@ const PopUp = (courseData: any) => {
     }
   };
 
+  // Filter data based on search query for the first grid
   useEffect(() => {
     const filterData = () => {
       if (!searchQuery1) {
@@ -223,6 +236,7 @@ const PopUp = (courseData: any) => {
     filterData();
   }, [searchQuery1, rowData]);
 
+  // Filter data based on search query for the second grid
   useEffect(() => {
     const filterData = () => {
       if (!searchQuery2) {
@@ -242,6 +256,7 @@ const PopUp = (courseData: any) => {
     filterData();
   }, [searchQuery2, selectedRowData]);
 
+  // Handle Snackbar close
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

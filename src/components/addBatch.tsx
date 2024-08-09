@@ -4,6 +4,7 @@ import { batchType } from "../types/myTypes";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Custom Alert component using Material UI's Alert
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -12,6 +13,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddBatch() {
+  // State hooks for managing form data and snackbar notifications
   const [batchName, setBatchName] = useState<string>("");
   const [actStatus, setActStatus] = useState<string>("");
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -20,13 +22,7 @@ function AddBatch() {
     "success" | "error" | "warning"
   >("success");
 
-  const handleBatchNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setBatchName(event.target.value);
-    console.log(batchName);
-  };
-
+  // Function to handle form submission and add a new batch
   async function batchAdd(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
     if (!batchName || !actStatus) {
@@ -42,10 +38,12 @@ function AddBatch() {
       };
       const jsonobj = JSON.stringify(newobj);
 
+      // Encode object to base64
       const encode = btoa(jsonobj);
 
       const seshID = sessionStorage.getItem("key");
 
+      // Make a POST request to add the batch
       const response = await fetch(
         "http://localhost:8081/api/batch?session_id=" +
           seshID +
@@ -80,6 +78,7 @@ function AddBatch() {
     }
   }
 
+  // Handler for closing the snackbar
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -116,7 +115,7 @@ function AddBatch() {
               type="text"
               className="form-control"
               value={batchName}
-              onChange={handleBatchNameChange}
+              onChange={(e) => setBatchName(e.target.value)}
               required
             />
           </div>

@@ -4,6 +4,7 @@ import { addAttendance } from "../apis/backend";
 import { AddAttendProps } from "../types/myTypes";
 
 const AddAttend: React.FC<AddAttendProps> = ({ courseCode, courseName }) => {
+  // Extract relevant values and functions from context
   const {
     isCellClicked,
     setQueryHandler,
@@ -12,14 +13,14 @@ const AddAttend: React.FC<AddAttendProps> = ({ courseCode, courseName }) => {
     examid,
   } = useContext(AttendanceContext);
 
+  // Refs and states for managing component behavior
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [querytext, setQueryText] = useState<string>("");
   const [selectedAction, setSelectedAction] = useState<string>("");
   const [timeMap, setTimeMap] = useState<Map<string, string>>(new Map());
   const newTimeMap = new Map(timeMap);
 
-  // dropdown menu selection
-
+  // Effect to show dropdown menu when a cell is clicked
   useEffect(() => {
     if (isCellClicked && dropdownRef.current) {
       dropdownRef.current.classList.add("show");
@@ -28,18 +29,16 @@ const AddAttend: React.FC<AddAttendProps> = ({ courseCode, courseName }) => {
         dropdownMenu.classList.add("show");
       }
     }
-    setQueryHandler(querytext);
+    setQueryHandler(querytext); // Update query handler with current text
   }, [isCellClicked, querytext]);
 
-  // when clicking option
-
+  // Handle action button clicks (Mark Present/Absent)
   const handleActionClick = (action: string) => {
     setSelectedAction(action);
     setAttendanceHandler(action === "Mark Present" ? true : false);
   };
 
   // when submit button is clicked
-
   const handleSubmit = async () => {
     console.log("Selected Action:", selectedAction);
     console.log("attendance data from addAttendance: ", [
@@ -49,6 +48,7 @@ const AddAttend: React.FC<AddAttendProps> = ({ courseCode, courseName }) => {
         attendance: selectedAction === "Mark Present" ? "present" : "absent",
       },
     ]);
+    // Get current time and update the map
     const newTime = new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
@@ -57,6 +57,7 @@ const AddAttend: React.FC<AddAttendProps> = ({ courseCode, courseName }) => {
     newTimeMap.set(userid, newTime);
     localStorage.setItem(userid, newTime);
     setTimeMap(newTimeMap);
+    // Call API to add attendance
     await addAttendance({
       exam_schedule_id: examid,
       user_id: userid,

@@ -7,7 +7,9 @@ function ProgCord() {
       <NavBar />
       <div className="d-flex flex-column w-100 justify-content-between">
         <AddProgSched />
+        {/* Render the AddProgSched component to add program schedules */}
         <ProgCordSchedConf />
+        {/* Render the ProgCordSchedConf component to configure program schedules */}
       </div>
     </div>
   );

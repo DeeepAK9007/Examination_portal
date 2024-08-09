@@ -4,6 +4,7 @@ import { addExam_mode } from "../apis/backend";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Custom Alert component for Snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -12,6 +13,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddExamModelUp() {
+  // State variables for form fields and Snackbar
   const [dateTime, setDateTime] = useState<string>("");
   const [examName, setExamName] = useState<string>("");
   const [selectedCourse, setSelectedCourse] = useState<string>("");
@@ -23,6 +25,7 @@ function AddExamModelUp() {
   const [status, setStatus] = useState<string>("");
   const [mode, setMode] = useState<string>("");
 
+  // State for holding the exam data object
   const [examData, setExamData] = useState<examModeUpdateType>({
     date: "",
     examination_name: "",
@@ -36,12 +39,14 @@ function AddExamModelUp() {
     status: "",
   });
 
+  // Snackbar state variables
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<
     "success" | "error" | "warning"
   >("success");
 
+  // useEffect to update examData whenever any form field changes
   useEffect(() => {
     setExamData({
       date: dateTime,
@@ -67,8 +72,10 @@ function AddExamModelUp() {
     status,
   ]);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Check if required fields are filled
     if (!mode || !status) {
       setSnackbarMessage("Please fill all the required fields.");
       setSnackbarSeverity("warning");
@@ -77,10 +84,11 @@ function AddExamModelUp() {
     }
     try {
       console.log("examData: ", examData);
-      const res = await addExam_mode(examData);
+      const res = await addExam_mode(examData); // API call to add exam mode
       const jsonData = await res?.json();
       console.log("response json after submit,", jsonData);
 
+      // Check for success response
       if (jsonData.errCode == 0) {
         setSnackbarMessage("Course added successfully!");
         setSnackbarSeverity("success");
@@ -93,6 +101,7 @@ function AddExamModelUp() {
     }
   };
 
+  // Handle Snackbar close
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -134,6 +143,8 @@ function AddExamModelUp() {
               required
             />
           </div>
+
+          {/* Course selection field */}
           <div className="mb-3 form-group">
             <div
               className="palceholder ms-1"
@@ -165,6 +176,8 @@ function AddExamModelUp() {
               <option value="DMS">DMS</option>
             </select>
           </div>
+
+          {/* Invigilator selection field */}
           <div className="mb-3">
             <select
               name="Assign invigilator"
@@ -183,9 +196,11 @@ function AddExamModelUp() {
               <option value="Cipher">Cipher</option>
             </select>
           </div>
+
+          {/* Supervisor selection field */}
           <div className="mb-3">
             <select
-              name="Assign invigilator"
+              name="Assign supervisor"
               className="form-select"
               id="floatingSelect"
               aria-label="Floating label select example"
@@ -206,11 +221,11 @@ function AddExamModelUp() {
               className="palceholder ms-1"
               style={{ display: status ? "none" : "" }}
             >
-              <label htmlFor="file">Mode</label>
+              <label htmlFor="mode">Mode</label>
               <span className="star"> *</span>
             </div>
             <select
-              name="block"
+              name="mode"
               className="form-select"
               id="blockno"
               aria-label="Floating label select example"
@@ -218,8 +233,8 @@ function AddExamModelUp() {
               onChange={(e) => setMode(e.target.value)}
             >
               <option id="examrole" value="" disabled selected></option>
-              <option value="Active">Off-line</option>
-              <option value="InActive">On-line</option>
+              <option value="Off-line">Off-line</option>
+              <option value="On-line">On-line</option>
             </select>
           </div>
         </div>
@@ -273,7 +288,7 @@ function AddExamModelUp() {
           </div>
           <div className="mb-3">
             <select
-              name="Assign invigilator"
+              name="Assign instructor"
               className="form-select"
               id="floatingSelect"
               aria-label="Floating label select example"
@@ -302,11 +317,11 @@ function AddExamModelUp() {
               className="palceholder ms-1"
               style={{ display: status ? "none" : "" }}
             >
-              <label htmlFor="file">Status</label>
+              <label htmlFor="status">Status</label>
               <span className="star"> *</span>
             </div>
             <select
-              name="block"
+              name="status"
               className="form-select"
               id="blockno"
               aria-label="Floating label select example"

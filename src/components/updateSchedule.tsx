@@ -9,6 +9,7 @@ import parseISO from "date-fns/parseISO";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Custom Alert component for displaying snackbar notifications
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -18,6 +19,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 function UpdateSchedule() {
   const navigate = useNavigate();
+  // State variables for managing the form input values and UI states
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
@@ -52,6 +54,7 @@ function UpdateSchedule() {
   console.log("schedule id:", scheduleId);
   console.log("schedule obj", scheduleobj);
 
+  // State to manage the schedule data object
   const [scheduleData, setScheduleData] = useState<scheduleType>({
     date: "",
     examination_name: "",
@@ -64,6 +67,7 @@ function UpdateSchedule() {
     status: "",
   });
 
+  // useEffect to fetch and set the schedule data when the component is mounted
   useEffect(() => {
     const sideOperation = async () => {
       try {
@@ -112,6 +116,7 @@ function UpdateSchedule() {
     sideOperation();
   }, []);
 
+  // useEffect to update the scheduleData state whenever relevant form input states change
   useEffect(() => {
     if (scheduleId && scheduleobj) {
       const jsonobj = JSON.parse(atob(scheduleobj));
@@ -146,6 +151,7 @@ function UpdateSchedule() {
     status,
   ]);
 
+  // Function to handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (scheduleId) {
@@ -162,6 +168,7 @@ function UpdateSchedule() {
     }
   };
 
+  // Function to close the snackbar notification
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

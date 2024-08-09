@@ -11,6 +11,7 @@ import {
 } from "../apis/backend";
 import { incidentType, incident } from "../types/myTypes";
 
+// Toggle component for Yes/No switch
 const YesNoToggle = () => {
   const [isYes, setIsYes] = useState<boolean>(false);
 
@@ -32,6 +33,7 @@ const YesNoToggle = () => {
   );
 };
 
+// Photo component to display student photos
 interface PhotoComponentProps {
   value: string;
 }
@@ -47,10 +49,12 @@ const PhotoComponent: React.FC<PhotoComponentProps> = (props) => {
   );
 };
 
+// Props interface for the IncidentTab component
 interface studentId {
   id: string;
 }
 
+// IncidentTab component
 const IncidentTab: React.FC<studentId> = ({ id }) => {
   const { isCellClicked, setIsCellCliked, queryHandler, IncidentHandler } =
     useContext(IncidentContext);
@@ -69,6 +73,7 @@ const IncidentTab: React.FC<studentId> = ({ id }) => {
 
   console.log("query text from IncidentTab: ", queryHandler);
 
+  // Columns definition for ag-Grid
   const [colDefs, setColDefs] = useState([
     { field: "Name", headerCheckboxSelection: true, sort: "asc", flex: 1 },
     { field: "IncidentReported", flex: 1, cellRenderer: YesNoToggle },
@@ -77,8 +82,7 @@ const IncidentTab: React.FC<studentId> = ({ id }) => {
     { field: "Photo", sortable: true, flex: 1, cellRenderer: PhotoComponent },
   ]);
 
-  // handle cell click params
-
+  // Handle cell click events in the grid
   const onCellClicked = (params: any) => {
     console.log("params data from incident tab", params.data.Id);
     console.log("from cell clicked:", IncidentHandler);

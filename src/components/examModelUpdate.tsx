@@ -5,10 +5,10 @@ import AddExamModelUp from "./addExamModelU";
 function ExamModelUpdate() {
   return (
     <div className="d-flex flex-row">
-      <NavBar />
+      <NavBar />{/* Navigation bar component */}
       <div className="d-flex flex-column w-100 justify-content-between">
-        <AddExamModelUp />
-        <ExamModelUpdateTab />
+        <AddExamModelUp />{/* Component for adding a new exam model update */}
+        <ExamModelUpdateTab />{/* Component displaying the list of exam model updates */}
       </div>
     </div>
   );

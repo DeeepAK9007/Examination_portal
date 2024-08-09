@@ -9,12 +9,16 @@ import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 import { deletestuff } from "../types/myTypes";
 import { useNavigate } from "react-router-dom";
 
+// Type definition for custom button props
 type CustomButtonProps = {
   rowData: ExamTypeType;
 };
 
+// CustomButton component for edit and delete actions
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
+
+  // Edit exam type handler
   const editExamType = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
@@ -27,6 +31,8 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       }`
     );
   };
+
+  // Delete exam type handler
   const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
@@ -54,6 +60,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
     window.location.reload();
   };
 
+  // Render edit and delete icons
   return (
     <div className="d-flex gap-4 justify-content-around mt-2 ">
       <i
@@ -72,6 +79,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
   );
 };
 
+// Type definition for custom button renderer params
 type CustomButtonRendererParams = {
   data: ExamTypeType;
   value: any;
@@ -90,25 +98,30 @@ type CustomButtonRendererParams = {
   eParentOfValue: HTMLElement;
 };
 
+// Renderer for custom buttons in the grid
 const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
+// Props interface for the ExamTypeConfTab component
 interface ExamTypeConfTabProps {
   // queryText: string;
   // searchStatus: boolean;
 }
 
+// ExamTypeTab component
 const ExamTypeTab: React.FC<ExamTypeConfTabProps> = (
   {
     // queryText,
     // searchStatus,
   }
 ) => {
+  // State to hold exam types
   const [types, setTypes] = useState<getExamType[]>([]);
   // const [filteredTypes, setFilteredTypes] = useState<ExamTypeType[]>([]);
   // console.log("query text: ", queryText);
 
+  // Fetch exam types
   useEffect(() => {
     const fetchusers = async () => {
       try {
@@ -147,6 +160,7 @@ const ExamTypeTab: React.FC<ExamTypeConfTabProps> = (
   //   filterTypes();
   // }, [queryText, types]);
 
+  // Column definitions for the grid
   const [colDefs, setColDefs] = useState<ColDef<ExamTypeType, unknown>[]>([
     { field: "exam_type_name", headerName: "Type", flex: 1 },
     { field: "remark", headerName: "Remarks", flex: 1 },

@@ -4,6 +4,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied
 import { useState } from "react";
 import YesNoToggle from "./yesNoToggle";
 
+// Component for rendering an image
 interface PhotoComponentProps {
   value: string;
 }
@@ -19,7 +20,9 @@ const PhotoComponent: React.FC<PhotoComponentProps> = (props) => {
   );
 };
 
+// Main Component
 function IssueTab() {
+  // State to manage row data for the grid and it is hardcoded because it is not yet implemented
   const [rowData, setRowData] = useState([
     {
       Name: "Jonathan",
@@ -47,6 +50,7 @@ function IssueTab() {
     },
   ]);
 
+  // State to manage column definitions for the grid
   const [colDefs, setColDefs] = useState([
     { field: "Name", headerCheckboxSelection: true, sort: "asc", flex: 1 },
     { field: "IncidentReported", flex: 1, cellRenderer: YesNoToggle },
@@ -62,10 +66,10 @@ function IssueTab() {
         style={{ height: 250, width: "93%", overflowY: "auto" }}
       >
         <AgGridReact
-          rowSelection="multiple"
-          headerCheckboxSelection={true}
-          rowData={rowData}
-          columnDefs={colDefs}
+          rowSelection="multiple" // Allow multiple row selection
+          headerCheckboxSelection={true} // Add checkbox in the header for selecting all rows
+          rowData={rowData} // Data to be displayed in the grid
+          columnDefs={colDefs} // Column definitions
         />
       </div>
     </div>

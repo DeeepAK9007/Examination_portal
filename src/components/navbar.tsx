@@ -8,6 +8,7 @@ import { LoginContext } from "../context/loginContext";
 function NavBar() {
   let navigate = useNavigate();
 
+  // Type definition for dropdown state
   type DropdownState = {
     admin: boolean;
     examOffice: boolean;
@@ -15,6 +16,7 @@ function NavBar() {
     invigilator: boolean;
   };
 
+  // State for managing dropdown visibility
   const [dropdownOpen, setDropdownOpen] = useState<DropdownState>({
     admin: false,
     examOffice: false,
@@ -22,6 +24,7 @@ function NavBar() {
     invigilator: false,
   });
 
+  // Function to toggle dropdown visibility
   const toggleDropdown = (section: keyof DropdownState) => {
     setDropdownOpen({
       admin: false,
@@ -32,18 +35,20 @@ function NavBar() {
     });
   };
 
+  // Contexts for navigation and login state
   const { navitem, setNavItem } = useContext(NavbarContext);
   const [target, setTarget] = useState<string>("");
   const [col, setcol] = useState<boolean>(false);
 
   const logstat = useContext(LoginContext);
 
+  // Logout handler function
   const handleLogout = () => {
-    logstat.setIsLoggedIn(false);
-    sessionStorage.clear();
-    console.log("session storage length", sessionStorage.length);
+    logstat.setIsLoggedIn(false); // Update login state
+    sessionStorage.clear(); // Clear session storage
+    console.log("session storage length", sessionStorage.length); // Log session storage length
     navigate("/");
-    console.log("is logged in", logstat.isLoggedIn);
+    console.log("is logged in", logstat.isLoggedIn); // Log login status
   };
 
   return (
@@ -55,6 +60,7 @@ function NavBar() {
         className="d-flex flex-column col-xs-2"
         style={{ background: "#074E85", height: "90vh", width: "319px" }}
       >
+        {/* Header section with logo and institution name */}
         <div className="my-2">
           <p className="text-center mt-2">
             <img
@@ -72,12 +78,14 @@ function NavBar() {
 
         <hr className="border border-light w-100 m-1" />
 
+        {/* Navigation menu */}
         <div className="d-flex flex-column navbar navbar-nav-scroll">
           <div>
             <ul
               className="text-start d-flex flex-column h-75 gap-0 mx-4 navbar-nav"
               style={{ fontSize: "16px", color: "white" }}
             >
+              {/* Administration dropdown */}
               <li className="nav-item">
                 <p
                   className="btn dropdown-heading"
@@ -235,7 +243,7 @@ function NavBar() {
               </li>
 
               <br />
-
+              {/* Exam Office dropdown */}
               <li className="nav-item">
                 <p
                   className="btn dropdown-heading"
@@ -276,7 +284,7 @@ function NavBar() {
               </li>
 
               <br />
-
+              {/* Programme Co-ordinator link */}
               <li
                 className=" btn nav-item dropdown-heading"
                 onClick={() => {
@@ -294,7 +302,7 @@ function NavBar() {
               </li>
 
               <br />
-
+              {/* Course Instructor dropdown */}
               <li className="nav-item">
                 <p
                   className=" btn dropdown-heading"
@@ -381,7 +389,7 @@ function NavBar() {
               </li>
 
               <br />
-
+              {/* Invigilator dropdown */}
               <li className="nav-item">
                 <p
                   className="btn dropdown-heading"
@@ -449,6 +457,7 @@ function NavBar() {
           </div>
         </div>
       </div>
+      {/* Footer section with user info and logout button */}
       <div
         className="d-flex flex-row justify-content-around"
         style={{ backgroundColor: "#070241", height: "10vh" }}

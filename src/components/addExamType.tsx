@@ -4,6 +4,7 @@ import { ExamTypeType } from "../types/myTypes";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Custom alert component for Snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -12,6 +13,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddRoomDet() {
+  // State variables to manage form inputs and Snackbar
   const [examType, setExamType] = useState<string>("");
   const [remarks, setRemarks] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
@@ -21,8 +23,11 @@ function AddRoomDet() {
     "success" | "error" | "warning"
   >("success");
 
+  // Function to handle form submission
   async function addExamType(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
+
+    // Check if all required fields are filled
     if (!examType || !remarks || !actStatus) {
       setSnackbarMessage("Please fill all the required fields!");
       setSnackbarSeverity("warning");
@@ -45,6 +50,7 @@ function AddRoomDet() {
       const seshID = sessionStorage.getItem("key");
       console.log(seshID);
 
+      // Send a POST request to add the new exam type
       const response = await fetch(
         "http://localhost:8081/api/exam_type?session_id=" +
           seshID +
@@ -61,6 +67,8 @@ function AddRoomDet() {
       console.log(response);
       const jsonData = await response?.json();
       console.log("response json after submit,", jsonData);
+
+      // Check response and set appropriate Snackbar message and severity
       if (jsonData.errCode == 0) {
         setSnackbarMessage("ExamType added successfully!");
         setSnackbarSeverity("success");
@@ -75,6 +83,7 @@ function AddRoomDet() {
     }
   }
 
+  // Function to handle Snackbar close event
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

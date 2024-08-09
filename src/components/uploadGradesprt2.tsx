@@ -2,11 +2,11 @@ import { useState } from "react";
 import UploadGradesPart2Tab from "./uploadGradesprt2tab";
 
 function UploadGradesPart2() {
-  const [queryText, setQueryText] = useState<string>("");
-  const [searchStatus, setSearchStatus] = useState<boolean>(false);
+  const [queryText, setQueryText] = useState<string>(""); // State for search query text
+  const [searchStatus, setSearchStatus] = useState<boolean>(false); // State for search status
 
-  const termId = new URLSearchParams(location.search).get("id");
-  const corsse = new URLSearchParams(location.search).get("course_nm");
+  const termId = new URLSearchParams(location.search).get("id"); // Get 'id' parameter from URL
+  const corsse = new URLSearchParams(location.search).get("course_nm"); // Get 'course_nm' parameter from URL
   console.log("term id here", termId);
   console.log("term id here", corsse);
 

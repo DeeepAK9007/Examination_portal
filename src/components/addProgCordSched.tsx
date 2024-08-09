@@ -7,6 +7,7 @@ import { courseType } from "../types/myTypes";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Alert component using Material-UI's Alert
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -15,12 +16,13 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddProgSched() {
+  // State for managing date range selection
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
   ]);
 
-  // Handle the date range change
+  // Handle changes in the date range picker
   const handleDateRangeChange = (value: [Date | null, Date | null] | null) => {
     if (value) {
       setDateRange(value);
@@ -28,6 +30,8 @@ function AddProgSched() {
       setDateRange([null, null]);
     }
   };
+
+  // State for managing form inputs
   const [examName, setExamName] = useState<string>("");
   const [selectedCourse, setSelectedCourse] = useState<string>("");
   const [roomNumber, setRoomNumber] = useState<string>("");
@@ -35,7 +39,8 @@ function AddProgSched() {
   const [status, setStatus] = useState<string>("");
   const [courses, setCourses] = useState<courseType[]>([]);
   const [rooms, setRooms] = useState<roomMatchedType[]>([]);
-
+  
+  // State for managing schedule data to be submitted
   const [scheduleData, setScheduleData] = useState<addProgCordType>({
     date: "",
     examination_name: "",
@@ -44,13 +49,15 @@ function AddProgSched() {
     remarks: "",
     status: "",
   });
-
+  
+  // Snackbar state for notifications
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<
     "success" | "error" | "warning"
   >("success");
 
+  // Fetch courses and rooms from the API
   useEffect(() => {
     const fetchUsers = async () => {
       const res = await getAllCourses();
@@ -63,6 +70,7 @@ function AddProgSched() {
     fetchUsers();
   }, []);
 
+  // Update scheduleData whenever form inputs change
   useEffect(() => {
     console.log("date range", dateRange);
     setScheduleData({
@@ -75,8 +83,10 @@ function AddProgSched() {
     });
   }, [dateRange, examName, selectedCourse, roomNumber, remark, status]);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Check if all required fields are filled
     if (!dateRange || !examName || !selectedCourse || !roomNumber || !status) {
       setSnackbarMessage("Please fill all the required fields.");
       setSnackbarSeverity("warning");
@@ -102,6 +112,7 @@ function AddProgSched() {
     }
   };
 
+  // Handle snackbar close
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -110,7 +121,7 @@ function AddProgSched() {
       return;
     }
     setSnackbarOpen(false);
-    window.location.reload();
+    window.location.reload();// Reload page after snackbar closes
   };
 
   return (

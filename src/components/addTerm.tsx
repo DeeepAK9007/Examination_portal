@@ -6,6 +6,7 @@ import "rsuite/dist/rsuite.min.css";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Custom alert component for Snackbar notifications
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -14,12 +15,13 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddTerm() {
+  // State to manage the date range selected by the user
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
   ]);
 
-  // Handle the date range change
+  // Handler to update the date range state
   const handleDateRangeChange = (value: [Date | null, Date | null] | null) => {
     if (value) {
       setDateRange(value);
@@ -27,9 +29,13 @@ function AddTerm() {
       setDateRange([null, null]);
     }
   };
+
+  // State to manage the term name, date time, and status
   const [termName, setTermName] = useState<string>("");
   const [dateTime, setDateTime] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+
+  // State to manage Snackbar notifications
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<
@@ -40,6 +46,7 @@ function AddTerm() {
 
   const dates = dateTime.split("-");
 
+  // State to store term data for submission
   const [termData, setTermData] = useState<termType>({
     term_name: "",
     start_date: "",
@@ -47,6 +54,7 @@ function AddTerm() {
     status: "",
   });
 
+  // Effect to update termData state whenever the termName, dateTime, or status changes
   useEffect(() => {
     setTermData({
       term_name: termName,
@@ -56,8 +64,10 @@ function AddTerm() {
     });
   }, [termName, dateTime, status]);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Validate required fields
     if (!termName || !dateRange || !status) {
       setSnackbarMessage("Please fill all the required fields.");
       setSnackbarSeverity("warning");
@@ -65,24 +75,28 @@ function AddTerm() {
       return;
     }
     try {
+      // Send term data to the server
       console.log("termData: ", termData);
       const response = await addOneTerm(termData);
+      console.log("response after submit,", response);
 
       const jsonData = await response?.json();
       console.log("response json after submit,", jsonData);
 
-      if (jsonData.errCode == 0) {
+      if (jsonData.errCode === 0 || jsonData.message === "Success") {
         setSnackbarMessage("Term added successfully!");
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
       }
     } catch (error) {
+      console.log("error ", error);
       setSnackbarMessage("Failed to add Term.");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
   };
 
+  // Handler to close the Snackbar
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -91,7 +105,7 @@ function AddTerm() {
       return;
     }
     setSnackbarOpen(false);
-    window.location.reload();
+    window.location.reload(); // Reload the page after closing Snackbar
   };
 
   return (
@@ -101,11 +115,13 @@ function AddTerm() {
       </p>
       <hr style={{ width: "95%", margin: "auto" }} />
 
+      {/* Form for adding a new term */}
       <form
         className="d-flex flex-row jutify-content-evenly w-100"
         onSubmit={handleSubmit}
       >
         <div className="d-flex flex-column ms-5 w-50">
+          {/* Input for term name */}
           <div className="mb-3 mt-5 form-group">
             <div
               className="palceholder"
@@ -125,6 +141,7 @@ function AddTerm() {
           </div>
         </div>
         <div className="d-flex flex-column ms-5 w-50 me-5">
+          {/* Date range picker for term dates */}
           <div className="mb-3 mt-5 form-group">
             <div
               className="palceholder"
@@ -137,13 +154,13 @@ function AddTerm() {
               name="datetime"
               format="MM/dd/yyyy hh:mm aa"
               label="StartDate ~ EndDate"
-              // caretAs={faCalendar}
               showMeridian
               value={dateRange}
               onChange={handleDateRangeChange}
               style={{ width: 730, fontSize: "5em" }}
             />
           </div>
+          {/* Dropdown for status selection */}
           <div className="mb-3 form-group">
             <div
               className="palceholder ms-1"
@@ -165,6 +182,7 @@ function AddTerm() {
               <option value="InActive">InActive</option>
             </select>
           </div>
+          {/* Submit button */}
           <div className="d-flex justify-content-end mb-3">
             <button
               type="submit"
@@ -176,6 +194,7 @@ function AddTerm() {
           </div>
         </div>
       </form>
+      {/* Snackbar for displaying notifications */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}

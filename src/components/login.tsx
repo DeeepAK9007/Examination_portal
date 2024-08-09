@@ -8,20 +8,26 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 function Login() {
-  const navigate = useNavigate();
-  const { user, setUser, isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
+  const navigate = useNavigate(); // Hook for navigation
+  const { user, setUser, isLoggedIn, setIsLoggedIn } = useContext(LoginContext); // Destructure login context
 
+  // State to manage form data
   const [formData, setFormData] = useState<User>({
     email_id: "",
     password: "",
   });
+
+  // State to manage error messages
   const [error, setError] = useState("");
+
+  // State to manage Snackbar notification
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "error", // 'success' | 'error' | 'warning' | 'info'
   });
 
+  // Effect to update user context and check login credentials
   useEffect(() => {
     setUser(formData);
     const lowerCaseName = formData.email_id.toLowerCase();
@@ -35,12 +41,16 @@ function Login() {
     }
   }, [formData]);
 
+  // Handler to close Snackbar
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
+  // Handler for form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Validation checks and setting Snackbar messages
     if (!formData.email_id && !formData.password) {
       setSnackbar({
         open: true,
@@ -66,6 +76,8 @@ function Login() {
 
     setIsLoggedIn(true);
     const lowerCaseName = formData.email_id.toLowerCase();
+
+    // Credential checks and handling login logic
     if (
       lowerCaseName === "admin@rasp.com" &&
       formData.password === "admin@123"
@@ -77,9 +89,9 @@ function Login() {
       });
 
       const loginObj: User = formData;
-      const ssid = await login(loginObj);
-      sessionStorage.setItem("key", ssid);
-      navigate("/user");
+      const ssid = await login(loginObj); // API call to login
+      sessionStorage.setItem("key", ssid); // Store session ID in sessionStorage
+      navigate("/user"); // Navigate to user page
     } else if (lowerCaseName !== "admin@rasp.com") {
       setError("Invalid email");
       setSnackbar({
@@ -112,6 +124,7 @@ function Login() {
         minHeight: "100vh",
       }}
     >
+      {/* Header with navigation links and settings dropdown */}
       <div className="d-flex flex-row justify-content-end py-3 px-4">
         <a href="/" className="pe-3 fw-bold" style={{ textDecoration: "none" }}>
           Home
@@ -147,6 +160,8 @@ function Login() {
           </ul>
         </div>
       </div>
+
+      {/* Main login container */}
       <div className="container-fluid d-flex flex-column flex-md-row justify-content-center align-items-center shadow-sm bg-body-tertiary rounded w-75 px-0">
         <div
           className="d-flex flex-column justify-content-between rounded-start h-100 w-100"

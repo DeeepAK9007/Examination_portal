@@ -8,8 +8,8 @@ function Term()
         <div className="d-flex flex-row">
             <NavBar/> 
             <div className="d-flex flex-column w-100 justify-content-between">
-                <AddTerm/>
-                <TermConf/>
+                <AddTerm/>{/* Render the AddTerm component */}
+                <TermConf/>{/* Render the TermConf component */}
             </div>
         </div>
     );

@@ -6,6 +6,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React from "react";
 
+// Custom Alert component using Material UI's Alert
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -14,12 +15,14 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddCourseDet() {
+  // State hooks for managing form data
   const [CourseCode, setCourseCode] = useState<string>("");
   const [Instructor, setInstructor] = useState<string>("");
   const [CourseName, setCourseName] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [users, setUsers] = useState<{ name: string }[]>([]);
 
+  // State hook for managing course data object
   const [courseData, setCourseData] = useState<courseType>({
     course_name: "",
     instructor_id: "",
@@ -27,12 +30,14 @@ function AddCourseDet() {
     status: "",
   });
 
+  // State hooks for managing snackbar notifications
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<
     "success" | "error" | "warning"
   >("success");
 
+  // Update courseData state when form fields change
   useEffect(() => {
     setCourseData({
       course_name: CourseName,
@@ -42,6 +47,7 @@ function AddCourseDet() {
     });
   }, [CourseName, Instructor, CourseCode, status]);
 
+  // Fetch users with the role of "Faculty"
   useEffect(() => {
     const fetchusers = async () => {
       try {
@@ -56,8 +62,10 @@ function AddCourseDet() {
     fetchusers();
   }, []);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Validate form inputs
     if (!CourseCode || !Instructor || !CourseName || !status) {
       setSnackbarMessage("Please fill all the required fields.");
       setSnackbarSeverity("warning");
@@ -83,6 +91,7 @@ function AddCourseDet() {
     }
   };
 
+  // Handle snackbar close event
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

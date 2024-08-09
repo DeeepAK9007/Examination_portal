@@ -6,6 +6,7 @@ import { getUsersByRole, updateOrDeleteCourse } from "../apis/backend";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Custom Alert component with ref forwarding for Snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -14,7 +15,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function UpdateCourse() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook for navigation
 
   const [CourseCode, setCourseCode] = useState<string>("");
   const [Instructor, setInstructor] = useState<string>("");
@@ -22,9 +23,11 @@ function UpdateCourse() {
   const [status, setStatus] = useState<string>("");
   const [users, setUsers] = useState<{ name: string }[]>([]);
 
-  const location = useLocation();
-  const courseId = new URLSearchParams(location.search).get("id");
-  const courseobj = new URLSearchParams(location.search).get("course");
+  const location = useLocation(); // Hook to access location object
+  const courseId = new URLSearchParams(location.search).get("id"); // Extract course ID from URL
+  const courseobj = new URLSearchParams(location.search).get("course"); // Extract course object from URL
+
+  // Snackbar state variables for managing notification messages
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
@@ -32,6 +35,8 @@ function UpdateCourse() {
   );
   console.log("Course id:", courseId);
   console.log("Course obj", courseobj);
+
+  // State variable to hold course data for updating
   const [courseData, setCourseData] = useState<courseType>({
     id: "",
     course_name: "",
@@ -40,6 +45,7 @@ function UpdateCourse() {
     status: "",
   });
 
+  // useEffect to initialize form fields based on course data from the URL
   useEffect(() => {
     if (courseId && courseobj) {
       const jsonobj = JSON.parse(atob(courseobj));
@@ -52,6 +58,7 @@ function UpdateCourse() {
     }
   }, []);
 
+  // useEffect to update course data when input fields change
   useEffect(() => {
     if (courseId && courseobj) {
       const jsonobj = JSON.parse(atob(courseobj));
@@ -68,6 +75,7 @@ function UpdateCourse() {
     }
   }, [CourseName, Instructor, CourseCode, status]);
 
+  // Fetch users with the role of "Faculty" from the backend
   useEffect(() => {
     const fetchusers = async () => {
       try {
@@ -82,6 +90,7 @@ function UpdateCourse() {
     fetchusers();
   }, []);
 
+  // Function to handle form submission for course updates
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (courseId) {
@@ -98,6 +107,7 @@ function UpdateCourse() {
     }
   };
 
+  // Function to handle Snackbar close event
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

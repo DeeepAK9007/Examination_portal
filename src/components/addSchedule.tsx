@@ -12,6 +12,7 @@ import { courseType } from "../types/myTypes";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Alert component for showing Snackbar messages
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -20,6 +21,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddSched() {
+  // State variables
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
@@ -43,12 +45,14 @@ function AddSched() {
   const [remark, setRemark] = useState<string>("");
   const [status, setStatus] = useState<string>("");
 
+  // State variables to store all the users corresponding to thier role
   const [invigilators, setInvigilators] = useState<{ name: string }[]>([]);
   const [instructors, setInstructors] = useState<{ name: string }[]>([]);
   const [supervisors, setSupervisors] = useState<{ name: string }[]>([]);
   const [courses, setCourses] = useState<courseType[]>([]);
   const [rooms, setRooms] = useState<roomMatchedType[]>([]);
 
+  // State variables for snack message
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<
@@ -67,6 +71,7 @@ function AddSched() {
     status: "",
   });
 
+  // Update scheduleData whenever the relevant state changes
   useEffect(() => {
     if (dateRange) {
       setScheduleData({
@@ -93,6 +98,7 @@ function AddSched() {
     status,
   ]);
 
+  // Fetch users, courses, and rooms
   useEffect(() => {
     const fetchUsers = async () => {
       const invigilators = await getUsersByRole("Invigilator");
@@ -113,8 +119,10 @@ function AddSched() {
 
   console.log("courses", courses);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Check for required fields
     if (!dateRange || !examName || !selectedCourse || !roomNumber || !status) {
       setSnackbarMessage("Please fill all the required fields.");
       setSnackbarSeverity("warning");
@@ -128,8 +136,9 @@ function AddSched() {
       const jsonData = await response?.json();
       console.log("response json after submit,", jsonData);
 
+      // Check if schedule was added successfully
       if (jsonData.errCode == 0) {
-        setSnackbarMessage("Room added successfully!");
+        setSnackbarMessage("Schedule added successfully!");
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
       }
@@ -140,6 +149,7 @@ function AddSched() {
     }
   };
 
+  // Close Snackbar and refresh the page
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -148,7 +158,7 @@ function AddSched() {
       return;
     }
     setSnackbarOpen(false);
-    window.location.reload();
+    window.location.reload(); // Refresh the page after Snackbar closes
   };
 
   return (

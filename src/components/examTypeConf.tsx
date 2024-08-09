@@ -2,6 +2,7 @@ import ExamTypeTab from "./examTypeConfTab";
 // import { useState } from "react";
 
 function ExamTypeConf() {
+  // State variables for search functionality (currently commented out)
   // const [queryText, setQueryText] = useState<string>("");
   // const [searchStatus, setSearchStatus] = useState<boolean>(false);
   return (
@@ -49,6 +50,7 @@ function ExamTypeConf() {
           </button>
         </div> */}
       </div>
+      {/* Component for displaying exam type configurations */}
       {/* <ExamTypeTab queryText={queryText} searchStatus={searchStatus} /> */}
       <ExamTypeTab />
     </div>

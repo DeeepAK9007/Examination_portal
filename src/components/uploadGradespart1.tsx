@@ -2,7 +2,9 @@ import { useState } from "react";
 import UploadGradesPart1Tab from "./uploadGradespart1tab";
 
 function UploadGradesPart1() {
+  // State to store the search query text
   const [queryText, setQueryText] = useState<string>("");
+  // State to track the search status (trigger search action)
   const [searchStatus, setSearchStatus] = useState<boolean>(false);
   return (
     <div>

@@ -4,6 +4,7 @@ import { RoomType } from "../types/myTypes";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Alert component using Material-UI's Alert
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -12,10 +13,13 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddRoomDet() {
+  // State for managing room details
   const [roomNumber, setRoomNumber] = useState<string>("");
   const [roomCapacity, setCapacity] = useState<number | undefined>(undefined);
   const [selectedBlock, setSelectedBlock] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
+
+  // Snackbar state for notifications
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "warning">(
@@ -27,6 +31,7 @@ function AddRoomDet() {
     console.log(event.target.value);
   };
 
+  // Handle form submission
   async function addSingRoom(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
     if(!roomNumber || !selectedBlock || !roomCapacity || !actStatus){
@@ -36,6 +41,7 @@ function AddRoomDet() {
       return;
     }
     try {
+      // Create a new room object
       const newRoom: RoomType = {
         room_number: roomNumber,
         block: selectedBlock,
@@ -44,14 +50,18 @@ function AddRoomDet() {
       };
 
       console.log(newRoom);
-
+      
+      // Convert the room object to JSON, then encode it
       const jsonobj = JSON.stringify(newRoom);
       console.log(jsonobj);
       const encode = btoa(jsonobj);
       console.log(encode);
+
+      // Retrieve session ID from sessionStorage
       const seshID = sessionStorage.getItem("key");
       console.log(seshID);
 
+      // Send the new room data to the server
       const response = await fetch(
         "http://localhost:8081/api/room?session_id=" +
           seshID +
@@ -66,6 +76,8 @@ function AddRoomDet() {
         }
       );
       console.log(response);
+
+      // Handle the server response
       const jsonData = await response?.json();
       console.log("response json after submit,", jsonData);
       if (jsonData.errCode == 0) {
@@ -82,6 +94,7 @@ function AddRoomDet() {
     }
   }
 
+  // Handle snackbar close
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -90,7 +103,7 @@ function AddRoomDet() {
       return;
     }
     setSnackbarOpen(false);
-    window.location.reload();
+    window.location.reload();// Reload page after snackbar closes
   };
 
   return (

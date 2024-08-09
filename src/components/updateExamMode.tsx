@@ -7,6 +7,7 @@ import { updateOrDeleteExamMode } from "../apis/backend";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Creating a custom Alert component with forwardRef for Material-UI Snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -15,19 +16,22 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function UpdateExamMode() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook for programmatic navigation
+  // initialize states
   const [examMode, setExamMode] = useState<string>("");
   const [remmarks, setRemmarks] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
+
+  // states for snack bar message
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
 
-  const location = useLocation();
-  const examModeId = new URLSearchParams(location.search).get("id");
-  const exammodeobj = new URLSearchParams(location.search).get("exammode");
+  const location = useLocation(); // Hook to access the current location
+  const examModeId = new URLSearchParams(location.search).get("id"); // Extracting the exam mode ID from the query parameters
+  const exammodeobj = new URLSearchParams(location.search).get("exammode"); // Extracting the exam mode object from the query parameters
   console.log("examMode id:", examModeId);
   const [examModeData, setExamModeData] = useState<ExamModeType>({
     id: "",
@@ -37,8 +41,9 @@ function UpdateExamMode() {
   });
 
   useEffect(() => {
+    // Effect to populate the form fields when the component mounts
     if (examModeId && exammodeobj) {
-      const jsonobj = JSON.parse(atob(exammodeobj));
+      const jsonobj = JSON.parse(atob(exammodeobj)); // Decoding and parsing the exam mode object
       setExamMode(jsonobj.exam_mode_name);
       setRemmarks(jsonobj.remark);
       setActStat(jsonobj.status);
@@ -48,6 +53,7 @@ function UpdateExamMode() {
   }, []);
 
   useEffect(() => {
+    // Decoding and parsing the exam mode object
     if (examModeId && exammodeobj) {
       const jsonobj = JSON.parse(atob(exammodeobj));
       console.log("jsonobj", jsonobj);
@@ -62,6 +68,7 @@ function UpdateExamMode() {
     }
   }, [examMode, remmarks, actStatus]);
 
+  // Function to handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (examModeId) {
@@ -79,6 +86,7 @@ function UpdateExamMode() {
     }
   };
 
+  // Function to handle Snackbar close event
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

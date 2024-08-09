@@ -8,12 +8,14 @@ import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 import { deletestuff } from "../types/myTypes";
 import { useNavigate } from "react-router-dom";
 
+// CustomButton component for editing and deleting rows
 type CustomButtonProps = {
   rowData: userMappedType;
 };
 
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
+  // Handle edit button click
   const editUser = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
@@ -24,6 +26,8 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       `/editUser?user=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
     );
   };
+
+  // Handle delete button click
   const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
@@ -69,6 +73,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
   );
 };
 
+// Renderer for custom button cells in the grid
 type CustomButtonRendererParams = {
   data: userMappedType;
   value: any;
@@ -96,21 +101,24 @@ interface UserTabProps {
   searchStatus: boolean;
 }
 
+// Main Component for displaying user data in a grid
 const UserCourseConfTab: React.FC<UserTabProps> = ({
   queryText,
   searchStatus,
 }) => {
-  const [obt_users, setObtUsers] = useState<userMappedType[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<userMappedType[]>([]);
+  const [obt_users, setObtUsers] = useState<userMappedType[]>([]); // All users data
+  const [filteredUsers, setFilteredUsers] = useState<userMappedType[]>([]); // Filtered users data
   console.log("query text: ", queryText);
 
   useEffect(() => {
+    // Fetch users from backend
     const fetchusers = async () => {
       try {
         const res: getuserType[] = await getAllUsers();
 
         console.log("res: ", res);
 
+        // Map the response to match the grid's expected format
         const mappedRowData = res.map((row) => ({
           id: row.id,
           roll_number: row.roll_number,
@@ -130,6 +138,7 @@ const UserCourseConfTab: React.FC<UserTabProps> = ({
   }, []);
 
   useEffect(() => {
+    // Filter users based on query text
     const filterUsers = () => {
       if (!queryText) {
         setFilteredUsers(obt_users);
@@ -147,6 +156,7 @@ const UserCourseConfTab: React.FC<UserTabProps> = ({
     filterUsers();
   }, [queryText, obt_users]);
 
+  // Define column definitions for the grid
   const [colDefs, setColDefs] = useState<ColDef<userMappedType, unknown>[]>([
     {
       field: "roll_number",

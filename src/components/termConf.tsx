@@ -2,7 +2,9 @@ import TermConfTab from "./termConfTab";
 import { useState } from "react";
 
 function TermConf() {
+  // State for handling search query text
   const [queryText, setQueryText] = useState<string>("");
+  // State for handling search status
   const [searchStatus, setSearchStatus] = useState<boolean>(false);
   return (
     <div>
@@ -69,6 +71,7 @@ function TermConf() {
           </button>
         </div>
       </div>
+      {/* Render the TermConfTab component with queryText and searchStatus props */}
       <TermConfTab queryText={queryText} searchStatus={searchStatus} />
     </div>
   );

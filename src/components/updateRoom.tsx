@@ -7,6 +7,7 @@ import { updateOrDeleteRoom } from "../apis/backend";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Creating a custom Alert component using forwardRef for Material-UI Snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -15,20 +16,23 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function UpdateRoom() {
-  const navigate = useNavigate();
+  const navigate = useNavigate();// Hook for programmatic navigation
+  // intialize states for input values
   const [roomNumber, setRoomNumber] = useState<string>("");
   const [roomCapacity, setCapacity] = useState<number | undefined>(undefined);
   const [selectedBlock, setSelectedBlock] = useState<string>("");
   const [actStatus, setActStat] = useState<string>("");
+
+  // initialize states for snack bar messages
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
 
-  const location = useLocation();
-  const roomId = new URLSearchParams(location.search).get("id");
-  const roomobj = new URLSearchParams(location.search).get("room");
+  const location = useLocation();// Hook to access the current location
+  const roomId = new URLSearchParams(location.search).get("id");// Extracting room ID from query parameters
+  const roomobj = new URLSearchParams(location.search).get("room");// Extracting room object from query parameters
   console.log("Room id:", roomId);
   const [roomData, setRoomData] = useState<roomMatchedType>({
     id: "",
@@ -39,8 +43,9 @@ function UpdateRoom() {
   });
 
   useEffect(() => {
+    // Effect to populate form fields with existing data
     if (roomId && roomobj) {
-      const jsonobj = JSON.parse(atob(roomobj));
+      const jsonobj = JSON.parse(atob(roomobj));// Decoding and parsing room object
       setRoomNumber(jsonobj.room_number);
       setCapacity(jsonobj.capacity);
       setSelectedBlock(jsonobj.block);
@@ -51,9 +56,11 @@ function UpdateRoom() {
   }, []);
 
   useEffect(() => {
+    // Effect to update room data state when form fields change
     if (roomId && roomobj) {
-      const jsonobj = JSON.parse(atob(roomobj));
+      const jsonobj = JSON.parse(atob(roomobj));// Decoding and parsing room object
       console.log(jsonobj);
+      // updating room data
       setRoomData({
         id: roomId,
         room_number: roomNumber ? roomNumber : jsonobj.room_number,
@@ -66,11 +73,12 @@ function UpdateRoom() {
     }
   }, [roomNumber, roomCapacity, selectedBlock, actStatus]);
 
+  // Function to handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (roomId) {
       console.log("RoomData: ", roomData);
-      await updateOrDeleteRoom(roomId, roomData, "MODIFY");
+      await updateOrDeleteRoom(roomId, roomData, "MODIFY");// Updating room using API
       setSnackbarMessage("Room updated successfully!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
@@ -83,6 +91,7 @@ function UpdateRoom() {
     }
   };
 
+  // Function to handle Snackbar close event
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

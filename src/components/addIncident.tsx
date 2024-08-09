@@ -6,13 +6,15 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { AddAttendProps } from "../types/myTypes";
 
 const AddIncident: React.FC<AddAttendProps> = ({ courseCode, courseName }) => {
+  // Use IncidentContext to access context values and functions
   const { isCellClicked, setQueryHandler } = useContext(IncidentContext);
 
+  // Ref for the dropdown element
   const dropdownRef = useRef<HTMLDivElement>(null);
+  // State for managing the search query text
   const [querytext, setQueryText] = useState<string>("");
 
-  // dropdown opening function
-
+  // Effect to handle the modal display based on isCellClicked and update query handler
   useEffect(() => {
     if (isCellClicked && dropdownRef.current) {
       const modalElement = dropdownRef.current.querySelector("#exampleModal");

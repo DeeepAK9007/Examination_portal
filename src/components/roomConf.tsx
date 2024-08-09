@@ -2,7 +2,9 @@ import RoomConfTab from "./roomConfTab";
 import { useState } from "react";
 
 function RoomConf() {
+  // State to store the query text from the search input
   const [queryText, setQueryText] = useState<string>("");
+  // State to track whether the search button has been clicked
   const [searchStatus, setSearchStatus] = useState<boolean>(false);
 
   return (

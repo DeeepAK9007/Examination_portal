@@ -10,33 +10,49 @@ import { deletestuff } from "../types/myTypes";
 import { useNavigate } from "react-router-dom";
 import { getExamModeTypes } from "../types/myTypes";
 
+// Defining props for the CustomButton component
 type CustomButtonProps = {
   rowData: ExamModeType;
 };
 
+// Component for rendering custom buttons in grid cells for editing and deleting exam modes
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
+
+  // Function to handle the edit action
   const editExamMode = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
     console.log(rowData.id);
+
+    // Retrieve session ID from session storage
     const seshID = sessionStorage.getItem("key");
     console.log(seshID);
+
+    // Navigate to the edit exam mode page with the encoded row data and ID
     navigate(
       `/editExamMode?exammode=${btoa(JSON.stringify(rowData))}&&id=${
         rowData.id
       }`
     );
   };
+
+  // Function to handle the delete action
   const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
     console.log(rowData.id);
+
+    // Retrieve session ID from session storage
     const seshID = sessionStorage.getItem("key");
     console.log("&resource=id:" + rowData.id);
+
+    // Prepare the data for deletion
     const temp: deletestuff = { id: rowData.id };
     const targ = JSON.stringify(temp);
     const enc = btoa(targ);
+
+    // Send a DELETE request to the backend
     const resource = await fetch(
       "http://localhost:8081/api/exam_mode?session_id=" +
         seshID +
@@ -52,6 +68,8 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
       }
     );
     console.log("result:", resource);
+
+    // Reload the page to update the data
     console.log("now reloading");
     window.location.reload();
   };
@@ -74,6 +92,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
   );
 };
 
+// Defining parameters for the custom button renderer
 type CustomButtonRendererParams = {
   data: ExamModeType;
   value: any;
@@ -92,6 +111,7 @@ type CustomButtonRendererParams = {
   eParentOfValue: HTMLElement;
 };
 
+// Renderer component for custom buttons in the grid
 const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
@@ -113,11 +133,13 @@ const ExamModeTab: React.FC<ExamModeTabProps> = (
   // );
   // console.log("query text: ", queryText);
 
+  // Fetch exam modes from the backend
   useEffect(() => {
     const fetchusers = async () => {
       try {
-        const res: getModeTypes[] = await getAllModes();
+        const res: getModeTypes[] = await getAllModes(); // Fetch all modes from backend
 
+        // Map the response data to the required format
         const mappedRowData: getExamModeTypes[] = res.map((row) => ({
           id: row.id,
           exam_mode_name: row.exam_mode_name,
@@ -125,12 +147,13 @@ const ExamModeTab: React.FC<ExamModeTabProps> = (
           status: row.status == "Active" ? true : false,
         }));
 
+        // Set the modes state with the mapped data
         setModes(mappedRowData);
       } catch (error) {
         console.log("Error fetching data:", error);
       }
     };
-    fetchusers();
+    fetchusers(); // Invoke the fetch function
   }, []);
 
   // useEffect(() => {
@@ -151,6 +174,7 @@ const ExamModeTab: React.FC<ExamModeTabProps> = (
   //   filterExamModes();
   // }, [queryText, modes]);
 
+  // Define column definitions for the grid
   const [colDefs, setColDefs] = useState<ColDef<ExamModeType, unknown>[]>([
     {
       field: "exam_mode_name",

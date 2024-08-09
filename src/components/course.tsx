@@ -1,8 +1,6 @@
 import AddCourseDet from "./addCourseDet";
-// import AddTerm from "./addTerm";
 import CourseConf from "./courseConf";
 import NavBar from "./navbar";
-// import TermConf from "./termConf";
 
 function Course() {
   return (
@@ -10,7 +8,9 @@ function Course() {
       <NavBar />
       <div className="d-flex flex-column w-100 justify-content-between">
         <AddCourseDet />
+        {/* Component to handle adding course details */}
         <CourseConf />
+        {/* Component to handle course configuration */}
       </div>
     </div>
   );

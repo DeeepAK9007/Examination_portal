@@ -13,6 +13,7 @@ interface PhotoComponentProps {
   value: string;
 }
 
+// Component for rendering photos in grid cells
 const PhotoComponent: React.FC<PhotoComponentProps> = (props) => {
   // console.log(props.value);
   return (
@@ -24,11 +25,13 @@ const PhotoComponent: React.FC<PhotoComponentProps> = (props) => {
   );
 };
 
+// Interface for student ID prop
 interface studentId {
   id: string;
 }
 
 const AttendTab: React.FC<studentId> = ({ id }) => {
+  // Context values and functions
   const {
     isCellClicked,
     setIsCellCliked,
@@ -41,7 +44,8 @@ const AttendTab: React.FC<studentId> = ({ id }) => {
 
   useContext(AttendanceContext);
   console.log("data from AttendanceTab:", isCellClicked);
-
+  
+  // State variables
   const [rowData, setRowData] = useState([]);
   const [ExamName, setExamName] = useState<string>("");
   const [filteredAttendance, setFilteredAttendance] = useState<
@@ -58,8 +62,8 @@ const AttendTab: React.FC<studentId> = ({ id }) => {
   console.log("query text from AttendTab: ", queryHandler);
   const newTimeMap = new Map(timeMap);
 
-  // yes or no toggle
-
+  
+  // Toggle button for Yes/No attendance
   const YesNoToggle = (params: any) => {
     const [isYes, setIsYes] = useState<boolean>(false);
 
@@ -68,15 +72,18 @@ const AttendTab: React.FC<studentId> = ({ id }) => {
 
       setIsYes(!isYes);
       setPresent(isYes);
+      
       const newTime = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       });
-
+      // Update time map and local storage
       newTimeMap.set(params.data.Id, newTime);
       localStorage.setItem(params.data.Id, newTime);
       console.log("new time map: ", newTimeMap);
       setTimeMap(newTimeMap);
+
+      // Reload the page to reflect changes
       window.location.reload();
     };
 
@@ -94,6 +101,7 @@ const AttendTab: React.FC<studentId> = ({ id }) => {
     );
   };
 
+  // Column definitions for AG Grid
   const [colDefs, setColDefs] = useState([
     { field: "Name", headerCheckboxSelection: true, sort: "asc", flex: 1 },
     {
@@ -105,8 +113,8 @@ const AttendTab: React.FC<studentId> = ({ id }) => {
     { field: "Photo", flex: 1, cellRenderer: PhotoComponent },
   ]);
 
-  // handle cell click params
 
+  // Handle cell click event
   const onCellClicked = (params: any) => {
     console.log("params data from attend tab", params.data.Id);
     console.log("from cell clicked:", AttendanceHandler);
@@ -146,8 +154,8 @@ const AttendTab: React.FC<studentId> = ({ id }) => {
     }
   };
 
-  // search operation
-
+  
+  // Filter attendance based on search query
   useEffect(() => {
     const filterAttendance = () => {
       if (!queryHandler) {
@@ -166,8 +174,8 @@ const AttendTab: React.FC<studentId> = ({ id }) => {
     filterAttendance();
   }, [queryHandler, rowData]);
 
-  // useEffect for getting all the schedules
-
+ 
+  // Fetch exam types from the backend
   useEffect(() => {
     const fetchExamTypes = async () => {
       const res = await getAllSchedules();
@@ -179,8 +187,7 @@ const AttendTab: React.FC<studentId> = ({ id }) => {
     fetchExamTypes();
   }, []);
 
-  // useEffect to fecth students by courseid
-
+  // Fetch students by course ID and format data for the grid 
   useEffect(() => {
     const fetchStudentsByCourseId = async () => {
       try {

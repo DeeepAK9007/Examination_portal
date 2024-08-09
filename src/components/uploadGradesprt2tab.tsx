@@ -7,33 +7,44 @@ import { getEnrollbyCours } from "../apis/backend";
 import { ColDef, GridApi, ColumnApi, RowNode, Column } from "ag-grid-community";
 import { updateGradeType } from "../types/myTypes";
 import { updtGrades } from "../apis/backend";
+
+// Type for the custom button props
 type CustomButtonProps = {
   rowData: studsBycourse;
 };
 
+// Custom button component for saving grades
 const CustomButton = ({ rowData }: CustomButtonProps) => {
-const [state1,setstat1]=useState(rowData);
-const [state2,setstat2]=useState(rowData);
+  const [state1, setstat1] = useState(rowData);
+  const [state2, setstat2] = useState(rowData);
 
-
-  const upld_grd= async (e : React.MouseEvent<HTMLElement>) => {
+  // Function to handle grade upload on button click
+  const upld_grd = async (e: React.MouseEvent<HTMLElement>) => {
     console.log("heyy there");
     console.log(rowData);
-    const data:updateGradeType={    
-      id:rowData.id,
-      grade:rowData.Grade,
-      remarks:rowData.Remark
-    }
-    console.log("new dta here!!!",data);
-    const response= updtGrades(data);
-    window.location.reload();
-  }
+    // Prepare data for updating grades
+    const data: updateGradeType = {
+      id: rowData.id,
+      grade: rowData.Grade,
+      remarks: rowData.Remark,
+    };
+    console.log("new dta here!!!", data);
+    // Call API to update grades
+    const response = updtGrades(data);
+    window.location.reload(); // Reload the page to reflect changes
+  };
   return (
-        <i className="fa-regular fa-floppy-disk" onClick={(e)=>{upld_grd(e)}} style={{cursor:"pointer"}}>
-        </i>
+    <i
+      className="fa-regular fa-floppy-disk"
+      onClick={(e) => {
+        upld_grd(e);
+      }}
+      style={{ cursor: "pointer" }}
+    ></i>
   );
 };
 
+// Type for custom button renderer parameters
 type CustomButtonRendererParams = {
   data: studsBycourse;
   value: any;
@@ -52,41 +63,52 @@ type CustomButtonRendererParams = {
   eParentOfValue: HTMLElement;
 };
 
+// Custom button renderer function
 const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
 
+// Interface for props passed to the component
 interface CourseConfTabProps {
   queryText: string;
   searchStatus: boolean;
 }
 
+// Main component for displaying and managing course enrollments
 const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
   queryText,
   searchStatus,
 }) => {
+  // States for storing course data and filtered data
   const [courses, setCourses] = useState<studsBycourse[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<studsBycourse[]>([]);
 
+  // Column definitions for Ag-Grid
   const [colDefs, setColDefs] = useState([
     {
       field: "StudentId",
       flex: 1,
     },
     { field: "StudentName", flex: 1 },
-    { field: "Grade", flex: 1 , editable: true, cellEditor: 'agTextCellEditor'},
-    { field: "Remark", flex: 1, editable: true, cellEditor: 'agTextCellEditor' },
-    {field: "Save Changes", flex: 1, cellRenderer: CustomButtonRenderer} 
+    { field: "Grade", flex: 1, editable: true, cellEditor: "agTextCellEditor" },
+    {
+      field: "Remark",
+      flex: 1,
+      editable: true,
+      cellEditor: "agTextCellEditor",
+    },
+    { field: "Save Changes", flex: 1, cellRenderer: CustomButtonRenderer },
   ]);
 
+  // Fetch course data on component mount
   useEffect(() => {
     const fetchUsersMapped = async () => {
       try {
         const course_iden = new URLSearchParams(location.search).get("id");
-        const res= await getEnrollbyCours(course_iden);
+        const res = await getEnrollbyCours(course_iden);
         // console.log("Terms", res);
-        console.log("studs associated with the course",res);
-        
+        console.log("studs associated with the course", res);
+
         const filteredTerms = res.map((stud: studsBycourse) => ({
           id: stud.id,
           StudentId: stud.student_id,
@@ -103,6 +125,7 @@ const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
     fetchUsersMapped();
   }, []);
 
+  // Filter courses based on search query
   useEffect(() => {
     const filterCourses = () => {
       if (!queryText) {
@@ -124,7 +147,6 @@ const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
   console.log("Row data:", courses);
   console.log("Column Data", colDefs);
 
-
   return (
     <div>
       <div
@@ -137,12 +159,10 @@ const UploadGradesPart2Tab: React.FC<CourseConfTabProps> = ({
           rowData={filteredCourses}
           columnDefs={colDefs}
           //onCellEditingStopped={}
-          />
+        />
       </div>
     </div>
   );
 };
 
 export default UploadGradesPart2Tab;
-
-

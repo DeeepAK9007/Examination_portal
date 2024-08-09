@@ -1,5 +1,10 @@
 import { User } from "../context/loginContext";
-import { examModeUpdateType, scheduleType, termType, updateGradeType } from "../types/myTypes";
+import {
+  examModeUpdateType,
+  scheduleType,
+  termType,
+  updateGradeType,
+} from "../types/myTypes";
 import { courseType } from "../types/myTypes";
 import { batchType } from "../types/myTypes";
 import { roomMatchedType } from "../types/myTypes";
@@ -10,14 +15,18 @@ import { enrollmentType } from "../types/myTypes";
 import { addProgCordType } from "../types/myTypes";
 import { attendance } from "../types/myTypes";
 
+// Function to handle user login by posting user data to an API endpoint
 export const login = async (user: User) => {
   console.log("Adding User: ", user);
   try {
+    // Encode the user object as a Base64 string
     const new_obj = btoa(JSON.stringify(user));
     console.log("new object here", new_obj);
 
+    // Create the request body with the encoded user object
     const body = "resource=" + new_obj;
 
+    // Send a POST request to the login endpoint with the encoded user data
     const response = await fetch("http://localhost:8081/api/login", {
       method: "POST",
       headers: {
@@ -29,9 +38,11 @@ export const login = async (user: User) => {
     console.log(response);
     console.log("body here", body);
 
+    // Parse the JSON response from the server
     const jsonData = await response.json();
     console.log("response json after submit,", jsonData);
     // console.log("Login output after submit",jsonData.resource[0].session_id);
+    // Extract the session ID from the response
     const ssid = jsonData.resource[0].session_id;
     return ssid;
   } catch (error) {
@@ -39,11 +50,11 @@ export const login = async (user: User) => {
   }
 };
 
+// Function to add a term by sending term data to an API endpoint
 export const addOneTerm = async (term: termType) => {
   console.log("adding ", term);
   try {
-    // const params = new URLSearchParams();
-
+    // Convert the term object to a JSON string
     const jsonObj = term;
     // Convert JSON object to string
     const jsonString = JSON.stringify(jsonObj);
@@ -51,17 +62,12 @@ export const addOneTerm = async (term: termType) => {
 
     // Encode string to Base64
     const base64Encoded = btoa(jsonString);
-
-    // const body = "resource=" + base64Encoded;
-
     console.log(`Base Encoding of adding term: ${base64Encoded}`);
 
-    // params.append("resource", base64Encoded);
-    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
       console.log("session_id", ssid);
-      // params.append("session_id", ssid);
     } else {
       throw new Error("Session ID is expired");
     }
@@ -80,20 +86,18 @@ export const addOneTerm = async (term: termType) => {
       }
     );
 
-    const jsonData = await response.json();
-    console.log("response json after submit,", jsonData);
-
     console.log("Resposne after adding term: ", response);
     return response;
   } catch (error) {
     console.log(" error message: ", error);
   }
 };
+
+// Function to add a course by sending course data to an API endpoint
 export const addOneCourse = async (course: courseType) => {
   console.log("adding ", course);
   try {
-    // const params = new URLSearchParams();
-
+    // Convert the course object to a JSON string
     const jsonObj = course;
     // Convert JSON object to string
     const jsonString = JSON.stringify(jsonObj);
@@ -104,12 +108,10 @@ export const addOneCourse = async (course: courseType) => {
 
     console.log(`Base Encoding of adding course: ${base64Encoded}`);
 
-    // params.append("resource", base64Encoded);
-    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
       console.log("session_id", ssid);
-      // params.append("session_id", ssid);
     } else {
       throw new Error("Session ID is expired");
     }
@@ -135,11 +137,10 @@ export const addOneCourse = async (course: courseType) => {
   }
 };
 
+// Function to add a schedule by sending schedule data to an API endpoint
 export const addOneSchedule = async (schedule: scheduleType) => {
   console.log("adding ", schedule);
   try {
-    // const params = new URLSearchParams();
-
     const jsonObj = schedule;
     // Convert JSON object to string
     const jsonString = JSON.stringify(jsonObj);
@@ -147,17 +148,12 @@ export const addOneSchedule = async (schedule: scheduleType) => {
 
     // Encode string to Base64
     const base64Encoded = btoa(jsonString);
-
-    // const body = "resource=" + base64Encoded;
-
     console.log(`Base Encoding of adding schedule: ${base64Encoded}`);
 
-    // params.append("resource", base64Encoded);
-    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
       console.log("session_id", ssid);
-      // params.append("session_id", ssid);
     } else {
       throw new Error("Session ID is expired");
     }
@@ -183,6 +179,7 @@ export const addOneSchedule = async (schedule: scheduleType) => {
   }
 };
 
+// Function to add a program-coordinator by sending prog-coord data to an API endpoint
 export const addProgCord = async (pro: addProgCordType) => {
   console.log("adding ", pro);
   try {
@@ -193,17 +190,12 @@ export const addProgCord = async (pro: addProgCordType) => {
 
     // Encode string to Base64
     const base64Encoded = btoa(jsonString);
-
-    // const body = "resource=" + base64Encoded;
-
     console.log(`Base Encoding of adding term: ${base64Encoded}`);
 
-    // params.append("resource", base64Encoded);
-    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
       console.log("session_id", ssid);
-      // params.append("session_id", ssid);
     } else {
       throw new Error("Session ID is expired");
     }
@@ -229,6 +221,7 @@ export const addProgCord = async (pro: addProgCordType) => {
   }
 };
 
+// Function to add attendnace by sending attendance data to an API endpoint
 export const addAttendance = async (att: attendance[]) => {
   console.log("adding ", att);
   try {
@@ -239,17 +232,12 @@ export const addAttendance = async (att: attendance[]) => {
 
     // Encode string to Base64
     const base64Encoded = btoa(jsonString);
-
-    // const body = "resource=" + base64Encoded;
-
     console.log(`Base Encoding of adding term: ${base64Encoded}`);
 
-    // params.append("resource", base64Encoded);
-    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
       console.log("session_id", ssid);
-      // params.append("session_id", ssid);
     } else {
       throw new Error("Session ID is expired");
     }
@@ -273,20 +261,25 @@ export const addAttendance = async (att: attendance[]) => {
     console.log(" error message: ", error);
   }
 };
+
+// Function to fetch all terms from the API
 export const getAllTerms = async () => {
   try {
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
     console.log("Session Id in API: ", ssid);
     console.log("ssid insde Api term", ssid);
+
+    // Define the query ID for the API request
     const queryId = "GET_ALL";
 
+    // Send a GET request to the API endpoint to fetch terms
     const response = await fetch(
       "http://localhost:8081/api/term?queryId=" +
         queryId +
         "&session_id=" +
         ssid,
       {
-        // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
         method: "GET",
         mode: "cors",
         headers: {
@@ -296,9 +289,12 @@ export const getAllTerms = async () => {
     );
 
     console.log("response", response);
+    // Parse and log the JSON response from the server
     const jsonData = await response.json();
     console.log("response json,", jsonData);
     console.log(jsonData.resource);
+
+    // Extract and return the terms data from the JSON response
     const terms = jsonData.resource;
     return terms;
   } catch (error) {
@@ -306,20 +302,24 @@ export const getAllTerms = async () => {
   }
 };
 
+// Function to fetch all courses from the API
 export const getAllCourses = async () => {
   try {
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
     console.log("Session Id in API: ", ssid);
     console.log("ssid insde Api course", ssid);
+
+    // Define the query ID for the API request
     const queryId = "GET_ALL";
 
+    // Send a GET request to the API endpoint to fetch courses
     const response = await fetch(
       "http://localhost:8081/api/course?queryId=" +
         queryId +
         "&session_id=" +
         ssid,
       {
-        // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
         method: "GET",
         mode: "cors",
         headers: {
@@ -329,30 +329,36 @@ export const getAllCourses = async () => {
     );
 
     console.log("response", response);
+    // Parse and log the JSON response from the server
     const jsonData = await response.json();
     console.log("response json,", jsonData);
     console.log(jsonData.resource);
-    const terms = jsonData.resource;
-    return terms;
+    // Extract and return the courses data from the JSON response
+    const courses = jsonData.resource;
+    return courses;
   } catch (error) {
     console.error("Error fetching data from backend:", error);
   }
 };
 
+// Function to fetch all schedules from the API
 export const getAllSchedules = async () => {
   try {
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
     console.log("Session Id in API: ", ssid);
     console.log("ssid insde Api schedule", ssid);
+
+    // Define the query ID for the API request
     const queryId = "GET_ALL";
 
+    // Send a GET request to the API endpoint to fetch schedules
     const response = await fetch(
       "http://localhost:8081/api/exam_schedule?queryId=" +
         queryId +
         "&session_id=" +
         ssid,
       {
-        // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
         method: "GET",
         mode: "cors",
         headers: {
@@ -362,30 +368,37 @@ export const getAllSchedules = async () => {
     );
 
     console.log("response", response);
+    // Parse and log the JSON response from the server
     const jsonData = await response.json();
     console.log("response json,", jsonData);
     console.log(jsonData.resource);
-    const terms = jsonData.resource;
-    return terms;
+
+    // Extract and return the terms data from the JSON response
+    const schedules = jsonData.resource;
+    return schedules;
   } catch (error) {
     console.error("Error fetching data from backend:", error);
   }
 };
 
+// Function to fetch all program coordinator from the API
 export const getProgCord = async () => {
   try {
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
     console.log("Session Id in API: ", ssid);
     console.log("ssid insde Api schedule", ssid);
+
+    // Define the query ID for the API request
     const queryId = "GET_ALL";
 
+    // Send a GET request to the API endpoint to fetch program coordinator
     const response = await fetch(
       "http://localhost:8081/api/exam_schedule?queryId=" +
         queryId +
         "&session_id=" +
         ssid,
       {
-        // const response = await fetch("https://candidate.hubteam.com/candidateTest/v3/problem/dataset?userKey=a3d61ec0cfc3391809bf88a069c9" , {
         method: "GET",
         mode: "cors",
         headers: {
@@ -395,20 +408,25 @@ export const getProgCord = async () => {
     );
 
     console.log("response", response);
+    // Parse and log the JSON response from the server
     const jsonData = await response.json();
     console.log("response json,", jsonData);
     console.log(jsonData.resource);
-    const terms = jsonData.resource;
-    return terms;
+    // Extract and return the terms data from the JSON response
+    const progCoords = jsonData.resource;
+    return progCoords;
   } catch (error) {
     console.error("Error fetching data from backend:", error);
   }
 };
 
+// Function to fetch all users from the API
 export const getAllUsers = async () => {
+  // Retrieve the session ID from session storage
   const seshId = sessionStorage.getItem("key");
   console.log("session id: ", seshId);
 
+  // Send a GET request to the API endpoint to fetch users
   const response = await fetch(
     "http://localhost:8081/api/user_type?queryId=GET_ALL&session_id=" + seshId,
     {
@@ -421,16 +439,20 @@ export const getAllUsers = async () => {
   );
 
   console.log(response);
+  // Parse and log the JSON response from the server
   const json_users = await response.json();
+  // Extract and return the users data from the JSON response
   const users = json_users.resource;
   console.log(users);
   return users;
 };
 
+// Function to fetch all batches from the API
 export const getAllBatches = async () => {
+  // Retrieve the session ID from session storage
   const seshId = sessionStorage.getItem("key");
-  // console.log("session id: ", seshId);
 
+  // Send a GET request to the API endpoint to fetch batches
   const response = await fetch(
     "http://localhost:8081/api/batch?queryId=GET_ALL&session_id=" + seshId,
     {
@@ -442,15 +464,18 @@ export const getAllBatches = async () => {
     }
   );
 
-  //console.log("obtained resposnse here", response);
+  // Parse and log the JSON response from the server
   const json_users = await response.json();
   const batches = json_users.resource;
-  //console.log("here are the batches", batches);
   return batches;
 };
 
+// Function to fetch all rooms from the API
 export const getAllRooms = async () => {
+  // Retrieve the session ID from session storage
   const seshId = sessionStorage.getItem("key");
+
+  // Send a GET request to the API endpoint to fetch rooms
   const response = await fetch(
     "http://localhost:8081/api/room?queryId=GET_ALL&session_id=" + seshId,
     {
@@ -462,17 +487,17 @@ export const getAllRooms = async () => {
     }
   );
 
+  // Parse and log the JSON response from the server
   const json_users = await response.json();
+  // Extract and return the rooms data from the JSON response
   const rooms = json_users.resource;
   return rooms;
 };
 
-// Exam mode
+// Function to add a exam_mode by sending exam_mode data to an API endpoint
 export const addExam_mode = async (exam: examModeUpdateType) => {
   console.log("adding ", exam);
   try {
-    // const params = new URLSearchParams();
-
     const jsonObj = exam;
     // Convert JSON object to string
     const jsonString = JSON.stringify(jsonObj);
@@ -480,15 +505,12 @@ export const addExam_mode = async (exam: examModeUpdateType) => {
 
     // Encode string to Base64
     const base64Encoded = btoa(jsonString);
-
     console.log(`Base Encoding of adding exam: ${base64Encoded}`);
 
-    // params.append("resource", base64Encoded);
-    // params.append("session_id", "c64e3bda-7205-4a63-ac37-2d14ab7474bd-15");
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
       console.log("session_id", ssid);
-      // params.append("session_id", ssid);
     } else {
       throw new Error("Session ID is expired");
     }
@@ -507,6 +529,7 @@ export const addExam_mode = async (exam: examModeUpdateType) => {
       }
     );
 
+    // Parse and log the JSON response from the server
     const json_users = await response.json();
     const exammode = json_users.resource;
     return exammode;
@@ -515,8 +538,12 @@ export const addExam_mode = async (exam: examModeUpdateType) => {
   }
 };
 
+// Function to fetch all modes from the API
 export const getAllModes = async () => {
+  // Retrieve the session ID from session storage
   const seshId = sessionStorage.getItem("key");
+
+  // Send a GET request to the API endpoint to fetch modes
   const response = await fetch(
     "http://localhost:8081/api/exam_mode?queryId=GET_ALL&session_id=" + seshId,
     {
@@ -528,14 +555,20 @@ export const getAllModes = async () => {
     }
   );
 
+  // Parse and log the JSON response from the server
   const json_users = await response.json();
+  // Extract and return the terms data from the JSON response
   const modes = json_users.resource;
   return modes;
 };
 
+// Function to fetch schedule by id from the API
 export const getScheduleById = async (id: string) => {
   try {
+    // Retrieve the session ID from session storage
     const seshId = sessionStorage.getItem("key");
+
+    // Send a GET request to the API endpoint to fetch schedule by id
     const response = await fetch(
       "http://localhost:8081/api/exam_schedule?queryId=GET_EXAM_SCHEDULE_BY_ID&session_id=" +
         seshId +
@@ -550,7 +583,9 @@ export const getScheduleById = async (id: string) => {
       }
     );
 
+    // Parse and log the JSON response from the server
     const json_users = await response.json();
+    // Extract and return the schedule data from the JSON response
     const sche = json_users.resource;
     return sche;
   } catch (error) {
@@ -558,8 +593,12 @@ export const getScheduleById = async (id: string) => {
   }
 };
 
+// Function to fetch all exam types from the API
 export const getAllTypes = async () => {
+  // Retrieve the session ID from session storage
   const seshId = sessionStorage.getItem("key");
+
+  // Send a GET request to the API endpoint to fetch exam types
   const response = await fetch(
     "http://localhost:8081/api/exam_type?queryId=GET_ALL&session_id=" + seshId,
     {
@@ -571,11 +610,14 @@ export const getAllTypes = async () => {
     }
   );
 
+  // Parse and log the JSON response from the server
   const json_users = await response.json();
-  const modes = json_users.resource;
-  return modes;
+  // Extract and return the types data from the JSON response
+  const types = json_users.resource;
+  return types;
 };
 
+// Function to update or delete a term based on the action specified
 export const updateOrDeleteTerm = async (
   termId: string,
   newData: termType,
@@ -583,8 +625,10 @@ export const updateOrDeleteTerm = async (
 ) => {
   try {
     const params = new URLSearchParams();
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
 
+    // Check if session ID exists
     if (ssid !== null) {
       console.log("session_id", ssid);
       params.append("session_id", ssid);
@@ -599,6 +643,7 @@ export const updateOrDeleteTerm = async (
     // If action is MODIFY, encode the new data to base64 and set it as resource
     console.log("New Data after stingigy: ", JSON.stringify(newData));
 
+    // Convert new data to JSON string and then to Base64 encoding
     const base64EncodedData =
       action === "DELETE"
         ? btoa(JSON.stringify({ id: termId }))
@@ -606,8 +651,7 @@ export const updateOrDeleteTerm = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
-    //console.log("http://localhost:8081/api/term?" + params.toString());
-
+    // Send a POST request to the API to update or delete the term
     const response = await fetch(
       "http://localhost:8081/api/term?session_id=" +
         ssid +
@@ -628,6 +672,7 @@ export const updateOrDeleteTerm = async (
   }
 };
 
+// Function to update or delete a course based on the action specified
 export const updateOrDeleteCourse = async (
   courseId: string,
   newData: courseType,
@@ -635,8 +680,10 @@ export const updateOrDeleteCourse = async (
 ) => {
   try {
     const params = new URLSearchParams();
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
 
+    // Check if session ID exists
     if (ssid !== null) {
       console.log("session_id", ssid);
       params.append("session_id", ssid);
@@ -651,6 +698,7 @@ export const updateOrDeleteCourse = async (
     // If action is MODIFY, encode the new data to base64 and set it as resource
     console.log("New Data after stingigy: ", JSON.stringify(newData));
 
+    // Convert new data to JSON string and then to Base64 encoding
     const base64EncodedData =
       action === "DELETE"
         ? btoa(JSON.stringify({ id: courseId }))
@@ -658,6 +706,7 @@ export const updateOrDeleteCourse = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
+    // Send a POST request to the API to update or delete the course
     const response = await fetch(
       "http://localhost:8081/api/course?session_id=" +
         ssid +
@@ -678,6 +727,7 @@ export const updateOrDeleteCourse = async (
   }
 };
 
+// Function to update or delete a batch based on the action specified
 export const updateOrDeleteBatch = async (
   batchId: string,
   newData: batchType,
@@ -685,8 +735,10 @@ export const updateOrDeleteBatch = async (
 ) => {
   try {
     const params = new URLSearchParams();
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
 
+    // Check if session ID exists
     if (ssid !== null) {
       console.log("session_id", ssid);
       params.append("session_id", ssid);
@@ -701,6 +753,7 @@ export const updateOrDeleteBatch = async (
     // If action is MODIFY, encode the new data to base64 and set it as resource
     console.log("New Data after stingigy: ", JSON.stringify(newData));
 
+    // Convert new data to JSON string and then to Base64 encoding
     const base64EncodedData =
       action === "DELETE"
         ? btoa(JSON.stringify({ id: batchId }))
@@ -708,6 +761,7 @@ export const updateOrDeleteBatch = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
+    // Send a POST request to the API to update or delete the batch
     const response = await fetch(
       "http://localhost:8081/api/batch?session_id=" +
         ssid +
@@ -728,6 +782,7 @@ export const updateOrDeleteBatch = async (
   }
 };
 
+// Function to update or delete a room based on the action specified
 export const updateOrDeleteRoom = async (
   roomId: string,
   newData: roomMatchedType,
@@ -735,8 +790,10 @@ export const updateOrDeleteRoom = async (
 ) => {
   try {
     const params = new URLSearchParams();
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
 
+    // Check if session ID exists
     if (ssid !== null) {
       console.log("session_id", ssid);
       params.append("session_id", ssid);
@@ -751,6 +808,7 @@ export const updateOrDeleteRoom = async (
     // If action is MODIFY, encode the new data to base64 and set it as resource
     console.log("New Data after stingigy: ", JSON.stringify(newData));
 
+    // Convert new data to JSON string and then to Base64 encoding
     const base64EncodedData =
       action === "DELETE"
         ? btoa(JSON.stringify({ id: roomId }))
@@ -758,6 +816,7 @@ export const updateOrDeleteRoom = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
+    // Send a POST request to the API to update or delete the room
     const response = await fetch(
       "http://localhost:8081/api/room?session_id=" +
         ssid +
@@ -778,6 +837,7 @@ export const updateOrDeleteRoom = async (
   }
 };
 
+// Function to update or delete a user based on the action specified
 export const updateOrDeleteUser = async (
   userId: string,
   newData: userType,
@@ -785,8 +845,10 @@ export const updateOrDeleteUser = async (
 ) => {
   try {
     const params = new URLSearchParams();
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
 
+    // Check if session ID exists
     if (ssid !== null) {
       console.log("session_id", ssid);
       params.append("session_id", ssid);
@@ -801,6 +863,7 @@ export const updateOrDeleteUser = async (
     // If action is MODIFY, encode the new data to base64 and set it as resource
     console.log("New Data after stingigy: ", JSON.stringify(newData));
 
+    // Convert new data to JSON string and then to Base64 encoding
     const base64EncodedData =
       action === "DELETE"
         ? btoa(JSON.stringify({ id: userId }))
@@ -808,6 +871,7 @@ export const updateOrDeleteUser = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
+    // Send a POST request to the API to update or delete the user
     const response = await fetch(
       "http://localhost:8081/api/user_type?session_id=" +
         ssid +
@@ -828,6 +892,7 @@ export const updateOrDeleteUser = async (
   }
 };
 
+// Function to update or delete a exam type based on the action specified
 export const updateOrDeleteExamType = async (
   examtypeId: string,
   newData: ExamTypeType,
@@ -835,8 +900,10 @@ export const updateOrDeleteExamType = async (
 ) => {
   try {
     const params = new URLSearchParams();
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
 
+    // Check if session ID exists
     if (ssid !== null) {
       console.log("session_id", ssid);
       params.append("session_id", ssid);
@@ -851,6 +918,7 @@ export const updateOrDeleteExamType = async (
     // If action is MODIFY, encode the new data to base64 and set it as resource
     console.log("New Data after stingigy: ", JSON.stringify(newData));
 
+    // Convert new data to JSON string and then to Base64 encoding
     const base64EncodedData =
       action === "DELETE"
         ? btoa(JSON.stringify({ id: examtypeId }))
@@ -858,6 +926,7 @@ export const updateOrDeleteExamType = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
+    // Send a POST request to the API to update or delete the exam type
     const response = await fetch(
       "http://localhost:8081/api/exam_type?session_id=" +
         ssid +
@@ -878,6 +947,7 @@ export const updateOrDeleteExamType = async (
   }
 };
 
+// Function to update or delete a exam mode based on the action specified
 export const updateOrDeleteExamMode = async (
   examModeId: string,
   newData: ExamModeType,
@@ -885,8 +955,10 @@ export const updateOrDeleteExamMode = async (
 ) => {
   try {
     const params = new URLSearchParams();
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
 
+    // Check if session ID exists
     if (ssid !== null) {
       console.log("session_id", ssid);
       params.append("session_id", ssid);
@@ -901,6 +973,7 @@ export const updateOrDeleteExamMode = async (
     // If action is MODIFY, encode the new data to base64 and set it as resource
     console.log("New Data after stingigy: ", JSON.stringify(newData));
 
+    // Convert new data to JSON string and then to Base64 encoding
     const base64EncodedData =
       action === "DELETE"
         ? btoa(JSON.stringify({ id: examModeId }))
@@ -908,6 +981,7 @@ export const updateOrDeleteExamMode = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
+    // Send a POST request to the API to update or delete the exam mode
     const response = await fetch(
       "http://localhost:8081/api/exam_mode?session_id=" +
         ssid +
@@ -928,6 +1002,7 @@ export const updateOrDeleteExamMode = async (
   }
 };
 
+// Function to update or delete a schedule based on the action specified
 export const updateOrDeleteSchedule = async (
   scheduleId: string,
   newData: scheduleType,
@@ -935,8 +1010,10 @@ export const updateOrDeleteSchedule = async (
 ) => {
   try {
     const params = new URLSearchParams();
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage.getItem("key");
 
+    // Check if session ID exists
     if (ssid !== null) {
       console.log("session_id", ssid);
       params.append("session_id", ssid);
@@ -951,6 +1028,7 @@ export const updateOrDeleteSchedule = async (
     // If action is MODIFY, encode the new data to base64 and set it as resource
     console.log("New Data after stingigy: ", JSON.stringify(newData));
 
+    // Convert new data to JSON string and then to Base64 encoding
     const base64EncodedData =
       action === "DELETE"
         ? btoa(JSON.stringify({ id: scheduleId }))
@@ -958,8 +1036,7 @@ export const updateOrDeleteSchedule = async (
     console.log("Editing data encoding: ", base64EncodedData);
     params.append("resource", base64EncodedData);
 
-    //console.log("http://localhost:8081/api/term?" + params.toString());
-
+    // Send a POST request to the API to update or delete the echedule
     const response = await fetch(
       "http://localhost:8081/api/exam_schedule?session_id=" +
         ssid +
@@ -980,19 +1057,23 @@ export const updateOrDeleteSchedule = async (
   }
 };
 
+// Function to add a enrollment by sending enrollment data to an API endpoint
 export const AddEnrolment = async (enroll: enrollmentType[]) => {
   console.log("adding ", enroll);
   try {
     const jsonObj = enroll;
+    // Convert JSON object to string
     const jsonString = JSON.stringify(jsonObj);
     console.log("Adding enroll stringify", jsonString);
+
+    // Encode string to Base64
     const base64Encoded = btoa(jsonString);
     console.log(`Base Encoding of adding course: ${base64Encoded}`);
 
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
       console.log("session_id", ssid);
-      // params.append("session_id", ssid);
     } else {
       throw new Error("Session ID is expired");
     }
@@ -1027,8 +1108,12 @@ export const AddEnrolment = async (enroll: enrollmentType[]) => {
   }
 };
 
+// Function to fetch user by role from the API
 export const getUsersByRole = async (role: string) => {
+  // Retrieve the session ID from session storage
   const seshId = sessionStorage.getItem("key");
+
+  // Send a GET request to the API endpoint to fetch user by role
   const response = await fetch(
     "http://localhost:8081/api/user_type?queryId=GET_USERS_BY_ROLE&session_id=" +
       seshId +
@@ -1043,13 +1128,17 @@ export const getUsersByRole = async (role: string) => {
     }
   );
 
+  // Parse and log the JSON response from the server
   const json_users = await response.json();
+  // Extract and return the user by role data from the JSON response
   const usersbyrole = json_users.resource;
   return usersbyrole;
 };
 
+// Function to fetch student by courseId from the API
 export const getStudentsByCourseId = async (id: string) => {
   try {
+    // Retrieve the session ID from session storage
     const seshId = sessionStorage.getItem("key");
     console.log("session id", seshId);
     console.log(
@@ -1059,6 +1148,7 @@ export const getStudentsByCourseId = async (id: string) => {
         "&args=course_id:" +
         id
     );
+    // Send a GET request to the API endpoint to fetch enrollment
     const response = await fetch(
       "http://localhost:8081/api/enrollment?queryId=GET_ENROLLMENTS_BY_COURSE&session_id=" +
         seshId +
@@ -1073,7 +1163,9 @@ export const getStudentsByCourseId = async (id: string) => {
       }
     );
 
+    // Parse and log the JSON response from the server
     const json_users = await response.json();
+    // Extract and return the student by id data from the JSON response
     const studentsbyid = json_users.resource;
     return studentsbyid;
   } catch (error) {
@@ -1081,10 +1173,14 @@ export const getStudentsByCourseId = async (id: string) => {
   }
 };
 
+// Function to fetch user by id from the API
 export const getUserById = async (id: string) => {
   try {
+    // Retrieve the session ID from session storage
     const seshId = sessionStorage.getItem("key");
     console.log("session id", seshId);
+
+    // Send a GET request to the API endpoint to fetch user by id
     const response = await fetch(
       "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +
         seshId +
@@ -1099,17 +1195,23 @@ export const getUserById = async (id: string) => {
       }
     );
 
+    // Parse and log the JSON response from the server
     const json_users = await response.json();
+    // Extract and return the student by id data from the JSON response
     const studentsbyid = json_users.resource;
     return studentsbyid;
   } catch (error) {
     console.log("Error while get user by Id");
   }
 };
+
+// Function to fetch enrollment by course from the API
 export const getEnrollbyCours = async (courseID: string | null) => {
+  // Retrieve the session ID from session storage
   const seshId = sessionStorage.getItem("key");
   console.log("session id: ", seshId);
 
+  // Send a GET request to the API endpoint to fetch enrollment
   const response = await fetch(
     "http://localhost:8081/api/enrollment?queryId=GET_ENROLLMENTS_BY_COURSE&session_id=" +
       seshId +
@@ -1129,7 +1231,7 @@ export const getEnrollbyCours = async (courseID: string | null) => {
 
   const studentDetailsPromises = result.map(async (enrollment: any) => {
     const userTypeEnrollmentId = enrollment.user_type_enrollment_id;
-    console.log("enrollment details here: ",enrollment);
+    console.log("enrollment details here: ", enrollment);
     console.log("WHAT DO I SAY YOU TOO STUPID", userTypeEnrollmentId);
     const studentResponse = await fetch(
       //     "http://localhost:8081/api/user_type?queryId=GET_USER_BY_ID&session_id=" +
@@ -1147,14 +1249,14 @@ export const getEnrollbyCours = async (courseID: string | null) => {
     );
     //console.log("THE OBTAINED DEEEEEETS ARE HERE",studentResponse);
     const studentJson = await studentResponse.json();
-    console.log("THE OBTAINED DEEEEEETS ARE HERE",studentJson);
-    console.log("TOOOOOOOOOOOOOOOOOOOOOO",studentJson.resource[0].grade);
+    console.log("THE OBTAINED DEEEEEETS ARE HERE", studentJson);
+    console.log("TOOOOOOOOOOOOOOOOOOOOOO", studentJson.resource[0].grade);
     return {
       id: enrollment.id,
       student_id: studentJson.resource[0].roll_number,
       stud_name: studentJson.resource[0].name,
-      grade: enrollment.grade ? enrollment.grade :"satisfactory",
-      remarks:enrollment.remarks ? enrollment.remarks :"satisfactory"
+      grade: enrollment.grade ? enrollment.grade : "satisfactory",
+      remarks: enrollment.remarks ? enrollment.remarks : "satisfactory",
     };
   });
 
@@ -1164,7 +1266,8 @@ export const getEnrollbyCours = async (courseID: string | null) => {
   return studentDetails;
 };
 
-export const updtGrades= async (enroll: updateGradeType) => {
+// Function to update or delete a grades based on the action specified
+export const updtGrades = async (enroll: updateGradeType) => {
   console.log("adding ", enroll);
   try {
     const jsonObj = enroll;
@@ -1173,6 +1276,7 @@ export const updtGrades= async (enroll: updateGradeType) => {
     const base64Encoded = btoa(jsonString);
     console.log(`Base Encoding of adding course: ${base64Encoded}`);
 
+    // Retrieve the session ID from session storage
     const ssid = sessionStorage?.getItem("key");
     if (ssid !== null) {
       console.log("session_id", ssid);
@@ -1190,6 +1294,7 @@ export const updtGrades= async (enroll: updateGradeType) => {
         "&action=addBulk"
     );
 
+    // Send a GET request to the API endpoint to fetch enrollment
     const response = await fetch(
       "http://localhost:8081/api/enrollment?session_id=" +
         ssid +

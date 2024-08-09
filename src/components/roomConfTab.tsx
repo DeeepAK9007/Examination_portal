@@ -13,18 +13,24 @@ type CustomButtonProps = {
   rowData: roomMatchedType;
 };
 
+// Component to render custom buttons for each row
 const CustomButton = ({ rowData }: CustomButtonProps) => {
   const navigate = useNavigate();
+
+  // Function to handle editing a room
   const editRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
     console.log(rowData.id);
     const seshID = sessionStorage.getItem("key");
     console.log(seshID);
+    // Navigate to edit room page with encoded room data
     navigate(
       `/editRoom?room=${btoa(JSON.stringify(rowData))}&&id=${rowData.id}`
     );
   };
+
+  // Function to handle deleting a room
   const deleteUser = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     console.log("Row data:", rowData);
@@ -34,6 +40,7 @@ const CustomButton = ({ rowData }: CustomButtonProps) => {
     const temp: deletestuff = { id: rowData.id };
     const targ = JSON.stringify(temp);
     const enc = btoa(targ);
+    // Send DELETE request to backend
     const resource = await fetch(
       "http://localhost:8081/api/room?session_id=" +
         seshID +
@@ -88,6 +95,7 @@ type CustomButtonRendererParams = {
   eParentOfValue: HTMLElement;
 };
 
+// Custom button renderer for ag-Grid
 const CustomButtonRenderer = (params: CustomButtonRendererParams) => {
   return <CustomButton rowData={params.data} />;
 };
@@ -95,11 +103,15 @@ interface RoomConfTabProps {
   queryText: string;
   searchStatus: boolean;
 }
+
+// Main component for Room Configuration tab
 const RoomConfTab: React.FC<RoomConfTabProps> = ({
   queryText,
   searchStatus,
 }) => {
+  // State to store all room data
   const [obtRooms, setObtRooms] = useState<roomMatchedType[]>([]);
+  // State to store filtered room data based on search query
   const [filteredRooms, setFilteredRooms] = useState<roomMatchedType[]>([]);
   console.log("query text: ", queryText);
   useEffect(() => {
@@ -124,6 +136,7 @@ const RoomConfTab: React.FC<RoomConfTabProps> = ({
     fetchusers();
   }, []);
 
+  // search operation
   useEffect(() => {
     const filterRooms = () => {
       if (!queryText) {
@@ -142,6 +155,7 @@ const RoomConfTab: React.FC<RoomConfTabProps> = ({
     filterRooms();
   }, [queryText, obtRooms]);
 
+  // Column definitions for ag-Grid
   const [colDefs, setColDefs] = useState<ColDef<roomMatchedType, unknown>[]>([
     {
       field: "room_number",

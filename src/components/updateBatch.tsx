@@ -8,6 +8,7 @@ import { batchType } from "../types/myTypes";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Custom Alert component with ref forwarding for Snackbar
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -16,17 +17,18 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function UpdateBatch() {
-  const navigate = useNavigate();
-  const [batchName, setBatchName] = useState<string>("");
-  const [actStatus, setActStatus] = useState<string>("");
+  const navigate = useNavigate(); // Hook for navigation
+  const [batchName, setBatchName] = useState<string>(""); // State to store batch name
+  const [actStatus, setActStatus] = useState<string>(""); // State to store batch status
 
-  const location = useLocation();
-  const batchId = new URLSearchParams(location.search).get("id");
-  const batchobj = new URLSearchParams(location.search).get("batch");
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const location = useLocation(); // Hook to access location object
+  const batchId = new URLSearchParams(location.search).get("id"); // Extract batch ID from URL
+  const batchobj = new URLSearchParams(location.search).get("batch"); // Extract batch object from URL
+
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false); // State to control Snackbar visibility
+  const [snackbarMessage, setSnackbarMessage] = useState<string>(""); // State to store Snackbar message
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
-    "success"
+    "success" // State to store Snackbar severity
   );
 
   console.log("Batch id:", batchId);
@@ -36,9 +38,10 @@ function UpdateBatch() {
     status: "",
   });
 
+  // useEffect to initialize form fields based on batch data
   useEffect(() => {
     if (batchId && batchobj) {
-      const jsonobj = JSON.parse(atob(batchobj));
+      const jsonobj = JSON.parse(atob(batchobj)); // Decode and parse batch object
       setBatchName(jsonobj.batch_name);
       setActStatus(jsonobj.status);
     } else {
@@ -46,6 +49,7 @@ function UpdateBatch() {
     }
   }, []);
 
+  // useEffect to update batch data when batchId, batchName, or actStatus change
   useEffect(() => {
     if (batchId && batchobj) {
       const jsonobj = JSON.parse(atob(batchobj));
@@ -59,6 +63,7 @@ function UpdateBatch() {
     }
   }, [batchId, batchName, actStatus]);
 
+  // Function to handle form submission for batch updates
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (batchId) {
@@ -75,6 +80,7 @@ function UpdateBatch() {
     }
   };
 
+  // Function to handle Snackbar close event
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string

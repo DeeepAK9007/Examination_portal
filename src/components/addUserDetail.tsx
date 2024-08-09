@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+// Alert component for displaying snackbars
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -13,6 +14,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function AddUser() {
+  // State hooks for form fields
   const [rollNo, setRollNo] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -31,6 +33,7 @@ function AddUser() {
     "success" | "error" | "warning"
   >("success");
 
+  // Handle file input change, validate file type, and show preview
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (
@@ -46,7 +49,7 @@ function AddUser() {
         setShowModal(true); // Show the modal when a file is selected
       };
       reader.readAsDataURL(selectedFile);
-      settemp(selectedFile.name);
+      settemp(selectedFile.name); // Store the file name for later use
     } else {
       setFile(null);
       setPreviewUrl(null);
@@ -54,10 +57,12 @@ function AddUser() {
     }
   };
 
+  // Close the file preview modal
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
+  // Manage modal open/close state for body class
   useEffect(() => {
     if (showModal) {
       document.body.classList.add("modal-open");
@@ -70,6 +75,7 @@ function AddUser() {
     };
   }, [showModal]);
 
+  // Handle form submission, validate inputs, and post data
   async function handleclick(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
     if (!file || !name || !rollNo || !examRole || !email || !actStatus) {
@@ -85,6 +91,8 @@ function AddUser() {
       setSnackbarOpen(true);
       return;
     }
+
+    // Prepare user data object
     const newUser: userType = {
       name: name,
       role: examRole,
@@ -98,9 +106,10 @@ function AddUser() {
     };
     try {
       const jsonobj = JSON.stringify(newUser);
-      const encode = btoa(jsonobj);
+      const encode = btoa(jsonobj); // Encode user data
       const seshID = sessionStorage.getItem("key");
 
+      // Send POST request with encoded user data
       const response = await fetch(
         "http://localhost:8081/api/user_type?session_id=" +
           seshID +
@@ -118,6 +127,7 @@ function AddUser() {
       const jsonData = await response?.json();
       console.log("response json after submit,", jsonData);
 
+      // Handle response
       if (jsonData.errCode == 0) {
         setSnackbarMessage("User added successfully!");
         setSnackbarSeverity("success");
@@ -132,6 +142,7 @@ function AddUser() {
     }
   }
 
+  // Handle snackbar close event
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -140,7 +151,7 @@ function AddUser() {
       return;
     }
     setSnackbarOpen(false);
-    window.location.reload();
+    window.location.reload(); // Reload page on snackbar close
   };
 
   return (

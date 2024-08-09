@@ -2,11 +2,13 @@ import ExamModeTab from "./examModeConfTab";
 // import { useState } from "react";
 
 function ExamModeConf() {
+  // The search functionality has been commented out, as it is not currently in use
   // const [queryText, setQueryText] = useState<string>("");
   // const [searchStatus, setSearchStatus] = useState<boolean>(false);
   return (
     <div>
       <hr style={{ width: "95%", margin: "auto" }} />
+      {/* Horizontal line for separation */}
       <div className="d-flex justify-content-between mt-3">
         <p className="p-0 ms-5 mb-0 mt-2 ">
           <h3>Exam Mode Configuration</h3>
@@ -52,6 +54,7 @@ function ExamModeConf() {
         </div> */}
       </div>
       {/* <ExamModeTab queryText={queryText} searchStatus={searchStatus} /> */}
+      {/* The search functionality has been commented out, so queryText and searchStatus are not passed */}
       <ExamModeTab />
     </div>
   );
